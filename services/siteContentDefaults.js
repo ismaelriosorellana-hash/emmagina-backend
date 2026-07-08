@@ -307,7 +307,7 @@ const CONTENT_DEFAULTS = {
                 "title": "Consultas de privacidad",
                 "detail": "Utiliza el canal oficial y explica brevemente tu solicitud.",
                 "actionLabel": "Contactar por WhatsApp",
-                "actionUrl": "https://wa.me/56954633848?text=Consulta%20sobre%20privacidad%20en%20Mommy%20Crafts"
+                "actionUrl": "https://wa.me/56954633848?text=Consulta%20sobre%20privacidad%20en%20Emmagina"
             }
         ],
         "notice": "Esta página describe el funcionamiento actual del emprendimiento y podrá actualizarse cuando cambien sus procesos o servicios.",

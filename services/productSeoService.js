@@ -13,7 +13,7 @@ const {
 
 const DEFAULT_SITE_URL = "https://emmagina.cl";
 const DEFAULT_BRAND = "Emmagina";
-const DEFAULT_IMAGE = "https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/Mommy_Crafts_2_1_hbj8xi.png";
+const DEFAULT_IMAGE = process.env.DEFAULT_SEO_IMAGE || "";
 const DEFAULT_LOCALE = "es_CL";
 const DEFAULT_CURRENCY = "CLP";
 
