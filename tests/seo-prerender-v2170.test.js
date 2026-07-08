@@ -12,8 +12,8 @@ const {
 } = require("../services/productSeoService");
 
 test("construye metadatos Open Graph y Schema.org para un producto", () => {
-    process.env.PUBLIC_SITE_URL = "https://mommycrafts.onrender.com";
-    process.env.SEO_PUBLIC_URL = "https://mommycrafts.onrender.com";
+    process.env.PUBLIC_SITE_URL = "https://emmagina.onrender.com";
+    process.env.SEO_PUBLIC_URL = "https://emmagina.onrender.com";
 
     const meta = productMeta({
         _id: "abc123",
@@ -22,22 +22,22 @@ test("construye metadatos Open Graph y Schema.org para un producto", () => {
         descripcion: "Taza personalizada para regalar.",
         precio: 7990,
         stock: 4,
-        marca: "Mommy Crafts",
+        marca: "Emmagina",
         categoriaPrincipal: "Tazas",
         imagenes: ["https://res.cloudinary.com/demo/image/upload/taza.jpg"],
         seo: {
-            titulo: "Taza Mamá Especial | Mommy Crafts",
+            titulo: "Taza Mamá Especial | Emmagina",
             descripcion: "Taza personalizada para regalar a mamá.",
             imagen: "https://res.cloudinary.com/demo/image/upload/taza-seo.jpg"
         }
     });
 
-    assert.equal(meta.title, "Taza Mamá Especial | Mommy Crafts");
+    assert.equal(meta.title, "Taza Mamá Especial | Emmagina");
     assert.equal(meta.price, 7990);
     assert.equal(meta.currency, "CLP");
     assert.equal(meta.category, "Tazas");
-    assert.equal(meta.canonicalUrl, "https://mommycrafts.onrender.com/producto/taza-mama-especial");
-    assert.equal(meta.frontendUrl, "https://mommycrafts.onrender.com/producto.html?slug=taza-mama-especial");
+    assert.equal(meta.canonicalUrl, "https://emmagina.onrender.com/producto/taza-mama-especial");
+    assert.equal(meta.frontendUrl, "https://emmagina.onrender.com/producto.html?slug=taza-mama-especial");
     assert.equal(meta.schema["@type"], "Product");
     assert.equal(meta.schema.offers.priceCurrency, "CLP");
     assert.equal(meta.schema.offers.availability, "https://schema.org/InStock");
@@ -54,11 +54,11 @@ test("renderiza HTML prerenderizado usando el shell del frontend sin scripts inl
         imagenes: ["https://res.cloudinary.com/demo/image/upload/cuaderno.jpg"]
     });
 
-    const shellHtml = `<!doctype html><html lang="es-CL"><head><meta charset="utf-8"><title>Producto personalizado | Mommy Crafts</title><meta name="description" content="genérica"><link rel="canonical" href="https://mommycrafts.onrender.com/producto.html"><script defer src="js/config.js"></script><script defer src="js/products.js"></script></head><body data-page="product"><main id="product-detail"></main></body></html>`;
+    const shellHtml = `<!doctype html><html lang="es-CL"><head><meta charset="utf-8"><title>Producto personalizado | Emmagina</title><meta name="description" content="genérica"><link rel="canonical" href="https://emmagina.onrender.com/producto.html"><script defer src="js/config.js"></script><script defer src="js/products.js"></script></head><body data-page="product"><main id="product-detail"></main></body></html>`;
     const html = await renderProductHtml(meta, { shellHtml });
 
-    assert.match(html, /<base href="https:\/\/mommycrafts.onrender.com\/">/);
-    assert.match(html, /<meta property="og:title" content="Cuaderno Devocional \| Mommy Crafts">/);
+    assert.match(html, /<base href="https:\/\/emmagina.onrender.com\/">/);
+    assert.match(html, /<meta property="og:title" content="Cuaderno Devocional \| Emmagina">/);
     assert.match(html, /<meta property="product:price:currency" content="CLP">/);
     assert.match(html, /application\/ld\+json/);
     assert.match(html, /https:\/\/schema.org\/OutOfStock/);
@@ -92,7 +92,7 @@ test("genera sitemap dinámico con URLs de productos publicables", () => {
         }
     ]);
 
-    assert.match(xml, /<loc>https:\/\/mommycrafts.onrender.com\/producto\/producto-publicado<\/loc>/);
+    assert.match(xml, /<loc>https:\/\/emmagina.onrender.com\/producto\/producto-publicado<\/loc>/);
     assert.doesNotMatch(xml, /producto-privado/);
 });
 

@@ -27,7 +27,7 @@ const {
 
 const DUMMY_HASH =
     bcrypt.hashSync(
-        "mommy-crafts-dummy-password",
+        "emmagina-dummy-password",
         12
     );
 

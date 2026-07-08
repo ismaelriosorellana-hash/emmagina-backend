@@ -1,7 +1,7 @@
 {
-  "name": "key-soul-desing-backend",
-  "version": "3.0.0-ksd.1",
-  "description": "API de Key Soul Desing para tienda de escenas 3D familiares personalizadas, pedidos, catálogo, pagos y panel administrativo.",
+  "name": "emmagina-backend",
+  "version": "1.1.0-emmagina-stable",
+  "description": "API de Emmagina para tienda de figuras 3D personalizadas, catálogo, pedidos, Cloudinary, MongoDB y panel administrativo.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -26,16 +26,19 @@
     "analytics-check": "npm run check && node --test tests/analytics-settings-v2230.test.js",
     "email-templates-check": "npm run check && node --test tests/email-templates-v2241.test.js",
     "operations-check": "npm run check && node --test tests/operations-dashboard-v2250.test.js",
-    "seed-key-soul": "node scripts/seedKeySoulProducts.js"
+    "seed-key-soul": "node scripts/seedKeySoulProducts.js",
+    "seed-emmagina": "node scripts/seedEmmaginaProducts.js"
   },
   "keywords": [
+    "cloudinary",
     "ecommerce",
-    "mongodb",
+    "emmagina",
     "express",
-    "key-soul-desing",
-    "impresion-3d"
+    "figuras-3d",
+    "impresion-3d",
+    "mongodb"
   ],
-  "author": "Key Soul Desing",
+  "author": "Emmagina",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.2",

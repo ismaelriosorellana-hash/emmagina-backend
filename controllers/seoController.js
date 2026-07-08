@@ -77,7 +77,7 @@ async function renderProductSeoPage(req, res, next) {
 
         if (!product) {
             return res.status(404).type("html").send(
-                "<!doctype html><html lang=\"es-CL\"><head><meta charset=\"utf-8\"><meta name=\"robots\" content=\"noindex\"><title>Producto no encontrado | Mommy Crafts</title></head><body><h1>Producto no encontrado</h1></body></html>"
+                "<!doctype html><html lang=\"es-CL\"><head><meta charset=\"utf-8\"><meta name=\"robots\" content=\"noindex\"><title>Producto no encontrado | Emmagina</title></head><body><h1>Producto no encontrado</h1></body></html>"
             );
         }
 
@@ -101,7 +101,7 @@ async function renderProductSeoFromQuery(req, res, next) {
 
         if (!product) {
             return res.status(404).type("html").send(
-                "<!doctype html><html lang=\"es-CL\"><head><meta charset=\"utf-8\"><meta name=\"robots\" content=\"noindex\"><title>Producto no encontrado | Mommy Crafts</title></head><body><h1>Producto no encontrado</h1></body></html>"
+                "<!doctype html><html lang=\"es-CL\"><head><meta charset=\"utf-8\"><meta name=\"robots\" content=\"noindex\"><title>Producto no encontrado | Emmagina</title></head><body><h1>Producto no encontrado</h1></body></html>"
             );
         }
 

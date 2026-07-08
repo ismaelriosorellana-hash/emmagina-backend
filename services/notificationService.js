@@ -178,7 +178,7 @@ function firstName(order) {
 
 function productSummary(order) {
     const items = Array.isArray(order?.items) ? order.items : [];
-    if (!items.length) return "productos Mommy Crafts";
+    if (!items.length) return "productos Emmagina";
 
     if (items.length === 1) {
         const item = items[0];
@@ -201,18 +201,18 @@ function paymentLabel(status) {
 
 
 function brandName() {
-    return clean(process.env.EMAIL_BRAND_NAME || "Mommy Crafts") || "Mommy Crafts";
+    return clean(process.env.EMAIL_BRAND_NAME || "Emmagina") || "Emmagina";
 }
 
 function supportEmail() {
-    return clean(process.env.EMAIL_REPLY_TO || "venta@mommycrafts.cl") || "venta@mommycrafts.cl";
+    return clean(process.env.EMAIL_REPLY_TO || "venta@emmagina.cl") || "venta@emmagina.cl";
 }
 
 function emailLogoUrl() {
     return clean(
         process.env.EMAIL_LOGO_URL ||
         process.env.BRAND_LOGO_URL ||
-        "https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png"
+        ""
     );
 }
 
@@ -249,7 +249,7 @@ function orderItemsRows(order) {
         return `
             <tr>
                 <td style="padding:12px 0;border-top:1px solid #F0D6E6">
-                    <strong style="color:#372A32">${escapeHtml(item?.nombre || "Producto Mommy Crafts")}</strong>
+                    <strong style="color:#372A32">${escapeHtml(item?.nombre || "Producto Emmagina")}</strong>
                     ${variant ? `<br><span style="font-size:13px;color:#715F69">${escapeHtml(variant)}</span>` : ""}
                 </td>
                 <td style="padding:12px 8px;border-top:1px solid #F0D6E6;text-align:center;color:#715F69">${quantity}</td>
@@ -289,7 +289,7 @@ function emailFooterHtml() {
         <div style="background:#FFF2FA;border-top:1px solid #F0D6E6;padding:18px 22px;color:#715F69;font-size:13px;line-height:1.5">
             <p style="margin:0 0 6px"><strong style="color:#65445A">${escapeHtml(brandName())}</strong></p>
             <p style="margin:0">Correo: <a href="mailto:${escapeHtml(email)}" style="color:#8E456A">${escapeHtml(email)}</a>${whatsappUrl ? ` · WhatsApp: <a href="${escapeHtml(whatsappUrl)}" style="color:#8E456A">${escapeHtml(whatsapp)}</a>` : ""}</p>
-            <p style="margin:8px 0 0">Este correo fue enviado por una compra o actualización solicitada en mommycrafts.cl.</p>
+            <p style="margin:8px 0 0">Este correo fue enviado por una compra o actualización solicitada en emmagina.cl.</p>
         </div>
     `;
 }
@@ -385,7 +385,7 @@ function buildAdminEmailHtml(order, data) {
     return wrapBrandedEmail({
         preheader: `${data.label}: ${data.number}`,
         title: data.label,
-        introHtml: `<p style="margin:0 0 14px">Hay una actualización operativa en Mommy Crafts.</p><p style="margin:0 0 14px"><strong>Pedido:</strong> ${escapeHtml(data.number)}</p>`,
+        introHtml: `<p style="margin:0 0 14px">Hay una actualización operativa en Emmagina.</p><p style="margin:0 0 14px"><strong>Pedido:</strong> ${escapeHtml(data.number)}</p>`,
         mainHtml,
         ctaUrl: adminUrl,
         ctaLabel: "Abrir pedido en admin",
@@ -456,7 +456,7 @@ function eventBody(order, eventName) {
         ],
         delivered: [
             `${data.greeting}, tu pedido ${data.number} figura como entregado.`,
-            "Gracias por confiar en Mommy Crafts."
+            "Gracias por confiar en Emmagina."
         ],
         cancelled: [
             `${data.greeting}, tu pedido ${data.number} fue cancelado.`,
@@ -489,7 +489,7 @@ function buildNotification(order, eventName = "status_update") {
         label: EVENT_LABELS[body.event] || "Actualización de pedido",
         to: clean(order?.cliente?.email),
         customerPhone,
-        subject: `Mommy Crafts · ${body.subject}`,
+        subject: `Emmagina · ${body.subject}`,
         text: body.text,
         html: buildCustomerEmailHtml(order, body),
         whatsappText: body.text,
@@ -625,7 +625,7 @@ function buildAdminNotification(order, event, customerNotification) {
     });
 
     return {
-        subject: `[Mommy Crafts] ${label} · ${number}`,
+        subject: `[Emmagina] ${label} · ${number}`,
         text,
         html
     };

@@ -33,11 +33,11 @@ test("notificationConfigStatus detecta Resend operativo", () => {
     process.env.NOTIFICATIONS_ENABLED = "true";
     process.env.EMAIL_PROVIDER = "resend";
     process.env.RESEND_API_KEY = "re_123";
-    process.env.EMAIL_FROM = "Mommy Crafts <pedidos@example.com>";
+    process.env.EMAIL_FROM = "Emmagina <pedidos@example.com>";
     process.env.EMAIL_REPLY_TO = "soporte@example.com";
     process.env.NOTIFICATION_ADMIN_EMAIL = "admin@example.com,venta@example.com";
     process.env.WHATSAPP_SUPPORT_NUMBER = "56912345678";
-    process.env.PUBLIC_FRONTEND_URL = "https://mommycrafts.onrender.com";
+    process.env.PUBLIC_FRONTEND_URL = "https://emmagina.onrender.com";
 
     const {
         notificationConfigStatus,
@@ -58,7 +58,7 @@ test("notificationConfigStatus detecta Resend operativo", () => {
 
 test("buildNotification mantiene seguimiento cuando hay frontend público", () => {
     resetEnv();
-    process.env.PUBLIC_FRONTEND_URL = "https://mommycrafts.onrender.com";
+    process.env.PUBLIC_FRONTEND_URL = "https://emmagina.onrender.com";
     const {
         buildNotification
     } = require("../services/notificationService");

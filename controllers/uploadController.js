@@ -39,7 +39,7 @@ async function uploadCustomization(req, res, next) {
 
         const configuredFolder = String(
             process.env.CLOUDINARY_CUSTOMIZATION_FOLDER ||
-            "mommy-crafts/personalizaciones"
+            "emmagina/personalizaciones"
         )
             .split("/")
             .map((part) => cleanSegment(part, "personalizaciones"))
@@ -94,7 +94,7 @@ async function uploadSimpleCustomization(req, res, next) {
         const files = Array.isArray(req.files?.imagenes) ? req.files.imagenes : [];
         if (!files.length) return res.status(400).json({ error: "Debes enviar al menos una imagen." });
         const customizationId = cleanSegment(req.body.customizationId || crypto.randomUUID(), crypto.randomUUID());
-        const configuredFolder = String(process.env.CLOUDINARY_CUSTOMIZATION_FOLDER || "mommy-crafts/personalizaciones")
+        const configuredFolder = String(process.env.CLOUDINARY_CUSTOMIZATION_FOLDER || "emmagina/personalizaciones")
             .split("/").map(part => cleanSegment(part, "personalizaciones")).join("/");
         const folder = `${configuredFolder}/${customizationId}/simple`;
         const assets = [];
@@ -114,11 +114,72 @@ async function uploadSimpleCustomization(req, res, next) {
     }
 }
 
+async function uploadProductImages(req, res, next) {
+    const uploadedPublicIds = [];
+
+    try {
+        const files = Array.isArray(req.files?.imagenes)
+            ? req.files.imagenes
+            : [];
+
+        if (!files.length) {
+            return res.status(400).json({
+                error: "Debes enviar al menos una imagen del producto."
+            });
+        }
+
+        const productSegment = cleanSegment(
+            req.body.productSlug || req.body.productId || req.body.nombre || crypto.randomUUID(),
+            "producto"
+        );
+
+        const configuredFolder = String(
+            process.env.CLOUDINARY_PRODUCT_FOLDER ||
+            process.env.CLOUDINARY_SITE_FOLDER ||
+            "emmagina/productos"
+        )
+            .split("/")
+            .map((part) => cleanSegment(part, "productos"))
+            .join("/");
+
+        const folder = `${configuredFolder}/${productSegment}`;
+        const assets = [];
+
+        for (let index = 0; index < files.length; index += 1) {
+            const file = files[index];
+            const result = await uploadBuffer(file.buffer, {
+                folder,
+                publicId: `producto-${index + 1}-${cleanSegment(crypto.randomUUID(), "img")}`,
+                context: {
+                    productSegment,
+                    assetType: "product-image",
+                    uploadedFrom: "admin"
+                },
+                tags: ["emmagina", "producto", "admin"]
+            });
+
+            uploadedPublicIds.push(result.public_id);
+            assets.push(toAsset(result, file));
+        }
+
+        return res.status(201).json({
+            assets,
+            urls: assets.map((asset) => asset.url)
+        });
+    } catch (error) {
+        await Promise.allSettled(
+            uploadedPublicIds.map((publicId) => deleteAsset(publicId))
+        );
+        next(error);
+    }
+}
+
 function uploadStatus(req, res) {
     res.json({
         cloudinaryConfigured: hasCloudinaryConfig(),
-        maxFiles: 2,
+        maxFiles: 5,
         maxFileSizeMb: 8,
+        productUpload: true,
         allowedTypes: [
             "image/jpeg",
             "image/png",
@@ -130,5 +191,6 @@ function uploadStatus(req, res) {
 module.exports = {
     uploadCustomization,
     uploadSimpleCustomization,
+    uploadProductImages,
     uploadStatus
 };

@@ -31,7 +31,7 @@ function validPayload() {
         label: "Guía de regalos",
         path: "pagina.html?slug=guia-regalos",
         enabled: true,
-        seoTitle: "Guía de regalos | Mommy Crafts",
+        seoTitle: "Guía de regalos | Emmagina",
         seoDescription: "Ideas de regalos personalizados.",
         layout: { maxWidth: 1100, contentPadding: 20, sectionGap: 32, backgroundColor: "#FFF9FD" },
         sections: [{

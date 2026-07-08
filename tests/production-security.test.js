@@ -35,12 +35,12 @@ function withEnvironment(values, callback) {
 
 const validProductionEnvironment = {
     NODE_ENV: "production",
-    MONGODB_URI: "mongodb+srv://user:password@cluster.mongodb.net/mommycrafts",
-    FRONTEND_URLS: "https://mommycrafts.cl",
-    PUBLIC_FRONTEND_URL: "https://mommycrafts.cl",
-    PUBLIC_BACKEND_URL: "https://api.mommycrafts.cl",
+    MONGODB_URI: "mongodb+srv://user:password@cluster.mongodb.net/emmagina",
+    FRONTEND_URLS: "https://emmagina.cl",
+    PUBLIC_FRONTEND_URL: "https://emmagina.cl",
+    PUBLIC_BACKEND_URL: "https://api.emmagina.cl",
     TRUST_PROXY_HOPS: "1",
-    CLOUDINARY_CLOUD_NAME: "mommycrafts",
+    CLOUDINARY_CLOUD_NAME: "emmagina",
     CLOUDINARY_API_KEY: "123456789",
     CLOUDINARY_API_SECRET: "secret-cloudinary-value",
     MP_ENVIRONMENT: "test",
@@ -52,15 +52,15 @@ test("acepta una configuración de producción completa", () => {
     withEnvironment(validProductionEnvironment, () => {
         const report = validateProductionConfig();
         assert.equal(report.environment, "production");
-        assert.deepEqual(report.origins, ["https://mommycrafts.cl"]);
+        assert.deepEqual(report.origins, ["https://emmagina.cl"]);
     });
 });
 
 test("rechaza orígenes inseguros o con rutas", () => {
     withEnvironment({
         ...validProductionEnvironment,
-        FRONTEND_URLS: "http://mommycrafts.cl/tienda",
-        PUBLIC_FRONTEND_URL: "http://mommycrafts.cl/tienda"
+        FRONTEND_URLS: "http://emmagina.cl/tienda",
+        PUBLIC_FRONTEND_URL: "http://emmagina.cl/tienda"
     }, () => {
         assert.throws(
             validateProductionConfig,
@@ -83,12 +83,12 @@ test("rechaza configuración productiva con localhost", () => {
 
 test("normaliza solo orígenes absolutos sin ruta", () => {
     assert.equal(
-        normalizeOrigin("https://mommycrafts.cl/"),
-        "https://mommycrafts.cl"
+        normalizeOrigin("https://emmagina.cl/"),
+        "https://emmagina.cl"
     );
 
     assert.equal(
-        normalizeOrigin("https://mommycrafts.cl/catalogo"),
+        normalizeOrigin("https://emmagina.cl/catalogo"),
         ""
     );
 });

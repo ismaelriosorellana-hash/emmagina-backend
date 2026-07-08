@@ -190,9 +190,9 @@ test(
     () => {
         assert.equal(
             normalizeOrigin(
-                "https://mommycrafts-cl.netlify.app/"
+                "https://emmagina-cl.netlify.app/"
             ),
-            "https://mommycrafts-cl.netlify.app"
+            "https://emmagina-cl.netlify.app"
         );
     }
 );
@@ -223,7 +223,7 @@ test(
                 "y".repeat(64);
 
             process.env.FRONTEND_URLS =
-                "https://mommycrafts-cl.netlify.app";
+                "https://emmagina-cl.netlify.app";
 
             assert.doesNotThrow(
                 validateSecurityConfig

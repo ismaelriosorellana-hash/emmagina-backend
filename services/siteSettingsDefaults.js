@@ -15,9 +15,9 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
     key: "main",
     branding: {
         logo: {
-            url: "https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/LOGO_MOMMY_CRAFTS_PNGG_mpgyfl.png",
+            url: "",
             publicId: "",
-            alt: "Logo Mommy Crafts",
+            alt: "Logo Emmagina",
             width: 52,
             offsetX: 0,
             offsetY: 0
@@ -26,7 +26,7 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
             mode: "image",
             url: "https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/Mommy_Crafts_2_1_hbj8xi.png",
             publicId: "",
-            text: "Mommy Crafts",
+            text: "Emmagina",
             width: 220,
             fontSize: 32,
             offsetX: 0,

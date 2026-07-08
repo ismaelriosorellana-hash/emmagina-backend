@@ -4,7 +4,7 @@ require("dotenv").config();
 const mongoose = require("mongoose");
 const Producto = require("../models/Producto");
 const Categoria = require("../models/Categoria");
-const { connectDB } = require("../config/db");
+const { connectDatabase } = require("../config/db");
 
 const categories = [
   { nombre: "Figuras Esenciales", descripcion: "Opciones de entrada desde $14.990", icono: "fa-solid fa-cloud", color: "#b9d8e6", orden: 10 },
@@ -41,7 +41,7 @@ const products = [
   ["KSD-EXTRA-CAJA", "Caja Regalo Premium", 3990, "Packs y Regalos", ["Packs y Regalos", "Placas y Extras"], "Extra", "Presentación especial para regalo: caja, protección interior y tarjeta breve. No se vende por separado.", 0, 1, 120]
 ].map(([sku, nombre, precio, categoriaPrincipal, categorias, insignia, descripcion, pesoGramos, diasPreparacion, orden]) => ({
   sku, nombre, precio, categoriaPrincipal, categorias, insignia, descripcion, pesoGramos, diasPreparacion, orden,
-  marca: "Key Soul Desing",
+  marca: "Emmagina",
   precioOriginal: 0,
   imagenes: [placeholder(nombre, categoriaPrincipal)],
   destacado: ["KSD-MINI-ALMA", "KSD-ALMA", "KSD-ALMA-PLACA", "KSD-DUO-ALMA", "KSD-FAMILIAR-ALMA"].includes(sku),
@@ -89,15 +89,15 @@ async function upsertProduct(product) {
 }
 
 async function main() {
-  await connectDB();
+  await connectDatabase();
   for (const category of categories) await upsertCategory(category);
   for (const product of products) await upsertProduct(product);
-  console.log(`Seed Key Soul Desing aplicado: ${categories.length} categorías y ${products.length} productos.`);
+  console.log(`Seed Emmagina aplicado: ${categories.length} categorías y ${products.length} productos.`);
 }
 
 main()
   .catch((error) => {
-    console.error("No fue posible aplicar seed Key Soul Desing:", error);
+    console.error("No fue posible aplicar seed Emmagina:", error);
     process.exitCode = 1;
   })
   .finally(async () => {

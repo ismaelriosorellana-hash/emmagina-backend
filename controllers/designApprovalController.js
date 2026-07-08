@@ -17,8 +17,8 @@ async function uploadFinalDesign(req, res, next) {
         if (item.personalizacionResumen?.tipo === "ninguna") return res.status(409).json({ error: "Este producto no registra personalización." });
         const file = firstFile(req);
         if (!file) return res.status(400).json({ error: "Selecciona la imagen del diseño final." });
-        const folder = `${process.env.CLOUDINARY_DESIGN_FOLDER || "mommy-crafts/disenos"}/${cleanSegment(order.numeroPedido)}/${cleanSegment(item.lineaId)}`;
-        const result = await uploadBuffer(file.buffer, { folder, publicId: `diseno-${Date.now()}`, tags: ["mommy-crafts", "diseno-final"] });
+        const folder = `${process.env.CLOUDINARY_DESIGN_FOLDER || "emmagina/disenos"}/${cleanSegment(order.numeroPedido)}/${cleanSegment(item.lineaId)}`;
+        const result = await uploadBuffer(file.buffer, { folder, publicId: `diseno-${Date.now()}`, tags: ["emmagina", "diseno-final"] });
         const previous = item.disenoFinal?.asset;
         item.disenoFinal = {
             estado: item.disenoFinal?.estado === "cambios_solicitados" ? "corregido" : "enviado",

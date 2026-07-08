@@ -152,7 +152,7 @@ const productSchema = new mongoose.Schema(
             type: String,
             trim: true,
             maxlength: 120,
-            default: "Mommy Crafts"
+            default: "Emmagina"
         },
 
         codigoBarras: {
@@ -307,7 +307,7 @@ const productSchema = new mongoose.Schema(
                 },
                 instrucciones: {
                     type: String,
-                    default: "El envío se realizará dentro de 3 días hábiles después de la confirmación del pedido. Esta confirmación será notificada al cliente por correo electrónico o WhatsApp.",
+                    default: "Santiago: despacho local coordinado. Regiones: envío por pagar o cotizado antes de fabricar. El plazo de producción se confirma según complejidad.",
                     maxlength: 3000
                 }
             },
@@ -318,7 +318,7 @@ const productSchema = new mongoose.Schema(
                 },
                 instrucciones: {
                     type: String,
-                    default: "El lugar definido para retiros es la salida norte de la estación Macul, Línea 4 del Metro de Santiago. La fecha y hora de entrega serán coordinadas una vez confirmado el pedido.",
+                    default: "Retiro en Santiago previa coordinación. La fecha y hora se confirmarán cuando la pieza esté lista.",
                     maxlength: 3000
                 }
             }

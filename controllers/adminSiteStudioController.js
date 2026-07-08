@@ -73,7 +73,7 @@ async function uploadStudioImage(req, res, next) {
         const file = firstFile(req.files, "image");
         if (!file) return res.status(400).json({ error: "Selecciona una imagen." });
 
-        const folderRoot = String(process.env.CLOUDINARY_SITE_FOLDER || "mommy-crafts/sitio")
+        const folderRoot = String(process.env.CLOUDINARY_SITE_FOLDER || "emmagina/sitio")
             .split("/")
             .map((part) => cleanSegment(part, "sitio"))
             .join("/");
@@ -82,7 +82,7 @@ async function uploadStudioImage(req, res, next) {
             folder: `${folderRoot}/editor`,
             publicId: token,
             context: { assetType: "site-studio", uploadedBy: String(req.user?._id || "admin") },
-            tags: ["mommy-crafts", "site-studio"]
+            tags: ["emmagina", "site-studio"]
         });
         const asset = toAsset(result, file);
         securityEvent(req, "site_studio_image_uploaded", { publicId: asset.publicId });

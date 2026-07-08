@@ -7,8 +7,8 @@ const CORE_PAGES = [
         label: "Inicio",
         path: "index.html",
         enabled: true,
-        seoTitle: "Mommy Crafts | Productos personalizados",
-        seoDescription: "Productos personalizados, sublimados y estampados de Mommy Crafts.",
+        seoTitle: "Emmagina | Productos personalizados",
+        seoDescription: "Productos personalizados, sublimados y estampados de Emmagina.",
         layout: { maxWidth: 1320, contentPadding: 20, sectionGap: 54, backgroundColor: "#FFF9FD" },
         sections: [
             { id: "hero", type: "core", zone: "main", enabled: true, order: 10, eyebrow: "Regalos creados con intención", title: "Productos auténticos y únicos para quienes más quieres", body: "", buttonLabel: "Ver productos", buttonUrl: "#lo-mas-vendido", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
@@ -25,8 +25,8 @@ const CORE_PAGES = [
         label: "Catálogo",
         path: "catalogo.html",
         enabled: true,
-        seoTitle: "Catálogo | Mommy Crafts",
-        seoDescription: "Explora todos los productos disponibles en Mommy Crafts.",
+        seoTitle: "Catálogo | Emmagina",
+        seoDescription: "Explora todos los productos disponibles en Emmagina.",
         layout: { maxWidth: 1320, contentPadding: 20, sectionGap: 34, backgroundColor: "#FFF9FD" },
         sections: [
             { id: "heading", type: "core", zone: "main", enabled: true, order: 10, eyebrow: "Catálogo", title: "Todos los productos", body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
@@ -40,7 +40,7 @@ const CORE_PAGES = [
         label: "Detalle de producto",
         path: "producto.html",
         enabled: true,
-        seoTitle: "Producto | Mommy Crafts",
+        seoTitle: "Producto | Emmagina",
         seoDescription: "Detalle, opciones y personalización del producto.",
         layout: { maxWidth: 1320, contentPadding: 20, sectionGap: 42, backgroundColor: "#FFF9FD" },
         sections: [
@@ -54,7 +54,7 @@ const CORE_PAGES = [
         label: "Carrito",
         path: "carrito.html",
         enabled: true,
-        seoTitle: "Carrito de compras | Mommy Crafts",
+        seoTitle: "Carrito de compras | Emmagina",
         seoDescription: "Revisa productos, cantidades, sugerencias y meta de envío gratis.",
         layout: { maxWidth: 1220, contentPadding: 20, sectionGap: 32, backgroundColor: "#FFF9FD" },
         sections: [
@@ -71,7 +71,7 @@ const CORE_PAGES = [
         label: "Finalizar compra",
         path: "finalizar-compra.html",
         enabled: true,
-        seoTitle: "Finalizar compra | Mommy Crafts",
+        seoTitle: "Finalizar compra | Emmagina",
         seoDescription: "Completa tus datos, entrega y medio de pago.",
         layout: { maxWidth: 1260, contentPadding: 20, sectionGap: 24, backgroundColor: "#FFF9FD" },
         sections: [
@@ -89,7 +89,7 @@ const CORE_PAGES = [
         label: "Acceso clientes",
         path: "acceso.html",
         enabled: true,
-        seoTitle: "Acceso | Mommy Crafts",
+        seoTitle: "Acceso | Emmagina",
         seoDescription: "Inicia sesión o crea tu cuenta de cliente.",
         layout: { maxWidth: 980, contentPadding: 20, sectionGap: 28, backgroundColor: "#FFF9FD" },
         sections: [
@@ -103,7 +103,7 @@ const CORE_PAGES = [
         label: "Mi cuenta",
         path: "cuenta.html",
         enabled: true,
-        seoTitle: "Mi cuenta | Mommy Crafts",
+        seoTitle: "Mi cuenta | Emmagina",
         seoDescription: "Gestiona tu perfil y revisa tus pedidos.",
         layout: { maxWidth: 1180, contentPadding: 20, sectionGap: 28, backgroundColor: "#FFF9FD" },
         sections: [
@@ -119,7 +119,7 @@ const CORE_PAGES = [
         label: "Detalle de pedido",
         path: "pedido.html",
         enabled: true,
-        seoTitle: "Pedido | Mommy Crafts",
+        seoTitle: "Pedido | Emmagina",
         seoDescription: "Consulta el detalle y seguimiento de tu pedido.",
         layout: { maxWidth: 1080, contentPadding: 20, sectionGap: 28, backgroundColor: "#FFF9FD" },
         sections: [
@@ -133,7 +133,7 @@ const CORE_PAGES = [
         label: "Resultado de pago",
         path: "pago.html",
         enabled: true,
-        seoTitle: "Resultado de pago | Mommy Crafts",
+        seoTitle: "Resultado de pago | Emmagina",
         seoDescription: "Revisa el resultado y estado de tu pago.",
         layout: { maxWidth: 900, contentPadding: 20, sectionGap: 28, backgroundColor: "#FFF9FD" },
         sections: [
@@ -160,8 +160,8 @@ for (const [id, label, path] of CONTENT_PAGE_DEFINITIONS) {
         label,
         path,
         enabled: true,
-        seoTitle: `${label} | Mommy Crafts`,
-        seoDescription: `${label} de Mommy Crafts.`,
+        seoTitle: `${label} | Emmagina`,
+        seoDescription: `${label} de Emmagina.`,
         layout: { maxWidth: 1040, contentPadding: 20, sectionGap: 28, backgroundColor: "#FFF9FD" },
         sections: [
             { id: "content", type: "core", zone: "main", enabled: true, order: 10, eyebrow: "", title: label, body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 }
@@ -181,9 +181,9 @@ const DEFAULT_SITE_STUDIO = Object.freeze({
     },
     footer: {
         enabled: true,
-        heading: "Mommy Crafts",
+        heading: "Emmagina",
         description: "Productos personalizados creados con dedicación para cada ocasión.",
-        copyright: "Mommy Crafts. Todos los derechos reservados.",
+        copyright: "Emmagina. Todos los derechos reservados.",
         showNewsletter: true,
         links: [
             { label: "Quiénes somos", url: "quienes-somos.html", enabled: true, order: 10 },

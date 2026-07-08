@@ -27,7 +27,7 @@ function uploadBuffer(buffer, options = {}) {
                 unique_filename: false,
                 use_filename: false,
                 context: options.context || undefined,
-                tags: options.tags || ["mommy-crafts", "personalizacion"]
+                tags: options.tags || ["emmagina", "personalizacion"]
             },
             (error, result) => {
                 if (error) {

@@ -43,7 +43,7 @@ function sampleOrder(overrides = {}) {
 
 test("crea una preferencia con envío separado y URLs de retorno", () => {
     const previous = process.env.PUBLIC_FRONTEND_URL;
-    process.env.PUBLIC_FRONTEND_URL = "https://mommycrafts.onrender.com";
+    process.env.PUBLIC_FRONTEND_URL = "https://emmagina.onrender.com";
 
     try {
         const body = buildPreferenceBody(sampleOrder());
@@ -59,7 +59,7 @@ test("crea una preferencia con envío separado y URLs de retorno", () => {
             24000
         );
         assert.equal(body.external_reference, "MC-2026-0001");
-        assert.match(body.back_urls.success, /^https:\/\/mommycrafts\.onrender\.com\/pago\.html\?/);
+        assert.match(body.back_urls.success, /^https:\/\/emmagina\.onrender\.com\/pago\.html\?/);
         assert.equal(body.auto_return, "approved");
     } finally {
         if (previous === undefined) delete process.env.PUBLIC_FRONTEND_URL;
@@ -99,7 +99,7 @@ test("acepta los dos métodos habilitados y rechaza otros", () => {
     const previousBackendUrl = process.env.PUBLIC_BACKEND_URL;
     process.env.MP_ACCESS_TOKEN = "APP_USR-TEST";
     process.env.MP_WEBHOOK_SECRET = "test-webhook-secret";
-    process.env.PUBLIC_BACKEND_URL = "https://mommy-crafts-backend.onrender.com";
+    process.env.PUBLIC_BACKEND_URL = "https://emmagina-backend.onrender.com";
 
     try {
         assert.doesNotThrow(() => validatePaymentMethod("transferencia"));

@@ -27,8 +27,8 @@ test("cancelacion queda auditada sin borrar el pedido", () => {
     assert.doesNotMatch(accountController, /deleteOne\(\{\s*_id:\s*req\.params\.id/);
 });
 
-test("correo visible de produccion usa venta@mommycrafts.cl", () => {
-    assert.match(envExample, /EMAIL_FROM=Mommy Crafts <venta@mommycrafts\.cl>/);
-    assert.match(envExample, /EMAIL_REPLY_TO=venta@mommycrafts\.cl/);
-    assert.match(envExample, /NOTIFICATION_ADMIN_EMAIL=venta@mommycrafts\.cl/);
+test("correo visible de produccion usa venta@emmagina.cl", () => {
+    assert.match(envExample, /EMAIL_FROM=Emmagina <venta@emmagina\.cl>/);
+    assert.match(envExample, /EMAIL_REPLY_TO=venta@emmagina\.cl/);
+    assert.match(envExample, /NOTIFICATION_ADMIN_EMAIL=venta@emmagina\.cl/);
 });

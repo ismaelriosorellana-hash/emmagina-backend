@@ -19,8 +19,8 @@ async function uploadReceipt(req, res, next) {
         const file = firstFile(req);
         if (!file) return res.status(400).json({ error: "Selecciona un comprobante." });
         const resourceType = file.mimetype === "application/pdf" ? "raw" : "image";
-        const folder = `${process.env.CLOUDINARY_PAYMENT_FOLDER || "mommy-crafts/pagos"}/${cleanSegment(order.numeroPedido)}`;
-        const result = await uploadBuffer(file.buffer, { folder, publicId: `comprobante-${Date.now()}`, resourceType, tags: ["mommy-crafts", "comprobante"] });
+        const folder = `${process.env.CLOUDINARY_PAYMENT_FOLDER || "emmagina/pagos"}/${cleanSegment(order.numeroPedido)}`;
+        const result = await uploadBuffer(file.buffer, { folder, publicId: `comprobante-${Date.now()}`, resourceType, tags: ["emmagina", "comprobante"] });
         const previous = order.transferencia?.comprobante;
         order.transferencia.comprobante = toAsset(result, file);
         order.transferencia.recibidoAt = new Date();

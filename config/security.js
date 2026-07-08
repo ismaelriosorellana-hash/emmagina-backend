@@ -1,7 +1,7 @@
 "use strict";
 
-const DEFAULT_ISSUER = "mommy-crafts-api";
-const DEFAULT_AUDIENCE = "mommy-crafts-frontend";
+const DEFAULT_ISSUER = "emmagina-api";
+const DEFAULT_AUDIENCE = "emmagina-frontend";
 
 function jwtIssuer() {
     return String(

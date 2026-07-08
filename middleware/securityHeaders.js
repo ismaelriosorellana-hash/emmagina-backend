@@ -21,7 +21,7 @@ const DEFAULT_CSP = [
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com",
     "font-src 'self' data: https://fonts.gstatic.com https://cdnjs.cloudflare.com",
     "img-src 'self' data: blob: https: https://www.google-analytics.com https://www.googletagmanager.com https://*.clarity.ms",
-    "connect-src 'self' https://mommy-crafts-backend.onrender.com https://res.cloudinary.com https://*.cloudinary.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://www.clarity.ms https://*.clarity.ms",
+    "connect-src 'self' https://emmagina-backend.onrender.com https://res.cloudinary.com https://*.cloudinary.com https://www.google-analytics.com https://analytics.google.com https://www.googletagmanager.com https://www.clarity.ms https://*.clarity.ms",
     "media-src 'self' blob:",
     "worker-src 'self' blob:",
     "manifest-src 'self'",

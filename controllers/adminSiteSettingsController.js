@@ -100,14 +100,14 @@ async function uploadBrandAsset(req, res, next) {
         if (!file) return res.status(400).json({ error: "Selecciona una imagen." });
 
         const type = String(req.body.type || "logo").toLowerCase() === "title" ? "title" : "logo";
-        const folderRoot = String(process.env.CLOUDINARY_SITE_FOLDER || "mommy-crafts/sitio")
+        const folderRoot = String(process.env.CLOUDINARY_SITE_FOLDER || "emmagina/sitio")
             .split("/").map((part) => cleanSegment(part, "sitio")).join("/");
         const token = cleanSegment(`${type}-${Date.now()}-${crypto.randomBytes(4).toString("hex")}`, type);
         const result = await uploadBuffer(file.buffer, {
             folder: `${folderRoot}/identidad`,
             publicId: token,
             context: { assetType: type, uploadedBy: String(req.user?._id || "admin") },
-            tags: ["mommy-crafts", "site-branding", type]
+            tags: ["emmagina", "site-branding", type]
         });
 
         const asset = toAsset(result, file);

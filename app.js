@@ -299,7 +299,7 @@ app.get(
     (req, res) => {
         res.json({
             nombre:
-                "API Mommy Crafts",
+                "API Emmagina",
             version:
                 APP_VERSION,
             estado:
@@ -323,6 +323,16 @@ app.use(
 // Rutas públicas
 app.use(
     "/api/productos",
+    productosRoutes
+);
+
+app.use(
+    "/api/producto",
+    productosRoutes
+);
+
+app.use(
+    "/api/catalogo",
     productosRoutes
 );
 

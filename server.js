@@ -76,7 +76,7 @@ async function start() {
                 port,
                 () => {
                     console.log(
-                        `🚀 Servidor Mommy Crafts v${APP_VERSION} en puerto ${port}`
+                        `🚀 Servidor Emmagina v${APP_VERSION} en puerto ${port}`
                     );
                 }
             );

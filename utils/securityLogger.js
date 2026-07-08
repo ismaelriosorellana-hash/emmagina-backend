@@ -14,7 +14,7 @@ function hashValue(value) {
     const salt = String(
         process.env.SECURITY_LOG_SALT ||
         process.env.JWT_SECRET ||
-        "mommy-crafts"
+        "emmagina"
     );
 
     return crypto

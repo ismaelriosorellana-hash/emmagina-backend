@@ -31,40 +31,40 @@ function withEnv(values, fn) {
     }
 }
 
-test("dominio por defecto usa mommycrafts.cl", () => {
-    assert.equal(DEFAULT_SITE_URL, "https://mommycrafts.cl");
+test("dominio por defecto usa emmagina.cl", () => {
+    assert.equal(DEFAULT_SITE_URL, "https://emmagina.cl");
     withEnv({
         PUBLIC_SITE_URL: undefined,
         SEO_PUBLIC_URL: undefined,
         FRONTEND_URL: undefined,
         SITE_URL: undefined
     }, () => {
-        assert.equal(siteUrl(), "https://mommycrafts.cl");
-        assert.equal(seoPublicUrl(), "https://mommycrafts.cl");
-        assert.equal(prettyProductUrl("vaso-alto"), "https://mommycrafts.cl/producto/vaso-alto");
+        assert.equal(siteUrl(), "https://emmagina.cl");
+        assert.equal(seoPublicUrl(), "https://emmagina.cl");
+        assert.equal(prettyProductUrl("vaso-alto"), "https://emmagina.cl/producto/vaso-alto");
     });
 });
 
 test("metadatos, robots y sitemap usan dominio final", () => {
     withEnv({
-        PUBLIC_SITE_URL: "https://mommycrafts.cl",
-        SEO_PUBLIC_URL: "https://mommycrafts.cl",
-        FRONTEND_URL: "https://mommycrafts.cl"
+        PUBLIC_SITE_URL: "https://emmagina.cl",
+        SEO_PUBLIC_URL: "https://emmagina.cl",
+        FRONTEND_URL: "https://emmagina.cl"
     }, () => {
         const meta = productMeta({
             _id: "abc123",
             nombre: "Vaso alto con nombre",
             slug: "vaso-alto-con-nombre",
             precio: 7990,
-            descripcion: "Vaso personalizado preparado por Mommy Crafts.",
+            descripcion: "Vaso personalizado preparado por Emmagina.",
             imagenes: ["https://res.cloudinary.com/demo/image/upload/vaso.jpg"],
             activo: true,
             publicarCatalogo: true
         });
 
-        assert.equal(meta.canonicalUrl, "https://mommycrafts.cl/producto/vaso-alto-con-nombre");
-        assert.equal(meta.frontendUrl, "https://mommycrafts.cl/producto.html?slug=vaso-alto-con-nombre");
-        assert.match(renderRobots(), /Sitemap: https:\/\/mommycrafts\.cl\/sitemap\.xml/);
-        assert.match(renderSitemap([meta.product]), /<loc>https:\/\/mommycrafts\.cl\/producto\/vaso-alto-con-nombre<\/loc>/);
+        assert.equal(meta.canonicalUrl, "https://emmagina.cl/producto/vaso-alto-con-nombre");
+        assert.equal(meta.frontendUrl, "https://emmagina.cl/producto.html?slug=vaso-alto-con-nombre");
+        assert.match(renderRobots(), /Sitemap: https:\/\/emmagina\.cl\/sitemap\.xml/);
+        assert.match(renderSitemap([meta.product]), /<loc>https:\/\/emmagina\.cl\/producto\/vaso-alto-con-nombre<\/loc>/);
     });
 });

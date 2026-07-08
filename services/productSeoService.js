@@ -11,8 +11,8 @@ const {
     normalizeProductOutput
 } = require("../utils/productNormalizer");
 
-const DEFAULT_SITE_URL = "https://mommycrafts.cl";
-const DEFAULT_BRAND = "Mommy Crafts";
+const DEFAULT_SITE_URL = "https://emmagina.cl";
+const DEFAULT_BRAND = "Emmagina";
 const DEFAULT_IMAGE = "https://res.cloudinary.com/jo3bgrnh/image/upload/v1782320550/Mommy_Crafts_2_1_hbj8xi.png";
 const DEFAULT_LOCALE = "es_CL";
 const DEFAULT_CURRENCY = "CLP";
@@ -199,18 +199,18 @@ function productAvailability(product) {
 function productMeta(rawProduct) {
     const product = normalizeProductOutput(rawProduct);
     const slug = createSlug(product.slug || product.nombre || product.id).slice(0, 140);
-    const productName = cleanText(product.nombre, "Producto Mommy Crafts");
+    const productName = cleanText(product.nombre, "Producto Emmagina");
     const title = truncate(
-        product.seo?.titulo || `${productName} | Mommy Crafts`,
+        product.seo?.titulo || `${productName} | Emmagina`,
         70,
-        `${productName} | Mommy Crafts`
+        `${productName} | Emmagina`
     );
     const description = truncate(
         product.seo?.descripcion ||
         product.descripcion ||
-        `Compra ${productName} en Mommy Crafts. Revisa precio, opciones de personalización, tiempos de preparación y entrega coordinada.`,
+        `Compra ${productName} en Emmagina. Revisa precio, opciones de personalización, tiempos de preparación y entrega coordinada.`,
         170,
-        `Compra ${productName} en Mommy Crafts.`
+        `Compra ${productName} en Emmagina.`
     );
     const images = productImages(product);
     const price = Math.max(0, numberValue(product.precio));
@@ -310,7 +310,7 @@ function seoMetaBlock(meta) {
         `<meta name="description" content="${escapeHtml(meta.description)}">`,
         `<meta name="robots" content="${escapeHtml(robots)}">`,
         `<link rel="canonical" href="${escapeHtml(meta.canonicalUrl)}">`,
-        `<meta property="og:site_name" content="Mommy Crafts">`,
+        `<meta property="og:site_name" content="Emmagina">`,
         `<meta property="og:locale" content="${DEFAULT_LOCALE}">`,
         `<meta property="og:type" content="product">`,
         `<meta property="og:title" content="${escapeHtml(meta.title)}">`,
@@ -353,7 +353,7 @@ function minimalProductHtml(meta) {
 <main>
 <h1>${escapeHtml(meta.product.nombre)}</h1>
 <p>${escapeHtml(meta.description)}</p>
-<p><a href="${escapeHtml(meta.frontendUrl)}">Ver producto en Mommy Crafts</a></p>
+<p><a href="${escapeHtml(meta.frontendUrl)}">Ver producto en Emmagina</a></p>
 </main>
 </body>
 </html>`;

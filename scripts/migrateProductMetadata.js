@@ -65,7 +65,7 @@ async function main() {
                     {
                         $set: {
                             sku: data.sku,
-                            marca: data.marca || "Mommy Crafts",
+                            marca: data.marca || "Emmagina",
                             variantes: data.variantes,
                             dimensiones: data.dimensiones,
                             pesoGramos: data.pesoGramos,

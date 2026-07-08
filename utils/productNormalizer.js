@@ -307,7 +307,7 @@ function normalizeProductOutput(rawProduct) {
             stringValue(raw.nombre)
         ),
         sku: normalizeSku(raw.sku),
-        marca: stringValue(raw.marca, "Mommy Crafts").slice(0, 120),
+        marca: stringValue(raw.marca, "Emmagina").slice(0, 120),
         codigoBarras: stringValue(
             firstDefined(raw.codigoBarras, raw.barcode, raw.ean)
         ).slice(0, 80),
@@ -466,7 +466,7 @@ function normalizeProductInput(input = {}) {
         ).slice(0, 140);
 
     normalized.sku = normalizeSku(input.sku);
-    normalized.marca = stringValue(input.marca, "Mommy Crafts").slice(0, 120);
+    normalized.marca = stringValue(input.marca, "Emmagina").slice(0, 120);
     normalized.codigoBarras = stringValue(input.codigoBarras).slice(0, 80);
     normalized.pesoGramos = Math.round(
         clampNumber(input.pesoGramos, 0, 100000)

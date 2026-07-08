@@ -6,6 +6,7 @@ const express =
 const {
     uploadCustomization,
     uploadSimpleCustomization,
+    uploadProductImages,
     uploadStatus
 } = require(
     "../controllers/uploadController"
@@ -55,6 +56,17 @@ router.post(
     customizationUpload,
     validateImageSignatures,
     uploadCustomization
+);
+
+
+router.post(
+    "/productos",
+    uploadLimiter,
+    requireAuth,
+    requireRole("administrador", "gestor"),
+    simpleCustomizationUpload,
+    validateMagic,
+    uploadProductImages
 );
 
 router.post(

@@ -169,10 +169,10 @@ function buildSecurityStatus() {
         createCheck(
             "final-store-domain",
             "Dominio final de tienda",
-            publicFrontend === "https://mommycrafts.cl" && publicSite === "https://mommycrafts.cl",
-            publicFrontend === "https://mommycrafts.cl" && publicSite === "https://mommycrafts.cl"
-                ? "Frontend y SEO usan mommycrafts.cl como dominio oficial."
-                : "Actualiza PUBLIC_FRONTEND_URL, PUBLIC_SITE_URL y SEO_PUBLIC_URL a https://mommycrafts.cl.",
+            publicFrontend === "https://emmagina.cl" && publicSite === "https://emmagina.cl",
+            publicFrontend === "https://emmagina.cl" && publicSite === "https://emmagina.cl"
+                ? "Frontend y SEO usan emmagina.cl como dominio oficial."
+                : "Actualiza PUBLIC_FRONTEND_URL, PUBLIC_SITE_URL y SEO_PUBLIC_URL a https://emmagina.cl.",
             "warning"
         ),
         createCheck(

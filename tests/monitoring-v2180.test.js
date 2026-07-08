@@ -43,7 +43,7 @@ test("health live responde sin consultar datos sensibles", () => {
 
     assert.equal(res.statusCode, 200);
     assert.equal(res.payload.ok, true);
-    assert.equal(res.payload.servicio, "mommy-crafts-backend");
+    assert.equal(res.payload.servicio, "emmagina-backend");
     assert.equal(res.payload.requestId, "test-request");
     assert.equal(typeof res.payload.uptimeSegundos, "number");
     assert.equal(Object.prototype.hasOwnProperty.call(res.payload, "jwt"), false);

@@ -42,7 +42,7 @@ function databaseStatus() {
 function basePayload(req) {
     return {
         ok: true,
-        servicio: "mommy-crafts-backend",
+        servicio: "emmagina-backend",
         version: APP_VERSION,
         entorno: process.env.NODE_ENV || "development",
         fecha: new Date().toISOString(),
@@ -80,8 +80,8 @@ function adminSystemStatus(req, res) {
         seguridad: {
             corsProduccion: process.env.NODE_ENV === "production",
             trustProxy: Number(process.env.TRUST_PROXY_HOPS || 0),
-            jwtIssuer: Boolean(process.env.JWT_ISSUER || "mommy-crafts-api"),
-            jwtAudience: Boolean(process.env.JWT_AUDIENCE || "mommy-crafts-frontend")
+            jwtIssuer: Boolean(process.env.JWT_ISSUER || "emmagina-api"),
+            jwtAudience: Boolean(process.env.JWT_AUDIENCE || "emmagina-frontend")
         },
         seo: {
             publicSiteUrl: String(process.env.PUBLIC_SITE_URL || process.env.SEO_PUBLIC_URL || ""),
