@@ -1,0 +1,59 @@
+{
+  "name": "key-soul-desing-backend",
+  "version": "3.0.0-ksd.1",
+  "description": "API de Key Soul Desing para tienda de escenas 3D familiares personalizadas, pedidos, catálogo, pagos y panel administrativo.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "create-admin": "node scripts/createAdmin.js",
+    "check": "node scripts/checkSyntax.js",
+    "test": "node --test tests/*.test.js",
+    "security-check": "npm run check && npm test && node scripts/checkSecurity.js",
+    "db-check": "node scripts/checkDatabase.js",
+    "config-check": "node scripts/checkProductionConfig.js",
+    "catalog-slugs-check": "node scripts/migrateProductSlugs.js",
+    "catalog-slugs-apply": "node scripts/migrateProductSlugs.js --apply",
+    "catalog-metadata-check": "node scripts/migrateProductMetadata.js",
+    "catalog-metadata-apply": "node scripts/migrateProductMetadata.js --apply",
+    "seo-check": "npm run check && node --test tests/seo-prerender-v2170.test.js",
+    "monitoring-check": "npm run check && node --test tests/monitoring-v2180.test.js",
+    "notifications-check": "npm run check && node --test tests/notifications-v2190.test.js",
+    "production-check": "npm run config-check && npm run monitoring-check && npm run notifications-check && npm run launch-security-check && npm run domain-final-check",
+    "launch-security-check": "npm run check && node --test tests/production-security-v2200.test.js && node scripts/checkLaunchReadiness.js",
+    "domain-final-check": "npm run check && node --test tests/domain-final-v2210.test.js",
+    "customer-orders-check": "npm run check && node --test tests/customer-cancel-order-v2220.test.js",
+    "analytics-check": "npm run check && node --test tests/analytics-settings-v2230.test.js",
+    "email-templates-check": "npm run check && node --test tests/email-templates-v2241.test.js",
+    "operations-check": "npm run check && node --test tests/operations-dashboard-v2250.test.js",
+    "seed-key-soul": "node scripts/seedKeySoulProducts.js"
+  },
+  "keywords": [
+    "ecommerce",
+    "mongodb",
+    "express",
+    "key-soul-desing",
+    "impresion-3d"
+  ],
+  "author": "Key Soul Desing",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.6.1",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.1",
+    "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.16.0",
+    "morgan": "^1.10.0",
+    "cloudinary": "^2.7.0",
+    "multer": "^2.0.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

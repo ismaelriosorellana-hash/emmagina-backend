@@ -1,0 +1,264 @@
+"use strict";
+
+const Producto =
+    require("../models/Producto");
+
+const {
+    normalizeProductInput,
+    normalizeProductOutput
+} = require("../utils/productNormalizer");
+
+const {
+    resolveUniqueProductSlug
+} = require("../services/productSlugService");
+
+const {
+    assignProductSkus
+} = require("../services/productSkuService");
+
+const {
+    escapeRegex
+} = require("../utils/catalogQuery");
+
+async function listAdminProducts(
+    req,
+    res,
+    next
+) {
+    try {
+        const filter = {};
+
+        if (req.query.buscar) {
+            const search = String(req.query.buscar)
+                .replace(/[\u0000-\u001F\u007F]/g, " ")
+                .replace(/\s+/g, " ")
+                .trim()
+                .slice(0, 80);
+
+            if (search) {
+                const pattern = new RegExp(escapeRegex(search), "i");
+
+                filter.$or = [
+                    { nombre: pattern },
+                    { descripcion: pattern },
+                    { sku: pattern },
+                    { "variantes.sku": pattern },
+                    { marca: pattern },
+                    { categoriaPrincipal: pattern }
+                ];
+            }
+        }
+
+        if (
+            req.query.activo !==
+            undefined
+        ) {
+            filter.activo =
+                String(
+                    req.query.activo
+                ) !== "false";
+        }
+
+        const products =
+            await Producto.find(filter)
+                .sort({
+                    orden: 1,
+                    createdAt: -1
+                })
+                .lean();
+
+        res.json(
+            products.map(
+                normalizeProductOutput
+            )
+        );
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function getAdminProduct(
+    req,
+    res,
+    next
+) {
+    try {
+        const product =
+            await Producto.findById(
+                req.params.id
+            ).lean();
+
+        if (!product) {
+            return res.status(404).json({
+                error:
+                    "Producto no encontrado."
+            });
+        }
+
+        res.json(
+            normalizeProductOutput(
+                product
+            )
+        );
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function createProduct(
+    req,
+    res,
+    next
+) {
+    try {
+        const data =
+            normalizeProductInput(
+                req.body
+            );
+
+        if (!data.nombre) {
+            return res.status(400).json({
+                error:
+                    "El nombre es obligatorio."
+            });
+        }
+
+        data.slug = await resolveUniqueProductSlug(
+            Producto,
+            {
+                name: data.nombre,
+                requestedSlug: data.slug
+            }
+        );
+
+        await assignProductSkus(
+            Producto,
+            data
+        );
+
+        const product =
+            await Producto.create(data);
+
+        res.status(201).json(
+            normalizeProductOutput(
+                product
+            )
+        );
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function updateProduct(
+    req,
+    res,
+    next
+) {
+    try {
+        const data =
+            normalizeProductInput(
+                req.body
+            );
+
+        const existing = await Producto.findById(
+            req.params.id
+        )
+            .select("nombre slug sku")
+            .lean();
+
+        if (!existing) {
+            return res.status(404).json({
+                error:
+                    "Producto no encontrado."
+            });
+        }
+
+        data.nombre = data.nombre || existing.nombre;
+        data.slug = await resolveUniqueProductSlug(
+            Producto,
+            {
+                name: data.nombre,
+                requestedSlug: data.slug || existing.slug,
+                excludeId: req.params.id
+            }
+        );
+
+        await assignProductSkus(
+            Producto,
+            data,
+            {
+                excludeId: req.params.id,
+                existingSku: existing.sku
+            }
+        );
+
+        const product =
+            await Producto.findByIdAndUpdate(
+                req.params.id,
+                {
+                    $set: data
+                },
+                {
+                    new: true,
+                    runValidators: true
+                }
+            );
+
+        if (!product) {
+            return res.status(404).json({
+                error:
+                    "Producto no encontrado."
+            });
+        }
+
+        res.json(
+            normalizeProductOutput(
+                product
+            )
+        );
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function deleteProduct(
+    req,
+    res,
+    next
+) {
+    try {
+        const product =
+            await Producto.findByIdAndUpdate(
+                req.params.id,
+                {
+                    activo: false,
+                    publicarCatalogo: false
+                },
+                {
+                    new: true
+                }
+            );
+
+        if (!product) {
+            return res.status(404).json({
+                error:
+                    "Producto no encontrado."
+            });
+        }
+
+        res.json({
+            mensaje:
+                "Producto desactivado correctamente."
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = {
+    listAdminProducts,
+    getAdminProduct,
+    createProduct,
+    updateProduct,
+    deleteProduct
+};

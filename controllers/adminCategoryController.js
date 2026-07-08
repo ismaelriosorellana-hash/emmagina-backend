@@ -1,0 +1,104 @@
+"use strict";
+
+const Categoria = require("../models/Categoria");
+
+const {
+    normalizeCategoryInput,
+    normalizeCategoryOutput
+} = require("../utils/categoryNormalizer");
+
+const {
+    resolveUniqueCategorySlug
+} = require("../services/categoryService");
+
+async function listAdminCategories(req, res, next) {
+    try {
+        const categories = await Categoria.find({})
+            .sort({ orden: 1, nombre: 1 })
+            .lean();
+
+        res.json({
+            categorias: categories.map(normalizeCategoryOutput)
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function createCategory(req, res, next) {
+    try {
+        const data = normalizeCategoryInput(req.body);
+
+        if (!data.nombre) {
+            return res.status(400).json({
+                error: "El nombre de la categoría es obligatorio."
+            });
+        }
+
+        data.slug = await resolveUniqueCategorySlug(data.slug);
+
+        const category = await Categoria.create(data);
+
+        res.status(201).json(
+            normalizeCategoryOutput(category)
+        );
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function updateCategory(req, res, next) {
+    try {
+        const data = normalizeCategoryInput(req.body);
+
+        if (!data.nombre) {
+            return res.status(400).json({
+                error: "El nombre de la categoría es obligatorio."
+            });
+        }
+
+        data.slug = await resolveUniqueCategorySlug(
+            data.slug,
+            req.params.id
+        );
+
+        const category = await Categoria.findByIdAndUpdate(
+            req.params.id,
+            { $set: data },
+            { new: true, runValidators: true }
+        );
+
+        if (!category) {
+            return res.status(404).json({
+                error: "Categoría no encontrada."
+            });
+        }
+
+        res.json(normalizeCategoryOutput(category));
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function deleteCategory(req, res, next) {
+    try {
+        const category = await Categoria.findByIdAndDelete(req.params.id);
+
+        if (!category) {
+            return res.status(404).json({
+                error: "Categoría no encontrada."
+            });
+        }
+
+        res.json({ mensaje: "Categoría eliminada correctamente." });
+    } catch (error) {
+        next(error);
+    }
+}
+
+module.exports = {
+    listAdminCategories,
+    createCategory,
+    updateCategory,
+    deleteCategory
+};
