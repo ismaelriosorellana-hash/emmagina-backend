@@ -48,6 +48,19 @@ function getAllowedOrigins() {
         [...new Set(configured)];
 
     if (
+        process.env.NODE_ENV ===
+        "production"
+    ) {
+        [
+            "https://emmagina-frontend.onrender.com"
+        ].forEach((origin) => {
+            if (!unique.includes(origin)) {
+                unique.push(origin);
+            }
+        });
+    }
+
+    if (
         process.env.NODE_ENV !==
         "production"
     ) {
