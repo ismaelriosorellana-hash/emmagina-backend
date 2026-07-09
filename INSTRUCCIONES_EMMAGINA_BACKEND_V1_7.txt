@@ -1,0 +1,8 @@
+Emmagina Backend v1.7
+
+Cambios incluidos:
+- Modelo Banner agrega campo "ubicacion" para controlar desde Admin las imágenes del inicio:
+  hero-inicio, info-card, linea-memories, linea-alma, general.
+- La ruta pública /api/banners devuelve este campo para que el frontend pueda ubicar cada imagen en la sección correcta.
+
+No incluye .env.

@@ -43,6 +43,18 @@ const bannerSchema = new mongoose.Schema(
             type: String,
             default: ""
         },
+        ubicacion: {
+            type: String,
+            enum: [
+                "hero-inicio",
+                "info-card",
+                "linea-memories",
+                "linea-alma",
+                "general"
+            ],
+            default: "general",
+            index: true
+        },
         posicion: {
             type: String,
             default: "center"
