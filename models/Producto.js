@@ -207,6 +207,23 @@ const productSchema = new mongoose.Schema(
             trim: true
         },
 
+        badges: {
+            type: [mongoose.Schema.Types.Mixed],
+            default: []
+        },
+
+        badgeDescuento: {
+            type: mongoose.Schema.Types.Mixed,
+            default: null
+        },
+
+        textoDisponibilidad: {
+            type: String,
+            default: "",
+            trim: true,
+            maxlength: 80
+        },
+
         destacado: {
             type: Boolean,
             default: false

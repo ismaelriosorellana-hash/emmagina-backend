@@ -125,6 +125,52 @@ function normalizeKeywords(value) {
     return unique;
 }
 
+function normalizeBadgeColor(value, fallback) {
+    const color = stringValue(value || fallback).trim();
+    if (/^#[0-9A-Fa-f]{6}$/.test(color)) return color;
+    return fallback;
+}
+
+function normalizeBadges(value) {
+    if (!Array.isArray(value)) return [];
+
+    return value
+        .map((badge, index) => {
+            if (!badge || typeof badge !== "object") return null;
+
+            const text = stringValue(
+                firstDefined(badge.texto, badge.text, badge.label)
+            ).slice(0, 48);
+
+            if (!text) return null;
+
+            return {
+                ...badge,
+                tipo: stringValue(firstDefined(badge.tipo, badge.type), "insignia").slice(0, 40),
+                activo: booleanValue(firstDefined(badge.activo, badge.visible), true),
+                texto: text,
+                color: normalizeBadgeColor(firstDefined(badge.color, badge.background), "#303744"),
+                textoColor: normalizeBadgeColor(firstDefined(badge.textoColor, badge.textColor, badge.colorTexto), "#ffffff"),
+                orden: Math.round(clampNumber(firstDefined(badge.orden, badge.order), -1000, 1000, index + 1))
+            };
+        })
+        .filter(Boolean)
+        .sort((a, b) => a.orden - b.orden)
+        .slice(0, 8);
+}
+
+function normalizeDiscountBadge(value = {}) {
+    const source = value && typeof value === "object" ? value : {};
+    return {
+        tipo: "descuento",
+        activo: booleanValue(firstDefined(source.activo, source.visible), true),
+        texto: stringValue(firstDefined(source.texto, source.text, source.label)).slice(0, 48),
+        color: normalizeBadgeColor(firstDefined(source.color, source.background), "#a87148"),
+        textoColor: normalizeBadgeColor(firstDefined(source.textoColor, source.textColor, source.colorTexto), "#ffffff"),
+        orden: Math.round(clampNumber(firstDefined(source.orden, source.order), -1000, 1000, 2))
+    };
+}
+
 function normalizeSeo(value = {}) {
     const source = value && typeof value === "object"
         ? value
@@ -347,6 +393,17 @@ function normalizeProductOutput(rawProduct) {
                 raw.badge
             )
         ),
+        badges: normalizeBadges(raw.badges),
+        badgeDescuento: normalizeDiscountBadge(
+            firstDefined(raw.badgeDescuento, raw.discountBadge)
+        ),
+        textoDisponibilidad: stringValue(
+            firstDefined(
+                raw.textoDisponibilidad,
+                raw.availabilityText,
+                raw.estadoComercialTexto
+            )
+        ).slice(0, 80),
         destacado: booleanValue(
             raw.destacado,
             false
@@ -497,6 +554,8 @@ module.exports = {
     normalizeDimensions,
     normalizeKeywords,
     normalizeSeo,
+    normalizeBadges,
+    normalizeDiscountBadge,
     normalizeVariants,
     normalizeProductOutput,
     normalizeProductInput

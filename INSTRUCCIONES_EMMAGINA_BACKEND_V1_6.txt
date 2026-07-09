@@ -1,0 +1,8 @@
+Emmagina Backend v1.6
+
+Cambios incluidos:
+- Campos de producto para badges configurables desde admin: badges[] y badgeDescuento.
+- Campo textoDisponibilidad para mostrar textos como Fabricado a pedido, Disponible, Preventa o el texto que defina el administrador.
+- Normalizador público expone badges, badgeDescuento y textoDisponibilidad.
+
+No incluye .env. Mantener variables en Render.
