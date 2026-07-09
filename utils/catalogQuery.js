@@ -185,7 +185,11 @@ function buildCatalogFilter(options) {
         const stockConditions = options.inStock
             ? [
                 { stock: { $gt: 0 } },
-                { "variantes.stock": { $gt: 0 } }
+                { "variantes.stock": { $gt: 0 } },
+                { personalizable: true },
+                { fabricadoPedido: true },
+                { fabricadoAPedido: true },
+                { bajoPedido: true }
             ]
             : [
                 {

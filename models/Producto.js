@@ -222,6 +222,16 @@ const productSchema = new mongoose.Schema(
             default: false
         },
 
+        fabricadoPedido: {
+            type: Boolean,
+            default: false
+        },
+
+        bajoPedido: {
+            type: Boolean,
+            default: false
+        },
+
         publicarCatalogo: {
             type: Boolean,
             default: true

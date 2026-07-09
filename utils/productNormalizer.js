@@ -359,6 +359,18 @@ function normalizeProductOutput(rawProduct) {
             raw.personalizable,
             false
         ),
+        fabricadoPedido: booleanValue(
+            firstDefined(
+                raw.fabricadoPedido,
+                raw.fabricadoAPedido,
+                raw.madeToOrder
+            ),
+            false
+        ),
+        bajoPedido: booleanValue(
+            raw.bajoPedido,
+            false
+        ),
         publicarCatalogo: booleanValue(
             raw.publicarCatalogo,
             true

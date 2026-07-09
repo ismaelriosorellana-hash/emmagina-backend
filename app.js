@@ -294,6 +294,14 @@ if (
     );
 }
 
+
+app.get(
+    "/favicon.ico",
+    (req, res) => {
+        res.status(204).end();
+    }
+);
+
 app.get(
     "/",
     (req, res) => {

@@ -1,6 +1,6 @@
 {
   "name": "emmagina-backend",
-  "version": "1.3.0-emmagina-stable",
+  "version": "1.4.0-emmagina-stable",
   "description": "API de Emmagina para tienda de figuras 3D personalizadas, catálogo, pedidos, Cloudinary, MongoDB y panel administrativo.",
   "main": "server.js",
   "scripts": {
