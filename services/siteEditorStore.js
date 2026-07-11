@@ -1088,7 +1088,7 @@ async function diagnostic() {
         ok: true,
         module: "Editor del Sitio",
         storage: COLLECTION_NAME,
-        version: "2.8-editor-sitio-ux-final",
+        version: "2.9-editor-sitio-datos-reales",
         totalPages,
         visiblePages,
         home: {

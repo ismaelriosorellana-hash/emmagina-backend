@@ -2,12 +2,16 @@
 
 const express = require("express");
 const controller = require("../../controllers/adminSiteEditorPageController");
+const dataController = require("../../controllers/adminSiteEditorDataController");
 
 const router = express.Router();
 
 router.get("/_status", controller.status);
 router.get("/_diagnostic", controller.diagnostic);
 router.post("/_repair", controller.repair);
+router.get("/catalogo", dataController.getCatalogData);
+router.get("/catalogo/categorias", dataController.getCategories);
+router.get("/catalogo/productos", dataController.getProducts);
 router.get("/pages", controller.listPages);
 router.post("/pages", controller.createPage);
 router.get("/pages/:pageId", controller.getPage);
