@@ -4,19 +4,22 @@ require("dotenv").config();
 
 const mongoose = require("mongoose");
 const { connectDatabase } = require("../config/db");
-const { ensureDefaultHomePage } = require("../services/pageBuilderDefaults");
+const { ensureHomePage, diagnostic } = require("../services/siteEditorStore");
 
 async function main() {
     await connectDatabase();
-    await ensureDefaultHomePage();
-    console.log("✅ Página Home creada/actualizada en colección site_pages.");
+    const home = await ensureHomePage();
+    const status = await diagnostic();
+    console.log("✅ Editor del Sitio inicializado.");
+    console.log(`Página Inicio: ${home._id} · ${home.blocks.length} bloques`);
+    console.log(`Colección: ${status.storage} · Páginas visibles: ${status.visiblePages}`);
 }
 
 main()
     .catch((error) => {
-        console.error("No fue posible crear Home Page Builder:", error);
+        console.error("❌ No fue posible inicializar el Editor del Sitio:", error.message);
         process.exitCode = 1;
     })
     .finally(async () => {
-        await mongoose.disconnect();
+        await mongoose.connection.close().catch(() => {});
     });
