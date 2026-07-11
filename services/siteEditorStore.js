@@ -945,7 +945,7 @@ async function diagnostic() {
         ok: true,
         module: "Editor del Sitio",
         storage: COLLECTION_NAME,
-        version: "2.5-render-navigation",
+        version: "2.6-visual-editors",
         totalPages,
         visiblePages,
         home: {

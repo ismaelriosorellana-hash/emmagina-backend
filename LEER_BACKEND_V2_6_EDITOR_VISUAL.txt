@@ -1,0 +1,22 @@
+Emmagina Backend v2.6 - Editor del Sitio con editores visuales
+
+Esta versión mantiene el motor estable de Editor del Sitio sobre la colección site_editor_pages.
+No cambia rutas críticas ni requiere migración manual.
+
+Incluye:
+- Compatibilidad con páginas, secciones y bloques.
+- Navegación editable desde el Editor del Sitio.
+- Tipos de bloques normalizados.
+- Base estable para el frontend v4.0 con formularios visuales por tipo de bloque.
+- package-lock.json no incluido y .npmrc apuntando al registry público.
+
+Instalación:
+cd C:\Users\Ismael\Documents\Emmagina\emmagina-backend
+rm -f package-lock.json
+rm -rf node_modules
+npm config set registry https://registry.npmjs.org/
+npm install
+npm run check
+git add .
+git commit -m "Emmagina backend v2.6 editor visual"
+git push
