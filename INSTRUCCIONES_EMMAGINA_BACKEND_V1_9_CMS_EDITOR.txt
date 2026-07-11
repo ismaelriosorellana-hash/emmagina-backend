@@ -1,0 +1,30 @@
+EMMAGINA BACKEND v1.9 - CMS Editor del Sitio
+
+Objetivo:
+- Consolidar la edición visual de páginas en un único módulo: Editor del Sitio.
+- Permitir crear, editar, publicar/ocultar y eliminar páginas flexibles desde MongoDB.
+- Mantener Home como página de sistema protegida, no eliminable.
+- Mantener compatibilidad con /api/pages/home para la Home pública.
+
+Rutas principales:
+- GET    /api/pages/:key
+- GET    /api/admin/pages
+- POST   /api/admin/pages
+- GET    /api/admin/pages/:pageId
+- PATCH  /api/admin/pages/:pageId
+- DELETE /api/admin/pages/:pageId
+- POST   /api/admin/pages/:pageId/blocks
+- PATCH  /api/admin/pages/:pageId/blocks/:blockId
+- DELETE /api/admin/pages/:pageId/blocks/:blockId
+- PUT    /api/admin/pages/:pageId/reorder
+
+Notas:
+- Si se crea una página sin slug, el backend genera slug automáticamente desde el título.
+- Si el slug/key ya existe, el backend agrega sufijo automáticamente: pagina, pagina-2, pagina-3.
+- Inicio se crea automáticamente si no existe.
+- Inicio queda con isSystem=true y canDelete=false.
+
+Subir:
+git add .
+git commit -m "Emmagina backend v1.9 editor del sitio"
+git push

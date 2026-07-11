@@ -2,28 +2,40 @@
 
 const mongoose = require("mongoose");
 
+function slugify(value) {
+    return String(value || "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .toLowerCase()
+        .trim()
+        .replace(/[^a-z0-9]+/g, "-")
+        .replace(/^-+|-+$/g, "") || "pagina";
+}
+
 const blockSchema = new mongoose.Schema(
     {
         type: {
             type: String,
             required: true,
             trim: true,
-            lowercase: true
+            lowercase: true,
+            default: "custom_html"
         },
         position: {
             type: Number,
             required: true,
-            default: 0,
-            min: 0
+            default: 1,
+            min: 1
         },
         name: {
             type: String,
             trim: true,
-            default: ""
+            default: "Bloque"
         },
         isVisible: {
             type: Boolean,
-            default: true
+            default: true,
+            index: true
         },
         content: {
             type: mongoose.Schema.Types.Mixed,
@@ -56,7 +68,8 @@ const pageSchema = new mongoose.Schema(
         title: {
             type: String,
             required: true,
-            trim: true
+            trim: true,
+            default: "Nueva página"
         },
         slug: {
             type: String,
@@ -75,6 +88,46 @@ const pageSchema = new mongoose.Schema(
             type: Boolean,
             default: true,
             index: true
+        },
+        isSystem: {
+            type: Boolean,
+            default: false,
+            index: true
+        },
+        canDelete: {
+            type: Boolean,
+            default: true
+        },
+        template: {
+            type: String,
+            trim: true,
+            lowercase: true,
+            default: "page"
+        },
+        pageType: {
+            type: String,
+            trim: true,
+            lowercase: true,
+            enum: ["home", "landing", "content", "catalog", "product", "checkout", "custom"],
+            default: "custom"
+        },
+        showInSiteEditor: {
+            type: Boolean,
+            default: true,
+            index: true
+        },
+        showInNavigation: {
+            type: Boolean,
+            default: false
+        },
+        navigationLabel: {
+            type: String,
+            trim: true,
+            default: ""
+        },
+        sortOrder: {
+            type: Number,
+            default: 100
         },
         blocks: {
             type: [blockSchema],
@@ -118,20 +171,48 @@ const pageSchema = new mongoose.Schema(
 );
 
 pageSchema.pre("validate", function normalizePage(next) {
-    if (this.key) {
-        this.key = String(this.key).trim().toLowerCase();
+    const title = String(this.title || "Nueva página").trim() || "Nueva página";
+    this.title = title;
+
+    if (!this.slug) {
+        this.slug = slugify(this.key || title);
+    } else {
+        this.slug = slugify(this.slug);
     }
 
-    if (this.slug) {
-        this.slug = String(this.slug).trim().toLowerCase();
+    if (!this.key) {
+        this.key = this.slug;
+    } else {
+        this.key = slugify(this.key);
+    }
+
+    if (!this.navigationLabel) {
+        this.navigationLabel = title;
+    }
+
+    if (!this.seo) {
+        this.seo = {};
+    }
+
+    if (!this.seo.title) {
+        this.seo.title = title;
     }
 
     if (Array.isArray(this.blocks)) {
-        this.blocks.sort((a, b) => Number(a.position || 0) - Number(b.position || 0));
+        this.blocks = this.blocks
+            .map((block, index) => {
+                if (!block.type) block.type = "custom_html";
+                if (!block.name) block.name = block.type;
+                block.position = Number(block.position || index + 1);
+                if (!Number.isFinite(block.position) || block.position < 1) {
+                    block.position = index + 1;
+                }
+                return block;
+            })
+            .sort((a, b) => Number(a.position || 0) - Number(b.position || 0));
+
         this.blocks.forEach((block, index) => {
-            if (block.position === undefined || block.position === null) {
-                block.position = index + 1;
-            }
+            block.position = index + 1;
         });
     }
 
@@ -140,5 +221,8 @@ pageSchema.pre("validate", function normalizePage(next) {
 
 pageSchema.index({ key: 1, isPublished: 1 });
 pageSchema.index({ slug: 1, isPublished: 1 });
+pageSchema.index({ showInSiteEditor: 1, sortOrder: 1 });
+
+pageSchema.statics.slugify = slugify;
 
 module.exports = mongoose.model("Page", pageSchema);

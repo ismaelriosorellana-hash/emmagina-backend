@@ -7,6 +7,7 @@ const {
     getPage,
     createPage,
     updatePage,
+    deletePage,
     addBlock,
     updateBlock,
     deleteBlock,
@@ -20,6 +21,7 @@ router.post("/", createPage);
 router.get("/:pageId", getPage);
 router.patch("/:pageId", updatePage);
 router.put("/:pageId", updatePage);
+router.delete("/:pageId", deletePage);
 router.post("/:pageId/blocks", addBlock);
 router.patch("/:pageId/blocks/:blockId", updateBlock);
 router.put("/:pageId/blocks/:blockId", updateBlock);
