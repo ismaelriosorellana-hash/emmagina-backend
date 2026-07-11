@@ -1,0 +1,28 @@
+EMMAGINA BACKEND v1.8 - Page Builder Paso 1
+
+Qué incluye:
+- Modelo models/Page.js para páginas modulares con blocks.
+- Rutas públicas: GET /api/pages/:key
+- Rutas admin: /api/admin/pages
+- Script: npm run seed-pagebuilder-home
+
+Cómo usar:
+1. Reemplaza el contenido del repo emmagina-backend por este paquete completo.
+2. No subas .env a GitHub.
+3. Ejecuta localmente desde la carpeta que contiene package.json:
+   npm install
+   npm run check
+   npm run seed-pagebuilder-home
+4. Haz commit y push.
+5. En producción revisa:
+   https://emmagina-backend.onrender.com/api/pages/home
+
+Rutas admin disponibles:
+- GET    /api/admin/pages
+- POST   /api/admin/pages
+- GET    /api/admin/pages/:pageId
+- PATCH  /api/admin/pages/:pageId
+- POST   /api/admin/pages/:pageId/blocks
+- PATCH  /api/admin/pages/:pageId/blocks/:blockId
+- DELETE /api/admin/pages/:pageId/blocks/:blockId
+- PUT    /api/admin/pages/:pageId/reorder

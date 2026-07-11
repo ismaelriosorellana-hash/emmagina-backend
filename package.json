@@ -1,6 +1,6 @@
 {
   "name": "emmagina-backend",
-  "version": "1.7.0-emmagina-stable",
+  "version": "1.8.0-emmagina-pagebuilder",
   "description": "API de Emmagina para tienda de figuras 3D personalizadas, catálogo, pedidos, Cloudinary, MongoDB y panel administrativo.",
   "main": "server.js",
   "scripts": {
@@ -27,7 +27,8 @@
     "email-templates-check": "npm run check && node --test tests/email-templates-v2241.test.js",
     "operations-check": "npm run check && node --test tests/operations-dashboard-v2250.test.js",
     "seed-key-soul": "node scripts/seedKeySoulProducts.js",
-    "seed-emmagina": "node scripts/seedEmmaginaProducts.js"
+    "seed-emmagina": "node scripts/seedEmmaginaProducts.js",
+    "seed-pagebuilder-home": "node scripts/seedHomePageBuilder.js"
   },
   "keywords": [
     "cloudinary",

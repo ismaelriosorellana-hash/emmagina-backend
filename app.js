@@ -111,6 +111,11 @@ const uploadsRoutes =
         "./routes/uploads"
     );
 
+const pagesRoutes =
+    require(
+        "./routes/pages"
+    );
+
 const siteSettingsRoutes =
     require(
         "./routes/siteSettings"
@@ -174,6 +179,11 @@ const adminSiteSettingsRoutes =
 const adminSiteStudioRoutes =
     require(
         "./routes/admin/siteStudio"
+    );
+
+const adminPagesRoutes =
+    require(
+        "./routes/admin/pages"
     );
 
 const seoRoutes =
@@ -380,6 +390,11 @@ app.use(
 );
 
 app.use(
+    "/api/pages",
+    pagesRoutes
+);
+
+app.use(
     "/api/configuracion-sitio",
     siteSettingsRoutes
 );
@@ -472,6 +487,11 @@ app.use(
 app.use(
     "/api/admin/configuracion-sitio",
     adminSiteSettingsRoutes
+);
+
+app.use(
+    "/api/admin/pages",
+    adminPagesRoutes
 );
 
 app.use(
