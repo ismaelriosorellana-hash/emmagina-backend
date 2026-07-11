@@ -68,6 +68,38 @@ function validatePaymentMethod(method) {
     }
 }
 
+async function validateCart(req, res, next) {
+    try {
+        const data = normalizeOrderInput({
+            items: Array.isArray(req.body?.items) ? req.body.items : []
+        });
+
+        if (!Array.isArray(data.items) || data.items.length === 0) {
+            const error = new Error("El carrito está vacío.");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const items = await priceOrderItems(data.items);
+        const totals = calculateOrderTotals(items);
+
+        res.json({
+            mensaje: "Carrito validado correctamente.",
+            items,
+            subtotal: totals.subtotal,
+            costoEnvio: totals.costoEnvio,
+            descuento: totals.descuento,
+            total: totals.total,
+            metodosPago: {
+                transferencia: true,
+                mercadopago: isMercadoPagoReady()
+            }
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 async function createOrder(req, res, next) {
     let order = null;
     let stockReserved = false;
@@ -182,6 +214,7 @@ async function createOrder(req, res, next) {
 }
 
 module.exports = {
+    validateCart,
     createOrder,
     validateOrderData,
     validatePaymentMethod,

@@ -1,17 +1,20 @@
 "use strict";
 
 const express = require("express");
-const { createOrder } = require("../controllers/orderController");
-const { requireAuth, requireRole } = require("../middleware/auth");
+const { createOrder, validateCart } = require("../controllers/orderController");
 const { orderLimiter } = require("../middleware/rateLimits");
 
 const router = express.Router();
 
 router.post(
+    "/validar-carrito",
+    orderLimiter,
+    validateCart
+);
+
+router.post(
     "/",
     orderLimiter,
-    requireAuth,
-    requireRole("cliente"),
     createOrder
 );
 

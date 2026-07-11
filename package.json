@@ -1,7 +1,7 @@
 {
   "name": "emmagina-backend",
-  "version": "3.2.0-productos-pdp-avanzada",
-  "description": "API de Emmagina con productos avanzados, variantes, inventario por variante y PDP profesional.",
+  "version": "3.3.0-carrito-checkout-variantes",
+  "description": "API de Emmagina con carrito avanzado, validación de variantes y checkout preparado.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
