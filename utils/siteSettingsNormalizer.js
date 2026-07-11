@@ -80,6 +80,50 @@ function cleanHex(value, field, fallback) {
     return color;
 }
 
+
+function cleanInternalUrl(value, fallback = "") {
+    const url = cleanText(value ?? fallback, { field: "El enlace", maxLength: 1000 });
+    if (!url) return "";
+    if (/^(https:\/\/|\/|\.\/|\.\.\/|[a-z0-9_-]+\.html(?:[?#].*)?|pagina\.html\?slug=[a-z0-9_-]+)$/i.test(url)) return url;
+    throw validationError("Los enlaces deben ser rutas internas válidas o URLs https://.");
+}
+
+function cleanSelect(value, allowed, fallback) {
+    const raw = cleanText(value ?? fallback, { field: "La opción", maxLength: 40 }).toLowerCase();
+    return allowed.includes(raw) ? raw : fallback;
+}
+
+function normalizeNavItems(items = [], fallbackItems = []) {
+    const source = Array.isArray(items) ? items : fallbackItems;
+    return source.slice(0, 40).map((item, index) => ({
+        label: cleanText(item?.label || `Enlace ${index + 1}`, { field: "El nombre del enlace", maxLength: 80, required: true }),
+        href: cleanInternalUrl(item?.href, "#"),
+        isVisible: item?.isVisible === undefined ? true : Boolean(item.isVisible),
+        sortOrder: cleanNumber(item?.sortOrder, { field: "El orden del enlace", min: 1, max: 9999, fallback: index + 1 }),
+        source: cleanText(item?.source || "manual", { field: "El origen del enlace", maxLength: 40 }) || "manual",
+        opensNewTab: Boolean(item?.opensNewTab)
+    })).filter((item) => item.label && item.href);
+}
+
+function normalizeFooterLinks(items = [], fallbackItems = []) {
+    const source = Array.isArray(items) ? items : fallbackItems;
+    return source.slice(0, 30).map((item, index) => ({
+        label: cleanText(item?.label || `Enlace ${index + 1}`, { field: "El nombre del enlace del footer", maxLength: 80, required: true }),
+        href: cleanInternalUrl(item?.href, "#"),
+        isVisible: item?.isVisible === undefined ? true : Boolean(item.isVisible)
+    })).filter((item) => item.label && item.href);
+}
+
+function normalizeFooterColumns(columns = [], fallbackColumns = []) {
+    const source = Array.isArray(columns) ? columns : fallbackColumns;
+    return source.slice(0, 8).map((column, index) => ({
+        title: cleanText(column?.title || `Columna ${index + 1}`, { field: "El título de columna del footer", maxLength: 80, required: true }),
+        isVisible: column?.isVisible === undefined ? true : Boolean(column.isVisible),
+        sortOrder: cleanNumber(column?.sortOrder, { field: "El orden de columna", min: 1, max: 9999, fallback: index + 1 }),
+        links: normalizeFooterLinks(column?.links, fallbackColumns[index]?.links || [])
+    }));
+}
+
 function normalizeSiteSettings(input = {}, fallbackValue = cloneDefaultSiteSettings()) {
     const fallback = fallbackValue || cloneDefaultSiteSettings();
     const branding = input.branding && typeof input.branding === "object" ? input.branding : {};
@@ -95,6 +139,9 @@ function normalizeSiteSettings(input = {}, fallbackValue = cloneDefaultSiteSetti
     const announcement = input.announcementBar && typeof input.announcementBar === "object" ? input.announcementBar : {};
     const storeStatus = input.storeStatus && typeof input.storeStatus === "object" ? input.storeStatus : {};
     const analytics = input.analytics && typeof input.analytics === "object" ? input.analytics : {};
+    const navigation = input.navigation && typeof input.navigation === "object" ? input.navigation : {};
+    const footer = input.footer && typeof input.footer === "object" ? input.footer : {};
+    const visualStyle = input.visualStyle && typeof input.visualStyle === "object" ? input.visualStyle : {};
 
     const mode = cleanText(title.mode ?? fallback.branding.title.mode, {
         field: "El tipo de título",
@@ -192,6 +239,31 @@ function normalizeSiteSettings(input = {}, fallbackValue = cloneDefaultSiteSetti
             actions: normalizePositionGroup(headerLayout.actions, fallbackHeaderLayout.actions, "Los iconos de acciones")
         },
         colors: normalizedColors,
+        visualStyle: {
+            pageMaxWidth: cleanNumber(visualStyle.pageMaxWidth, { field: "El ancho máximo del sitio", min: 960, max: 1800, fallback: fallback.visualStyle?.pageMaxWidth || 1360 }),
+            sectionSpacing: cleanNumber(visualStyle.sectionSpacing, { field: "El espaciado entre secciones", min: 0, max: 120, fallback: fallback.visualStyle?.sectionSpacing || 28 }),
+            cardRadius: cleanNumber(visualStyle.cardRadius, { field: "La curvatura de tarjetas", min: 0, max: 60, fallback: fallback.visualStyle?.cardRadius || 28 }),
+            buttonRadius: cleanNumber(visualStyle.buttonRadius, { field: "La curvatura de botones", min: 0, max: 999, fallback: fallback.visualStyle?.buttonRadius || 999 }),
+            inputRadius: cleanNumber(visualStyle.inputRadius, { field: "La curvatura de campos", min: 0, max: 40, fallback: fallback.visualStyle?.inputRadius || 18 }),
+            shadowLevel: cleanSelect(visualStyle.shadowLevel, ["none", "soft", "medium"], fallback.visualStyle?.shadowLevel || "soft"),
+            density: cleanSelect(visualStyle.density, ["compact", "comfortable", "spacious"], fallback.visualStyle?.density || "comfortable")
+        },
+        navigation: {
+            mode: cleanSelect(navigation.mode, ["auto", "manual", "mixed"], fallback.navigation?.mode || "mixed"),
+            items: normalizeNavItems(navigation.items, fallback.navigation?.items || [])
+        },
+        footer: {
+            enabled: footer.enabled === undefined ? fallback.footer?.enabled !== false : Boolean(footer.enabled),
+            brandTitle: cleanText(footer.brandTitle ?? fallback.footer?.brandTitle ?? "Emmagina", { field: "El título del footer", maxLength: 120, required: true }),
+            brandText: cleanText(footer.brandText ?? fallback.footer?.brandText ?? "", { field: "El texto del footer", maxLength: 500, allowNewlines: true }),
+            columns: normalizeFooterColumns(footer.columns, fallback.footer?.columns || []),
+            contactTitle: cleanText(footer.contactTitle ?? fallback.footer?.contactTitle ?? "Soporte", { field: "El título de contacto del footer", maxLength: 80 }),
+            whatsapp: cleanPhone(footer.whatsapp ?? fallback.footer?.whatsapp ?? "56900000000", { field: "El WhatsApp del footer", required: false }).replace(/[^0-9]/g, ""),
+            email: cleanText(footer.email ?? fallback.footer?.email ?? "contacto@emmagina.cl", { field: "El correo del footer", maxLength: 120 }),
+            supportButtonText: cleanText(footer.supportButtonText ?? fallback.footer?.supportButtonText ?? "Contactar soporte", { field: "El botón del footer", maxLength: 80 }),
+            copyright: cleanText(footer.copyright ?? fallback.footer?.copyright ?? "", { field: "El copyright", maxLength: 200 }),
+            legalLinks: normalizeFooterLinks(footer.legalLinks, fallback.footer?.legalLinks || [])
+        },
         announcementBar: {
             enabled: announcement.enabled === undefined
                 ? fallback.announcementBar.enabled

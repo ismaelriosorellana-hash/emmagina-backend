@@ -58,6 +58,75 @@ const colorsSchema = new mongoose.Schema(
 );
 
 
+const navItemSchema = new mongoose.Schema(
+    {
+        label: { type: String, required: true, trim: true, maxlength: 80 },
+        href: { type: String, required: true, trim: true, maxlength: 1000 },
+        isVisible: { type: Boolean, default: true },
+        sortOrder: { type: Number, default: 100, min: 1, max: 9999 },
+        source: { type: String, default: "manual", trim: true, maxlength: 40 },
+        opensNewTab: { type: Boolean, default: false }
+    },
+    { _id: false }
+);
+
+const navigationSchema = new mongoose.Schema(
+    {
+        mode: { type: String, enum: ["auto", "manual", "mixed"], default: "mixed" },
+        items: { type: [navItemSchema], default: () => [] }
+    },
+    { _id: false }
+);
+
+const footerLinkSchema = new mongoose.Schema(
+    {
+        label: { type: String, required: true, trim: true, maxlength: 80 },
+        href: { type: String, required: true, trim: true, maxlength: 1000 },
+        isVisible: { type: Boolean, default: true }
+    },
+    { _id: false }
+);
+
+const footerColumnSchema = new mongoose.Schema(
+    {
+        title: { type: String, required: true, trim: true, maxlength: 80 },
+        links: { type: [footerLinkSchema], default: () => [] },
+        isVisible: { type: Boolean, default: true },
+        sortOrder: { type: Number, default: 100, min: 1, max: 9999 }
+    },
+    { _id: false }
+);
+
+const footerSchema = new mongoose.Schema(
+    {
+        enabled: { type: Boolean, default: true },
+        brandTitle: { type: String, default: "Emmagina", trim: true, maxlength: 120 },
+        brandText: { type: String, default: "Productos impresos en 3D, figuras personalizadas y decoraciones pensadas para regalar, crear y recordar.", trim: true, maxlength: 500 },
+        columns: { type: [footerColumnSchema], default: () => [] },
+        contactTitle: { type: String, default: "Soporte", trim: true, maxlength: 80 },
+        whatsapp: { type: String, default: "56900000000", trim: true, maxlength: 20 },
+        email: { type: String, default: "contacto@emmagina.cl", trim: true, maxlength: 120 },
+        supportButtonText: { type: String, default: "Contactar soporte", trim: true, maxlength: 80 },
+        copyright: { type: String, default: "© 2026 Emmagina. Todos los derechos reservados.", trim: true, maxlength: 200 },
+        legalLinks: { type: [footerLinkSchema], default: () => [] }
+    },
+    { _id: false }
+);
+
+const visualStyleSchema = new mongoose.Schema(
+    {
+        pageMaxWidth: { type: Number, default: 1360, min: 960, max: 1800 },
+        sectionSpacing: { type: Number, default: 28, min: 0, max: 120 },
+        cardRadius: { type: Number, default: 28, min: 0, max: 60 },
+        buttonRadius: { type: Number, default: 999, min: 0, max: 999 },
+        inputRadius: { type: Number, default: 18, min: 0, max: 40 },
+        shadowLevel: { type: String, enum: ["none", "soft", "medium"], default: "soft" },
+        density: { type: String, enum: ["compact", "comfortable", "spacious"], default: "comfortable" }
+    },
+    { _id: false }
+);
+
+
 const announcementItemSchema = new mongoose.Schema(
     {
         text: { type: String, required: true, trim: true, maxlength: 240 },
@@ -129,6 +198,9 @@ const siteSettingsSchema = new mongoose.Schema(
             actions: { type: headerPositionSchema, default: () => ({}) }
         },
         colors: { type: colorsSchema, default: () => ({}) },
+        visualStyle: { type: visualStyleSchema, default: () => ({}) },
+        navigation: { type: navigationSchema, default: () => ({}) },
+        footer: { type: footerSchema, default: () => ({}) },
         announcementBar: { type: announcementBarSchema, default: () => ({}) },
         storeStatus: { type: storeStatusSchema, default: () => ({}) },
         analytics: { type: analyticsSchema, default: () => ({}) },

@@ -1,6 +1,7 @@
 "use strict";
 
 const mongoose = require("mongoose");
+const { getResolvedSiteSettings } = require("../controllers/siteSettingsController");
 
 const COLLECTION_NAME = "site_editor_pages";
 const HOME_KEYS = new Set(["", "home", "inicio"]);
@@ -1042,9 +1043,28 @@ async function restoreRevision(value = "home", revisionValue = "", userId = null
     return findPage(page._id);
 }
 
+function normalizeNavigationItemsFromSettings(settings = {}) {
+    const items = Array.isArray(settings.navigation?.items) ? settings.navigation.items : defaultNavigationItems();
+    return items
+        .filter((item) => item && item.isVisible !== false && item.label && item.href)
+        .map((item, index) => ({
+            label: cleanText(item.label, "Enlace"),
+            href: cleanText(item.href, "#"),
+            source: item.source || "settings",
+            sortOrder: toNumber(item.sortOrder, index + 1),
+            isSystem: item.source === "system",
+            opensNewTab: item.opensNewTab === true
+        }));
+}
+
 async function listNavigationPages() {
     await ensureIndexes();
     await ensureHomePage();
+    let settings = null;
+    try { settings = await getResolvedSiteSettings(); } catch { settings = null; }
+    const mode = settings?.navigation?.mode || "mixed";
+    const configuredItems = normalizeNavigationItemsFromSettings(settings || {});
+
     const docs = await collection()
         .find({
             deletedAt: null,
@@ -1064,17 +1084,20 @@ async function listNavigationPages() {
             slug: page.slug,
             source: "cms",
             sortOrder: toNumber(page.sortOrder, 50),
-            isSystem: false
+            isSystem: false,
+            opensNewTab: false
         }));
 
+    const base = mode === "auto" ? defaultNavigationItems() : configuredItems;
+    const all = mode === "manual" ? base : [...base, ...dynamicItems];
     const seen = new Set();
-    return [...defaultNavigationItems(), ...dynamicItems]
+    return all
         .sort((a, b) => toNumber(a.sortOrder, 999) - toNumber(b.sortOrder, 999) || String(a.label).localeCompare(String(b.label), "es"))
         .filter((item) => {
             const key = `${item.href}|${item.label}`.toLowerCase();
             if (seen.has(key)) return false;
             seen.add(key);
-            return true;
+            return item.isVisible !== false;
         });
 }
 
@@ -1088,7 +1111,7 @@ async function diagnostic() {
         ok: true,
         module: "Editor del Sitio",
         storage: COLLECTION_NAME,
-        version: "2.9-editor-sitio-datos-reales",
+        version: "3.0-editor-navegacion-footer-estilos",
         totalPages,
         visiblePages,
         home: {

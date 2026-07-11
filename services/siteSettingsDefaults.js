@@ -89,6 +89,54 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
         footerText: "#F9F3F5",
         buttonText: "#FFFFFF"
     },
+    visualStyle: {
+        pageMaxWidth: 1360,
+        sectionSpacing: 28,
+        cardRadius: 28,
+        buttonRadius: 999,
+        inputRadius: 18,
+        shadowLevel: "soft",
+        density: "comfortable"
+    },
+    navigation: {
+        mode: "mixed",
+        items: [
+            { label: "Inicio", href: "index.html", isVisible: true, sortOrder: 1, source: "system", opensNewTab: false },
+            { label: "Tienda", href: "catalogo.html", isVisible: true, sortOrder: 10, source: "system", opensNewTab: false },
+            { label: "Crea tu Escena", href: "pedido-personalizado.html", isVisible: true, sortOrder: 20, source: "system", opensNewTab: false },
+            { label: "Sobre Nosotros", href: "quienes-somos.html", isVisible: true, sortOrder: 90, source: "system", opensNewTab: false },
+            { label: "Contáctanos", href: "contacto.html", isVisible: true, sortOrder: 100, source: "system", opensNewTab: false },
+            { label: "Preguntas Frecuentes", href: "preguntas-frecuentes.html", isVisible: true, sortOrder: 110, source: "system", opensNewTab: false }
+        ]
+    },
+    footer: {
+        enabled: true,
+        brandTitle: "Emmagina",
+        brandText: "Productos impresos en 3D, figuras personalizadas y decoraciones pensadas para regalar, crear y recordar.",
+        columns: [
+            { title: "Tienda", isVisible: true, sortOrder: 10, links: [
+                { label: "Catálogo", href: "catalogo.html", isVisible: true },
+                { label: "Crea tu escena", href: "pedido-personalizado.html", isVisible: true },
+                { label: "Carrito", href: "carrito.html", isVisible: true },
+                { label: "Comparación", href: "comparacion.html", isVisible: true }
+            ] },
+            { title: "Ayuda", isVisible: true, sortOrder: 20, links: [
+                { label: "Preguntas frecuentes", href: "preguntas-frecuentes.html", isVisible: true },
+                { label: "Despachos y retiros", href: "despachos-retiros.html", isVisible: true },
+                { label: "Cambios y pedidos", href: "cambios-pedidos.html", isVisible: true },
+                { label: "Seguimiento", href: "seguimiento-pedido.html", isVisible: true }
+            ] }
+        ],
+        contactTitle: "Soporte",
+        whatsapp: envText("STORE_SUPPORT_WHATSAPP", "56900000000").replace(/[^0-9]/g, "") || "56900000000",
+        email: envText("STORE_SUPPORT_EMAIL", "contacto@emmagina.cl"),
+        supportButtonText: "Contactar soporte",
+        copyright: "© 2026 Emmagina. Todos los derechos reservados.",
+        legalLinks: [
+            { label: "Privacidad", href: "privacidad.html", isVisible: true },
+            { label: "Términos", href: "terminos.html", isVisible: true }
+        ]
+    },
     revision: 1
 });
 
@@ -116,6 +164,18 @@ function mergeSiteSettings(value = {}) {
             actions: { ...defaults.headerLayout.actions, ...(value.headerLayout?.actions || {}) }
         },
         colors: { ...defaults.colors, ...(value.colors || {}) },
+        visualStyle: { ...defaults.visualStyle, ...(value.visualStyle || {}) },
+        navigation: {
+            ...defaults.navigation,
+            ...(value.navigation || {}),
+            items: Array.isArray(value.navigation?.items) ? value.navigation.items : defaults.navigation.items
+        },
+        footer: {
+            ...defaults.footer,
+            ...(value.footer || {}),
+            columns: Array.isArray(value.footer?.columns) ? value.footer.columns : defaults.footer.columns,
+            legalLinks: Array.isArray(value.footer?.legalLinks) ? value.footer.legalLinks : defaults.footer.legalLinks
+        },
         announcementBar: {
             ...defaults.announcementBar,
             ...(value.announcementBar || {}),
