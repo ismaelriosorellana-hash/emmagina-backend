@@ -1,7 +1,7 @@
 {
   "name": "emmagina-backend",
-  "version": "2.7.0-editor-sitio-publicacion-historial",
-  "description": "API de Emmagina con Editor del Sitio, secciones, editores visuales, publicación por borrador e historial de versiones.",
+  "version": "2.8.0-editor-sitio-ux-final",
+  "description": "API de Emmagina con Editor del Sitio estable, publicación por borrador, historial y soporte para edición visual optimizada.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
