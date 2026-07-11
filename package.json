@@ -1,7 +1,7 @@
 {
   "name": "emmagina-backend",
-  "version": "3.4.0-cms-schema-flexible",
-  "description": "API de Emmagina con arquitectura CMS flexible JSON para constructor visual profesional.",
+  "version": "3.5.0-cms-render-publico",
+  "description": "API de Emmagina con arquitectura CMS flexible y endpoint público para motor universal de renderizado.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

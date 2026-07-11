@@ -121,6 +121,11 @@ const editorSitioPagesRoutes =
         "./routes/editorSitioPages"
     );
 
+const cmsPagesRoutes =
+    require(
+        "./routes/cmsPages"
+    );
+
 const siteSettingsRoutes =
     require(
         "./routes/siteSettings"
@@ -402,6 +407,12 @@ app.use(
 app.use(
     "/api/uploads",
     uploadsRoutes
+);
+
+
+app.use(
+    "/api/cms",
+    cmsPagesRoutes
 );
 
 app.use(
