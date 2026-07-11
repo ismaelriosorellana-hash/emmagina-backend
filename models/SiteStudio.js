@@ -64,7 +64,7 @@ const layoutSchema = new mongoose.Schema(
         maxWidth: { type: Number, default: 1320, min: 720, max: 1800 },
         contentPadding: { type: Number, default: 20, min: 0, max: 80 },
         sectionGap: { type: Number, default: 40, min: 0, max: 140 },
-        backgroundColor: { type: String, default: "#FFF9FD", trim: true, maxlength: 7 }
+        backgroundColor: { type: String, default: "#EAF4F8", trim: true, maxlength: 7 }
     },
     { _id: false }
 );
@@ -149,7 +149,7 @@ const siteStudioSchema = new mongoose.Schema(
             headerSticky: { type: Boolean, default: false }
         },
         adminPanel: {
-            accentColor: { type: String, default: "#8E456A", trim: true, maxlength: 7 },
+            accentColor: { type: String, default: "#219EBC", trim: true, maxlength: 7 },
             sidebarBackground: { type: String, default: "#2F2930", trim: true, maxlength: 7 },
             sidebarText: { type: String, default: "#FFFFFF", trim: true, maxlength: 7 },
             items: { type: [adminItemSchema], default: [] }

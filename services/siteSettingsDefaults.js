@@ -43,7 +43,7 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
     announcementBar: {
         enabled: true,
         speedSeconds: 22,
-        backgroundColor: "#71364F",
+        backgroundColor: "#023047",
         textColor: "#FFFFFF",
         linkColor: "#FFFFFF",
         items: [
@@ -72,21 +72,21 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
         updatedAt: null
     },
     colors: {
-        primary: "#FCC0E6",
-        primaryDark: "#8E456A",
-        primaryDeep: "#71364F",
-        primarySoft: "#FFF2FA",
-        secondary: "#65445A",
-        accent: "#F59BCF",
-        background: "#FFF9FD",
+        primary: "#8ECAE6",
+        primaryDark: "#219EBC",
+        primaryDeep: "#023047",
+        primarySoft: "#EAF4F8",
+        secondary: "#125373",
+        accent: "#FB8500",
+        background: "#EAF4F8",
         surface: "#FFFFFF",
-        surfaceSoft: "#FFF2FA",
-        text: "#372A32",
-        textSoft: "#715F69",
-        border: "#F0D6E6",
-        headerBackground: "#FFF9FD",
-        footerBackground: "#2F292C",
-        footerText: "#F9F3F5",
+        surfaceSoft: "#EAF4F8",
+        text: "#023047",
+        textSoft: "#125373",
+        border: "#BFDCE8",
+        headerBackground: "#EAF4F8",
+        footerBackground: "#023047",
+        footerText: "#FFFFFF",
         buttonText: "#FFFFFF"
     },
     visualStyle: {
@@ -140,6 +140,18 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
     revision: 1
 });
 
+
+const LEGACY_COLORS = new Set(["#FCC0E6", "#8E456A", "#71364F", "#FFF2FA", "#65445A", "#F59BCF", "#FFF9FD", "#F0D6E6", "#2F292C", "#F9F3F5", "#372A32", "#715F69"]);
+
+function normalizePaletteColors(colors = {}, defaults = cloneDefaultSiteSettings().colors) {
+    const result = { ...defaults, ...(colors || {}) };
+    Object.keys(defaults).forEach((key) => {
+        const value = String(result[key] || "").trim().toUpperCase();
+        if (!value || LEGACY_COLORS.has(value)) result[key] = defaults[key];
+    });
+    return result;
+}
+
 function cloneDefaultSiteSettings() {
     return JSON.parse(JSON.stringify(DEFAULT_SITE_SETTINGS));
 }
@@ -163,7 +175,7 @@ function mergeSiteSettings(value = {}) {
             support: { ...defaults.headerLayout.support, ...(value.headerLayout?.support || {}) },
             actions: { ...defaults.headerLayout.actions, ...(value.headerLayout?.actions || {}) }
         },
-        colors: { ...defaults.colors, ...(value.colors || {}) },
+        colors: normalizePaletteColors(value.colors || {}, defaults.colors),
         visualStyle: { ...defaults.visualStyle, ...(value.visualStyle || {}) },
         navigation: {
             ...defaults.navigation,

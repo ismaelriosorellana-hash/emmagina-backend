@@ -9,7 +9,7 @@ const CORE_PAGES = [
         enabled: true,
         seoTitle: "Emmagina | Productos personalizados",
         seoDescription: "Productos personalizados, sublimados y estampados de Emmagina.",
-        layout: { maxWidth: 1320, contentPadding: 20, sectionGap: 54, backgroundColor: "#FFF9FD" },
+        layout: { maxWidth: 1320, contentPadding: 20, sectionGap: 54, backgroundColor: "#EAF4F8" },
         sections: [
             { id: "hero", type: "core", zone: "main", enabled: true, order: 10, eyebrow: "Regalos creados con intención", title: "Productos auténticos y únicos para quienes más quieres", body: "", buttonLabel: "Ver productos", buttonUrl: "#lo-mas-vendido", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
             { id: "categories", type: "core", zone: "main", enabled: true, order: 20, eyebrow: "Explora", title: "Categorías", body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
@@ -27,7 +27,7 @@ const CORE_PAGES = [
         enabled: true,
         seoTitle: "Catálogo | Emmagina",
         seoDescription: "Explora todos los productos disponibles en Emmagina.",
-        layout: { maxWidth: 1320, contentPadding: 20, sectionGap: 34, backgroundColor: "#FFF9FD" },
+        layout: { maxWidth: 1320, contentPadding: 20, sectionGap: 34, backgroundColor: "#EAF4F8" },
         sections: [
             { id: "heading", type: "core", zone: "main", enabled: true, order: 10, eyebrow: "Catálogo", title: "Todos los productos", body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
             { id: "toolbar", type: "core", zone: "main", enabled: true, order: 20, eyebrow: "", title: "", body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
@@ -42,7 +42,7 @@ const CORE_PAGES = [
         enabled: true,
         seoTitle: "Producto | Emmagina",
         seoDescription: "Detalle, opciones y personalización del producto.",
-        layout: { maxWidth: 1320, contentPadding: 20, sectionGap: 42, backgroundColor: "#FFF9FD" },
+        layout: { maxWidth: 1320, contentPadding: 20, sectionGap: 42, backgroundColor: "#EAF4F8" },
         sections: [
             { id: "detail", type: "core", zone: "main", enabled: true, order: 10, eyebrow: "", title: "", body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
             { id: "related", type: "core", zone: "main", enabled: true, order: 20, eyebrow: "", title: "También te puede gustar", body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 }
@@ -56,7 +56,7 @@ const CORE_PAGES = [
         enabled: true,
         seoTitle: "Carrito de compras | Emmagina",
         seoDescription: "Revisa productos, cantidades, sugerencias y meta de envío gratis.",
-        layout: { maxWidth: 1220, contentPadding: 20, sectionGap: 32, backgroundColor: "#FFF9FD" },
+        layout: { maxWidth: 1220, contentPadding: 20, sectionGap: 32, backgroundColor: "#EAF4F8" },
         sections: [
             { id: "heading", type: "core", zone: "main", enabled: true, order: 10, eyebrow: "Tu compra", title: "Carrito de compras", body: "", buttonLabel: "Seguir comprando", buttonUrl: "catalogo.html", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
             { id: "shipping-progress", type: "core", zone: "main", enabled: true, order: 20, eyebrow: "", title: "Meta de envío gratis", body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
@@ -73,7 +73,7 @@ const CORE_PAGES = [
         enabled: true,
         seoTitle: "Finalizar compra | Emmagina",
         seoDescription: "Completa tus datos, entrega y medio de pago.",
-        layout: { maxWidth: 1260, contentPadding: 20, sectionGap: 24, backgroundColor: "#FFF9FD" },
+        layout: { maxWidth: 1260, contentPadding: 20, sectionGap: 24, backgroundColor: "#EAF4F8" },
         sections: [
             { id: "heading", type: "core", zone: "main", enabled: true, order: 10, eyebrow: "Último paso", title: "Finalizar compra", body: "Completa tus datos, selecciona la entrega y revisa el total antes de confirmar.", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
             { id: "customer", type: "core", zone: "left", enabled: true, order: 20, eyebrow: "", title: "Datos de la persona", body: "Usaremos esta información para identificar y comunicar el estado del pedido.", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
@@ -91,7 +91,7 @@ const CORE_PAGES = [
         enabled: true,
         seoTitle: "Acceso | Emmagina",
         seoDescription: "Inicia sesión o crea tu cuenta de cliente.",
-        layout: { maxWidth: 980, contentPadding: 20, sectionGap: 28, backgroundColor: "#FFF9FD" },
+        layout: { maxWidth: 980, contentPadding: 20, sectionGap: 28, backgroundColor: "#EAF4F8" },
         sections: [
             { id: "auth", type: "core", zone: "main", enabled: true, order: 10, eyebrow: "Bienvenido", title: "Accede a tu cuenta", body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
             { id: "security", type: "core", zone: "main", enabled: true, order: 20, eyebrow: "", title: "Compra segura", body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 }
@@ -105,7 +105,7 @@ const CORE_PAGES = [
         enabled: true,
         seoTitle: "Mi cuenta | Emmagina",
         seoDescription: "Gestiona tu perfil y revisa tus pedidos.",
-        layout: { maxWidth: 1180, contentPadding: 20, sectionGap: 28, backgroundColor: "#FFF9FD" },
+        layout: { maxWidth: 1180, contentPadding: 20, sectionGap: 28, backgroundColor: "#EAF4F8" },
         sections: [
             { id: "hero", type: "core", zone: "main", enabled: true, order: 10, eyebrow: "Tu espacio personal", title: "Mi cuenta", body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
             { id: "profile", type: "core", zone: "main", enabled: true, order: 20, eyebrow: "", title: "Datos personales", body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
@@ -121,7 +121,7 @@ const CORE_PAGES = [
         enabled: true,
         seoTitle: "Pedido | Emmagina",
         seoDescription: "Consulta el detalle y seguimiento de tu pedido.",
-        layout: { maxWidth: 1080, contentPadding: 20, sectionGap: 28, backgroundColor: "#FFF9FD" },
+        layout: { maxWidth: 1080, contentPadding: 20, sectionGap: 28, backgroundColor: "#EAF4F8" },
         sections: [
             { id: "hero", type: "core", zone: "main", enabled: true, order: 10, eyebrow: "Seguimiento", title: "Pedido", body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
             { id: "detail", type: "core", zone: "main", enabled: true, order: 20, eyebrow: "", title: "Detalle", body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 }
@@ -135,7 +135,7 @@ const CORE_PAGES = [
         enabled: true,
         seoTitle: "Resultado de pago | Emmagina",
         seoDescription: "Revisa el resultado y estado de tu pago.",
-        layout: { maxWidth: 900, contentPadding: 20, sectionGap: 28, backgroundColor: "#FFF9FD" },
+        layout: { maxWidth: 900, contentPadding: 20, sectionGap: 28, backgroundColor: "#EAF4F8" },
         sections: [
             { id: "result", type: "core", zone: "main", enabled: true, order: 10, eyebrow: "Pago", title: "Resultado del pago", body: "", buttonLabel: "", buttonUrl: "", alignment: "center", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 }
         ]
@@ -162,7 +162,7 @@ for (const [id, label, path] of CONTENT_PAGE_DEFINITIONS) {
         enabled: true,
         seoTitle: `${label} | Emmagina`,
         seoDescription: `${label} de Emmagina.`,
-        layout: { maxWidth: 1040, contentPadding: 20, sectionGap: 28, backgroundColor: "#FFF9FD" },
+        layout: { maxWidth: 1040, contentPadding: 20, sectionGap: 28, backgroundColor: "#EAF4F8" },
         sections: [
             { id: "content", type: "core", zone: "main", enabled: true, order: 10, eyebrow: "", title: label, body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 }
         ]
@@ -207,7 +207,7 @@ const DEFAULT_SITE_STUDIO = Object.freeze({
         headerSticky: false
     },
     adminPanel: {
-        accentColor: "#8E456A",
+        accentColor: "#219EBC",
         sidebarBackground: "#2F2930",
         sidebarText: "#FFFFFF",
         items: [

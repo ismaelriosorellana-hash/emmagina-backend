@@ -1,7 +1,7 @@
 {
   "name": "emmagina-backend",
-  "version": "3.0.0-editor-navegacion-footer-estilos",
-  "description": "API de Emmagina con Editor del Sitio visual conectado a categorías y productos reales del catálogo.",
+  "version": "3.1.0-paleta-scroll-ui",
+  "description": "API de Emmagina con Editor del Sitio, navegación/footer global y paleta de marca 60-30-10.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

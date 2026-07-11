@@ -22,11 +22,11 @@ const FALLBACK_CATEGORIES = [
 ];
 
 function safeColor(value) {
-    const color = stringValue(value, "#8E456A");
+    const color = stringValue(value, "#219EBC");
 
     return /^#[0-9a-f]{6}$/i.test(color)
         ? color.toUpperCase()
-        : "#8E456A";
+        : "#219EBC";
 }
 
 function safeIcon(value) {
@@ -87,7 +87,7 @@ function fallbackCategoryDocuments() {
         descripcion: "",
         icono: nombre === "Temporada" ? "fa-solid fa-calendar-days" : "fa-solid fa-tag",
         imagen: "",
-        color: "#8E456A",
+        color: "#219EBC",
         activa: true,
         mostrarMenu: true,
         mostrarInicio: nombre !== "Temporada",

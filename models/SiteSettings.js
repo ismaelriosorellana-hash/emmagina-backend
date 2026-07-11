@@ -37,21 +37,21 @@ const titleSchema = new mongoose.Schema(
 
 const colorsSchema = new mongoose.Schema(
     {
-        primary: { type: String, default: "#FCC0E6" },
-        primaryDark: { type: String, default: "#8E456A" },
-        primaryDeep: { type: String, default: "#71364F" },
-        primarySoft: { type: String, default: "#FFF2FA" },
-        secondary: { type: String, default: "#65445A" },
-        accent: { type: String, default: "#F59BCF" },
-        background: { type: String, default: "#FFF9FD" },
+        primary: { type: String, default: "#8ECAE6" },
+        primaryDark: { type: String, default: "#219EBC" },
+        primaryDeep: { type: String, default: "#023047" },
+        primarySoft: { type: String, default: "#EAF4F8" },
+        secondary: { type: String, default: "#125373" },
+        accent: { type: String, default: "#FB8500" },
+        background: { type: String, default: "#EAF4F8" },
         surface: { type: String, default: "#FFFFFF" },
-        surfaceSoft: { type: String, default: "#FFF2FA" },
-        text: { type: String, default: "#372A32" },
-        textSoft: { type: String, default: "#715F69" },
-        border: { type: String, default: "#F0D6E6" },
-        headerBackground: { type: String, default: "#FFF9FD" },
-        footerBackground: { type: String, default: "#2F292C" },
-        footerText: { type: String, default: "#F9F3F5" },
+        surfaceSoft: { type: String, default: "#EAF4F8" },
+        text: { type: String, default: "#023047" },
+        textSoft: { type: String, default: "#125373" },
+        border: { type: String, default: "#BFDCE8" },
+        headerBackground: { type: String, default: "#EAF4F8" },
+        footerBackground: { type: String, default: "#023047" },
+        footerText: { type: String, default: "#FFFFFF" },
         buttonText: { type: String, default: "#FFFFFF" }
     },
     { _id: false }
@@ -139,7 +139,7 @@ const announcementBarSchema = new mongoose.Schema(
     {
         enabled: { type: Boolean, default: true },
         speedSeconds: { type: Number, default: 22, min: 6, max: 120 },
-        backgroundColor: { type: String, default: "#71364F" },
+        backgroundColor: { type: String, default: "#023047" },
         textColor: { type: String, default: "#FFFFFF" },
         linkColor: { type: String, default: "#FFFFFF" },
         items: { type: [announcementItemSchema], default: () => [] }

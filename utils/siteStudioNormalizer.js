@@ -135,7 +135,7 @@ function normalizeLayout(layout = {}, fallback = {}) {
         maxWidth: cleanNumber(layout.maxWidth, { field: "El ancho máximo de página", min: 720, max: 1800, fallback: fallback.maxWidth || 1320, integer: true }),
         contentPadding: cleanNumber(layout.contentPadding, { field: "El margen lateral de página", min: 0, max: 80, fallback: fallback.contentPadding || 20, integer: true }),
         sectionGap: cleanNumber(layout.sectionGap, { field: "La separación entre secciones", min: 0, max: 140, fallback: fallback.sectionGap || 40, integer: true }),
-        backgroundColor: cleanHex(layout.backgroundColor, "El fondo de página", fallback.backgroundColor || "#FFF9FD")
+        backgroundColor: cleanHex(layout.backgroundColor, "El fondo de página", fallback.backgroundColor || "#EAF4F8")
     };
 }
 
@@ -228,7 +228,7 @@ function normalizeComponents(input = {}, fallback = {}) {
 function normalizeAdminPanel(input = {}, fallback = {}) {
     const items = Array.isArray(input.items) ? input.items.slice(0, 30) : fallback.items || [];
     return {
-        accentColor: cleanHex(input.accentColor, "El color del panel", fallback.accentColor || "#8E456A"),
+        accentColor: cleanHex(input.accentColor, "El color del panel", fallback.accentColor || "#219EBC"),
         sidebarBackground: cleanHex(input.sidebarBackground, "El fondo del menú administrador", fallback.sidebarBackground || "#2F2930"),
         sidebarText: cleanHex(input.sidebarText, "El texto del menú administrador", fallback.sidebarText || "#FFFFFF"),
         items: items.map((item, index) => ({

@@ -239,7 +239,7 @@ function itemVariantText(item) {
 function orderItemsRows(order) {
     const items = Array.isArray(order?.items) ? order.items : [];
     if (!items.length) {
-        return `<tr><td colspan="3" style="padding:12px 0;color:#715F69">Productos no disponibles en el detalle.</td></tr>`;
+        return `<tr><td colspan="3" style="padding:12px 0;color:#125373">Productos no disponibles en el detalle.</td></tr>`;
     }
 
     return items.map((item) => {
@@ -248,12 +248,12 @@ function orderItemsRows(order) {
         const variant = itemVariantText(item);
         return `
             <tr>
-                <td style="padding:12px 0;border-top:1px solid #F0D6E6">
-                    <strong style="color:#372A32">${escapeHtml(item?.nombre || "Producto Emmagina")}</strong>
-                    ${variant ? `<br><span style="font-size:13px;color:#715F69">${escapeHtml(variant)}</span>` : ""}
+                <td style="padding:12px 0;border-top:1px solid rgba(2, 48, 71, 0.14)">
+                    <strong style="color:#023047">${escapeHtml(item?.nombre || "Producto Emmagina")}</strong>
+                    ${variant ? `<br><span style="font-size:13px;color:#125373">${escapeHtml(variant)}</span>` : ""}
                 </td>
-                <td style="padding:12px 8px;border-top:1px solid #F0D6E6;text-align:center;color:#715F69">${quantity}</td>
-                <td style="padding:12px 0;border-top:1px solid #F0D6E6;text-align:right;color:#372A32;font-weight:700">${escapeHtml(money(subtotal))}</td>
+                <td style="padding:12px 8px;border-top:1px solid rgba(2, 48, 71, 0.14);text-align:center;color:#125373">${quantity}</td>
+                <td style="padding:12px 0;border-top:1px solid rgba(2, 48, 71, 0.14);text-align:right;color:#023047;font-weight:700">${escapeHtml(money(subtotal))}</td>
             </tr>
         `;
     }).join("");
@@ -274,7 +274,7 @@ function emailButton(url, label) {
     if (!url) return "";
     return `
         <p style="margin:22px 0 10px">
-            <a href="${escapeHtml(url)}" style="display:inline-block;background:#8E456A;color:#FFFFFF;text-decoration:none;border-radius:999px;padding:12px 18px;font-weight:700">
+            <a href="${escapeHtml(url)}" style="display:inline-block;background:#219EBC;color:#FFFFFF;text-decoration:none;border-radius:999px;padding:12px 18px;font-weight:700">
                 ${escapeHtml(label)}
             </a>
         </p>
@@ -286,9 +286,9 @@ function emailFooterHtml() {
     const whatsapp = whatsappDigits(process.env.WHATSAPP_SUPPORT_NUMBER || "56954633848");
     const whatsappUrl = whatsapp ? `https://wa.me/${whatsapp}` : "";
     return `
-        <div style="background:#FFF2FA;border-top:1px solid #F0D6E6;padding:18px 22px;color:#715F69;font-size:13px;line-height:1.5">
+        <div style="background:#EAF4F8;border-top:1px solid rgba(2, 48, 71, 0.14);padding:18px 22px;color:#125373;font-size:13px;line-height:1.5">
             <p style="margin:0 0 6px"><strong style="color:#65445A">${escapeHtml(brandName())}</strong></p>
-            <p style="margin:0">Correo: <a href="mailto:${escapeHtml(email)}" style="color:#8E456A">${escapeHtml(email)}</a>${whatsappUrl ? ` · WhatsApp: <a href="${escapeHtml(whatsappUrl)}" style="color:#8E456A">${escapeHtml(whatsapp)}</a>` : ""}</p>
+            <p style="margin:0">Correo: <a href="mailto:${escapeHtml(email)}" style="color:#219EBC">${escapeHtml(email)}</a>${whatsappUrl ? ` · WhatsApp: <a href="${escapeHtml(whatsappUrl)}" style="color:#219EBC">${escapeHtml(whatsapp)}</a>` : ""}</p>
             <p style="margin:8px 0 0">Este correo fue enviado por una compra o actualización solicitada en emmagina.cl.</p>
         </div>
     `;
@@ -298,15 +298,15 @@ function wrapBrandedEmail({ preheader = "", title = "", introHtml = "", mainHtml
     const logo = emailLogoUrl();
     return `
         <div style="display:none;max-height:0;overflow:hidden;opacity:0;color:transparent">${escapeHtml(preheader)}</div>
-        <div style="margin:0;padding:0;background:#FFF9FD;font-family:Arial,Helvetica,sans-serif;color:#372A32">
-            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#FFF9FD;margin:0;padding:28px 12px">
+        <div style="margin:0;padding:0;background:#EAF4F8;font-family:Arial,Helvetica,sans-serif;color:#023047">
+            <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background:#EAF4F8;margin:0;padding:28px 12px">
                 <tr>
                     <td align="center">
-                        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;background:#FFFFFF;border:1px solid #F0D6E6;border-radius:22px;overflow:hidden">
+                        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:640px;background:#FFFFFF;border:1px solid rgba(2, 48, 71, 0.14);border-radius:22px;overflow:hidden">
                             <tr>
-                                <td style="background:#FFF2FA;padding:24px 24px 18px;text-align:center;border-bottom:1px solid #F0D6E6">
+                                <td style="background:#EAF4F8;padding:24px 24px 18px;text-align:center;border-bottom:1px solid rgba(2, 48, 71, 0.14)">
                                     ${logo ? `<img src="${escapeHtml(logo)}" width="72" alt="${escapeHtml(brandName())}" style="display:block;margin:0 auto 12px;border:0;max-width:72px;height:auto">` : ""}
-                                    <p style="margin:0;color:#8E456A;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700">${escapeHtml(brandName())}</p>
+                                    <p style="margin:0;color:#219EBC;font-size:13px;letter-spacing:.08em;text-transform:uppercase;font-weight:700">${escapeHtml(brandName())}</p>
                                     <h1 style="margin:8px 0 0;color:#65445A;font-size:24px;line-height:1.2">${escapeHtml(title)}</h1>
                                 </td>
                             </tr>
@@ -315,7 +315,7 @@ function wrapBrandedEmail({ preheader = "", title = "", introHtml = "", mainHtml
                                     ${introHtml}
                                     ${emailButton(ctaUrl, ctaLabel)}
                                     ${mainHtml}
-                                    ${footerNote ? `<p style="margin:18px 0 0;color:#715F69;font-size:13px">${escapeHtml(footerNote)}</p>` : ""}
+                                    ${footerNote ? `<p style="margin:18px 0 0;color:#125373;font-size:13px">${escapeHtml(footerNote)}</p>` : ""}
                                 </td>
                             </tr>
                             <tr>
@@ -337,7 +337,7 @@ function buildCustomerEmailHtml(order, body) {
         .join("\n");
 
     const summary = `
-        <div style="margin-top:22px;border:1px solid #F0D6E6;border-radius:16px;padding:16px;background:#FFF9FD">
+        <div style="margin-top:22px;border:1px solid rgba(2, 48, 71, 0.14);border-radius:16px;padding:16px;background:#EAF4F8">
             <p style="margin:0 0 10px;color:#65445A;font-weight:700">Resumen del pedido</p>
             <p style="margin:0 0 6px"><strong>N° pedido:</strong> ${escapeHtml(body.number)}</p>
             <p style="margin:0 0 6px"><strong>Total:</strong> ${escapeHtml(body.total)}</p>
@@ -347,9 +347,9 @@ function buildCustomerEmailHtml(order, body) {
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="margin-top:16px;border-collapse:collapse">
             <thead>
                 <tr>
-                    <th align="left" style="font-size:12px;color:#715F69;text-transform:uppercase;letter-spacing:.05em;padding-bottom:8px">Producto</th>
-                    <th align="center" style="font-size:12px;color:#715F69;text-transform:uppercase;letter-spacing:.05em;padding-bottom:8px">Cant.</th>
-                    <th align="right" style="font-size:12px;color:#715F69;text-transform:uppercase;letter-spacing:.05em;padding-bottom:8px">Subtotal</th>
+                    <th align="left" style="font-size:12px;color:#125373;text-transform:uppercase;letter-spacing:.05em;padding-bottom:8px">Producto</th>
+                    <th align="center" style="font-size:12px;color:#125373;text-transform:uppercase;letter-spacing:.05em;padding-bottom:8px">Cant.</th>
+                    <th align="right" style="font-size:12px;color:#125373;text-transform:uppercase;letter-spacing:.05em;padding-bottom:8px">Subtotal</th>
                 </tr>
             </thead>
             <tbody>${orderItemsRows(order)}</tbody>
@@ -370,7 +370,7 @@ function buildCustomerEmailHtml(order, body) {
 function buildAdminEmailHtml(order, data) {
     const adminUrl = data.adminUrl || "";
     const mainHtml = `
-        <div style="border:1px solid #F0D6E6;border-radius:16px;padding:16px;background:#FFF9FD">
+        <div style="border:1px solid rgba(2, 48, 71, 0.14);border-radius:16px;padding:16px;background:#EAF4F8">
             <p style="margin:0 0 8px"><strong>Cliente:</strong> ${escapeHtml(data.customer)}</p>
             <p style="margin:0 0 8px"><strong>Correo:</strong> ${escapeHtml(data.email)}</p>
             <p style="margin:0 0 8px"><strong>Teléfono:</strong> ${escapeHtml(data.phone)}</p>

@@ -42,7 +42,7 @@ const categorySchema = new mongoose.Schema(
             type: String,
             trim: true,
             maxlength: 20,
-            default: "#8E456A"
+            default: "#219EBC"
         },
         activa: {
             type: Boolean,

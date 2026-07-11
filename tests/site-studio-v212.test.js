@@ -33,7 +33,7 @@ function validPayload() {
         enabled: true,
         seoTitle: "Guía de regalos | Emmagina",
         seoDescription: "Ideas de regalos personalizados.",
-        layout: { maxWidth: 1100, contentPadding: 20, sectionGap: 32, backgroundColor: "#FFF9FD" },
+        layout: { maxWidth: 1100, contentPadding: 20, sectionGap: 32, backgroundColor: "#EAF4F8" },
         sections: [{
             id: "intro",
             type: "hero",
@@ -45,7 +45,7 @@ function validPayload() {
             body: "Elige una opción para cada ocasión.",
             alignment: "center",
             imagePosition: "background",
-            backgroundColor: "#FFF2FA",
+            backgroundColor: "#EAF4F8",
             textColor: "#372A32",
             paddingY: 50,
             borderRadius: 24,
