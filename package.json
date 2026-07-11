@@ -1,7 +1,7 @@
 {
   "name": "emmagina-backend",
-  "version": "1.9.1-emmagina-cms-editor-fix",
-  "description": "API de Emmagina con Editor del Sitio centralizado, páginas flexibles y guardado robusto.",
+  "version": "2.0.0-emmagina-cms-clean",
+  "description": "API de Emmagina con CMS Editor del Sitio limpio, robusto y centralizado.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

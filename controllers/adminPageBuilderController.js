@@ -2,7 +2,13 @@
 
 const mongoose = require("mongoose");
 const Page = require("../models/Page");
-const { ensureDefaultHomePage, shouldBootstrapHome } = require("../services/pageBuilderDefaults");
+const {
+    ensureDefaultHomePage,
+    shouldBootstrapHome,
+    getPageBuilderStatus
+} = require("../services/pageBuilderDefaults");
+
+const PAGE_TYPES = new Set(["home", "landing", "content", "catalog", "product", "checkout", "custom"]);
 
 function cleanText(value, fallback = "") {
     return String(value ?? fallback).trim();
@@ -20,7 +26,9 @@ function toBool(value, fallback = false) {
 }
 
 function slugify(value) {
-    return Page.slugify ? Page.slugify(value) : String(value || "pagina").toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "pagina";
+    return Page.slugify
+        ? Page.slugify(value)
+        : String(value || "pagina").toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "pagina";
 }
 
 function sortBlocks(blocks = []) {
@@ -33,13 +41,15 @@ function sortBlocks(blocks = []) {
 }
 
 async function uniqueValue(field, base, ignoreId = null) {
-    const safeBase = slugify(base);
+    const safeBase = slugify(base || "pagina");
     let candidate = safeBase;
     let suffix = 2;
 
     while (true) {
         const query = { [field]: candidate };
-        if (ignoreId) query._id = { $ne: ignoreId };
+        if (ignoreId && mongoose.Types.ObjectId.isValid(String(ignoreId))) {
+            query._id = { $ne: ignoreId };
+        }
         const exists = await Page.exists(query);
         if (!exists) return candidate;
         candidate = `${safeBase}-${suffix}`;
@@ -47,10 +57,21 @@ async function uniqueValue(field, base, ignoreId = null) {
     }
 }
 
+function cleanSeo(seo = {}, existing = {}) {
+    const source = seo && typeof seo === "object" ? seo : {};
+    return {
+        title: cleanText(source.title, existing.title || ""),
+        description: cleanText(source.description, existing.description || ""),
+        image: cleanText(source.image, existing.image || ""),
+        noIndex: toBool(source.noIndex, existing.noIndex === true)
+    };
+}
+
 async function normalizePagePayload(body = {}, options = {}) {
     const title = cleanText(body.title, "Nueva página") || "Nueva página";
     const rawSlug = cleanText(body.slug, "") || title;
     const rawKey = cleanText(body.key, "") || rawSlug;
+    const pageType = String(body.pageType || "custom").toLowerCase();
 
     return {
         key: await uniqueValue("key", rawKey, options.ignoreId),
@@ -60,25 +81,24 @@ async function normalizePagePayload(body = {}, options = {}) {
         isPublished: toBool(body.isPublished, true),
         isSystem: toBool(body.isSystem, false),
         canDelete: toBool(body.canDelete, true),
-        template: slugify(body.template || body.pageType || "page"),
-        pageType: ["home", "landing", "content", "catalog", "product", "checkout", "custom"].includes(String(body.pageType || "").toLowerCase())
-            ? String(body.pageType).toLowerCase()
-            : "custom",
+        template: slugify(body.template || pageType || "page"),
+        pageType: PAGE_TYPES.has(pageType) ? pageType : "custom",
         showInSiteEditor: toBool(body.showInSiteEditor, true),
         showInNavigation: toBool(body.showInNavigation, false),
         navigationLabel: cleanText(body.navigationLabel, title),
         sortOrder: Number.isFinite(Number(body.sortOrder)) ? Number(body.sortOrder) : 100,
         blocks: Array.isArray(body.blocks) ? sortBlocks(body.blocks) : [],
-        seo: body.seo && typeof body.seo === "object" ? body.seo : {}
+        seo: cleanSeo(body.seo || {}, {})
     };
 }
 
 function findPageQuery(value) {
-    const cleaned = slugify(value);
+    const raw = cleanText(value, "");
+    const cleaned = slugify(raw);
     const or = [{ key: cleaned }, { slug: cleaned }];
 
-    if (mongoose.Types.ObjectId.isValid(String(value || ""))) {
-        or.unshift({ _id: String(value) });
+    if (mongoose.Types.ObjectId.isValid(String(raw))) {
+        or.unshift({ _id: raw });
     }
 
     return { $or: or };
@@ -93,16 +113,26 @@ function publicPagePath(page = {}) {
     return `/pagina.html?slug=${encodeURIComponent(page.slug || page.key || "")}`;
 }
 
+function normalizePageForResponse(page) {
+    if (!page) return null;
+    const object = typeof page.toObject === "function" ? page.toObject() : { ...page };
+    object.blocks = sortBlocks(object.blocks || []);
+    object.publicPath = publicPagePath(object);
+    object.canDelete = object.canDelete !== false && object.isSystem !== true && object.key !== "home";
+    return object;
+}
+
 function toSummary(page) {
     return {
         _id: page._id,
+        id: page._id,
         key: page.key,
         title: page.title,
         slug: page.slug,
         description: page.description || "",
         isPublished: page.isPublished !== false,
         isSystem: page.isSystem === true,
-        canDelete: page.canDelete !== false && page.isSystem !== true,
+        canDelete: page.canDelete !== false && page.isSystem !== true && page.key !== "home",
         template: page.template || "page",
         pageType: page.pageType || "custom",
         showInNavigation: page.showInNavigation === true,
@@ -115,6 +145,26 @@ function toSummary(page) {
     };
 }
 
+async function status(req, res, next) {
+    try {
+        res.json(await getPageBuilderStatus());
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function repair(req, res, next) {
+    try {
+        const home = await ensureDefaultHomePage();
+        res.json({
+            message: "Editor del Sitio reparado.",
+            page: normalizePageForResponse(home)
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 async function listPages(req, res, next) {
     try {
         await ensureDefaultHomePage();
@@ -123,6 +173,7 @@ async function listPages(req, res, next) {
             .sort({ sortOrder: 1, updatedAt: -1 })
             .lean();
 
+        res.set("Cache-Control", "no-store");
         res.json(pages.map(toSummary));
     } catch (error) {
         next(error);
@@ -141,10 +192,8 @@ async function getPage(req, res, next) {
             return res.status(404).json({ error: "Página no encontrada." });
         }
 
-        page.blocks = sortBlocks(page.blocks || []);
-        page.publicPath = publicPagePath(page);
-        page.canDelete = page.canDelete !== false && page.isSystem !== true;
-        res.json(page);
+        res.set("Cache-Control", "no-store");
+        res.json(normalizePageForResponse(page));
     } catch (error) {
         next(error);
     }
@@ -167,13 +216,17 @@ async function createPage(req, res, next) {
                         title: payload.title,
                         html: `<p>Edita el contenido de ${payload.title} desde el Editor del Sitio.</p>`
                     },
-                    style: {}
+                    style: {
+                        marginTop: 0,
+                        marginBottom: 24
+                    },
+                    settings: {}
                 }
             ];
         }
 
         const page = await Page.create(payload);
-        res.status(201).json(page);
+        res.status(201).json(normalizePageForResponse(page));
     } catch (error) {
         next(error);
     }
@@ -196,7 +249,7 @@ async function updatePage(req, res, next) {
             set.description = cleanText(req.body.description, "");
         }
         if (Object.prototype.hasOwnProperty.call(req.body, "isPublished")) {
-            set.isPublished = toBool(req.body.isPublished, existing.isPublished !== false);
+            set.isPublished = existing.isSystem ? true : toBool(req.body.isPublished, existing.isPublished !== false);
         }
         if (Object.prototype.hasOwnProperty.call(req.body, "showInNavigation")) {
             set.showInNavigation = toBool(req.body.showInNavigation, existing.showInNavigation === true);
@@ -206,14 +259,12 @@ async function updatePage(req, res, next) {
         }
         if (Object.prototype.hasOwnProperty.call(req.body, "sortOrder")) {
             const sortOrder = Number(req.body.sortOrder);
-            if (Number.isFinite(sortOrder)) set.sortOrder = sortOrder;
+            if (Number.isFinite(sortOrder)) set.sortOrder = existing.isSystem ? 1 : sortOrder;
         }
 
         if (req.body.pageType && !existing.isSystem) {
             const value = String(req.body.pageType).toLowerCase();
-            if (["home", "landing", "content", "catalog", "product", "checkout", "custom"].includes(value)) {
-                set.pageType = value;
-            }
+            if (PAGE_TYPES.has(value)) set.pageType = value;
         }
         if (req.body.template && !existing.isSystem) {
             set.template = slugify(req.body.template);
@@ -225,10 +276,17 @@ async function updatePage(req, res, next) {
             set.key = await uniqueValue("key", req.body.key, existing._id);
         }
         if (req.body.seo && typeof req.body.seo === "object") {
-            set.seo = {
-                ...(existing.seo || {}),
-                ...req.body.seo
-            };
+            set.seo = cleanSeo(req.body.seo, existing.seo || {});
+        }
+
+        if (existing.isSystem && existing.key === "home") {
+            set.key = "home";
+            set.slug = "inicio";
+            set.isPublished = true;
+            set.isSystem = true;
+            set.canDelete = false;
+            set.showInSiteEditor = true;
+            set.sortOrder = 1;
         }
 
         set.updatedBy = safeUserId(req);
@@ -239,14 +297,7 @@ async function updatePage(req, res, next) {
             { new: true, runValidators: false }
         ).lean();
 
-        const response = {
-            ...page,
-            blocks: sortBlocks(page.blocks || []),
-            publicPath: publicPagePath(page),
-            canDelete: page.canDelete !== false && page.isSystem !== true
-        };
-
-        res.json(response);
+        res.json(normalizePageForResponse(page));
     } catch (error) {
         next(error);
     }
@@ -296,10 +347,12 @@ async function addBlock(req, res, next) {
         page.blocks.push(block);
         page.blocks = sortBlocks(page.blocks);
         page.updatedBy = safeUserId(req);
-        await page.save();
+        page.markModified("blocks");
+        await page.save({ validateBeforeSave: false });
 
-        const created = page.blocks.find((item) => item.position === nextPosition) || page.blocks[page.blocks.length - 1];
-        res.status(201).json({ page, block: created });
+        const response = normalizePageForResponse(page);
+        const created = response.blocks.find((item) => String(item.name) === String(block.name) && item.position === nextPosition) || response.blocks.at(-1);
+        res.status(201).json({ page: response, block: created });
     } catch (error) {
         next(error);
     }
@@ -329,9 +382,12 @@ async function updateBlock(req, res, next) {
 
         page.blocks = sortBlocks(page.blocks);
         page.updatedBy = safeUserId(req);
-        await page.save();
+        page.markModified("blocks");
+        await page.save({ validateBeforeSave: false });
 
-        res.json({ page, block });
+        const response = normalizePageForResponse(page);
+        const savedBlock = response.blocks.find((item) => String(item._id) === String(req.params.blockId)) || null;
+        res.json({ page: response, block: savedBlock });
     } catch (error) {
         next(error);
     }
@@ -351,12 +407,13 @@ async function deleteBlock(req, res, next) {
             return res.status(404).json({ error: "Bloque no encontrado." });
         }
 
-        block.deleteOne();
+        page.blocks.pull({ _id: block._id });
         page.blocks = sortBlocks(page.blocks);
         page.updatedBy = safeUserId(req);
-        await page.save();
+        page.markModified("blocks");
+        await page.save({ validateBeforeSave: false });
 
-        res.json({ message: "Bloque eliminado.", page });
+        res.json({ message: "Bloque eliminado.", page: normalizePageForResponse(page) });
     } catch (error) {
         next(error);
     }
@@ -387,15 +444,18 @@ async function reorderBlocks(req, res, next) {
 
         page.blocks = sortBlocks(page.blocks);
         page.updatedBy = safeUserId(req);
-        await page.save();
+        page.markModified("blocks");
+        await page.save({ validateBeforeSave: false });
 
-        res.json(page);
+        res.json(normalizePageForResponse(page));
     } catch (error) {
         next(error);
     }
 }
 
 module.exports = {
+    status,
+    repair,
     listPages,
     getPage,
     createPage,

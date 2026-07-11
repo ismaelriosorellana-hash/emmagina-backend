@@ -2,6 +2,8 @@
 
 const Page = require("../models/Page");
 
+const HOME_KEYS = ["home", "inicio"];
+
 function getDefaultHomePage() {
     return {
         key: "home",
@@ -35,7 +37,19 @@ function getDefaultHomePage() {
                     imageDesktop: "",
                     imageMobile: "",
                     buttonText: "Comprar ahora",
-                    buttonUrl: "catalogo.html"
+                    buttonUrl: "catalogo.html",
+                    categories: [
+                        "Accesorios",
+                        "Coleccionables",
+                        "Decoración",
+                        "Herramientas",
+                        "Linea Memories",
+                        "Librería",
+                        "Linea Alma",
+                        "Ofertas",
+                        "Vasos Temáticos",
+                        "Todos"
+                    ]
                 },
                 style: {
                     heightDesktop: 323,
@@ -149,39 +163,82 @@ function getDefaultHomePage() {
     };
 }
 
+function normalizeText(value) {
+    return String(value || "").trim().toLowerCase();
+}
+
 function shouldBootstrapHome(value) {
-    const key = String(value || "").trim().toLowerCase();
-    return key === "home" || key === "inicio" || key === "";
+    const key = normalizeText(value);
+    return key === "" || HOME_KEYS.includes(key);
 }
 
 function hasBlocks(page) {
     return Array.isArray(page?.blocks) && page.blocks.length > 0;
 }
 
-async function ensureDefaultHomePage() {
-    const defaultHomePage = getDefaultHomePage();
+function chooseCanonicalHome(candidates) {
+    const list = Array.isArray(candidates) ? candidates : [];
 
-    let page = await Page.findOne({
+    return list.find((page) => page.key === "home" && page.slug === "inicio") ||
+        list.find((page) => page.key === "home" && hasBlocks(page)) ||
+        list.find((page) => page.slug === "inicio" && hasBlocks(page)) ||
+        list.find((page) => hasBlocks(page)) ||
+        list[0] ||
+        null;
+}
+
+async function archiveDuplicateHomePages(candidates, canonicalId) {
+    const duplicates = (Array.isArray(candidates) ? candidates : [])
+        .filter((page) => String(page._id) !== String(canonicalId));
+
+    for (const duplicate of duplicates) {
+        const suffix = String(duplicate._id).slice(-8);
+        await Page.updateOne(
+            { _id: duplicate._id },
+            {
+                $set: {
+                    key: `archivo-home-${suffix}`,
+                    slug: `archivo-home-${suffix}`,
+                    title: duplicate.title ? `[Archivo técnico] ${duplicate.title}` : "[Archivo técnico] Inicio duplicado",
+                    isPublished: false,
+                    isSystem: true,
+                    canDelete: false,
+                    showInSiteEditor: false,
+                    showInNavigation: false,
+                    sortOrder: 9999
+                }
+            },
+            { runValidators: false }
+        );
+    }
+}
+
+async function findHomeCandidates() {
+    return Page.find({
         $or: [
-            { key: defaultHomePage.key },
-            { slug: defaultHomePage.slug }
+            { key: { $in: HOME_KEYS } },
+            { slug: { $in: HOME_KEYS } }
         ]
-    });
+    }).sort({ updatedAt: -1, createdAt: -1 });
+}
 
-    if (!page) {
+async function ensureDefaultHomePage() {
+    const defaults = getDefaultHomePage();
+    let candidates = await findHomeCandidates();
+
+    if (!candidates.length) {
         try {
-            return await Page.create(defaultHomePage);
+            return await Page.create(defaults);
         } catch (error) {
             if (error?.code !== 11000) throw error;
-            page = await Page.findOne({
-                $or: [
-                    { key: defaultHomePage.key },
-                    { slug: defaultHomePage.slug }
-                ]
-            });
-            if (!page) throw error;
+            candidates = await findHomeCandidates();
+            if (!candidates.length) throw error;
         }
     }
+
+    let canonical = chooseCanonicalHome(candidates);
+
+    await archiveDuplicateHomePages(candidates, canonical._id);
 
     const update = {
         key: "home",
@@ -193,26 +250,58 @@ async function ensureDefaultHomePage() {
         pageType: "home",
         showInSiteEditor: true,
         showInNavigation: false,
-        navigationLabel: page.navigationLabel || page.title || "Inicio",
+        navigationLabel: canonical.navigationLabel || canonical.title || "Inicio",
         sortOrder: 1
     };
 
-    if (!page.title) update.title = defaultHomePage.title;
-    if (!page.description) update.description = defaultHomePage.description;
-    if (!page.seo || !page.seo.title) update.seo = defaultHomePage.seo;
-    if (!hasBlocks(page)) update.blocks = defaultHomePage.blocks;
+    if (!canonical.title) update.title = defaults.title;
+    if (!canonical.description) update.description = defaults.description;
+    if (!canonical.seo || !canonical.seo.title) update.seo = defaults.seo;
+    if (!hasBlocks(canonical)) update.blocks = defaults.blocks;
 
-    await Page.updateOne(
-        { _id: page._id },
-        { $set: update },
-        { runValidators: false }
-    );
+    try {
+        await Page.updateOne(
+            { _id: canonical._id },
+            { $set: update },
+            { runValidators: false }
+        );
+    } catch (error) {
+        if (error?.code !== 11000) throw error;
+        candidates = await findHomeCandidates();
+        canonical = chooseCanonicalHome(candidates);
+        await archiveDuplicateHomePages(candidates, canonical._id);
+        await Page.updateOne(
+            { _id: canonical._id },
+            { $set: update },
+            { runValidators: false }
+        );
+    }
 
-    return Page.findById(page._id);
+    return Page.findById(canonical._id);
+}
+
+async function getPageBuilderStatus() {
+    const home = await ensureDefaultHomePage();
+    const totalPages = await Page.countDocuments({ showInSiteEditor: { $ne: false } });
+    return {
+        ok: true,
+        module: "Editor del Sitio",
+        totalPages,
+        home: {
+            id: home._id,
+            key: home.key,
+            slug: home.slug,
+            title: home.title,
+            blocksCount: Array.isArray(home.blocks) ? home.blocks.length : 0,
+            updatedAt: home.updatedAt
+        }
+    };
 }
 
 module.exports = {
+    HOME_KEYS,
     getDefaultHomePage,
     shouldBootstrapHome,
-    ensureDefaultHomePage
+    ensureDefaultHomePage,
+    getPageBuilderStatus
 };

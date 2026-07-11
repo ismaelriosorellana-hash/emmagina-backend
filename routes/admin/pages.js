@@ -3,6 +3,8 @@
 const express = require("express");
 
 const {
+    status,
+    repair,
     listPages,
     getPage,
     createPage,
@@ -16,6 +18,8 @@ const {
 
 const router = express.Router();
 
+router.get("/_status", status);
+router.post("/_repair", repair);
 router.get("/", listPages);
 router.post("/", createPage);
 router.get("/:pageId", getPage);
