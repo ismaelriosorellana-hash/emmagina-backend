@@ -2,6 +2,7 @@
 
 const mongoose = require("mongoose");
 const Page = require("../models/Page");
+const { ensureDefaultHomePage, shouldBootstrapHome } = require("../services/pageBuilderDefaults");
 
 function cleanPageKey(value) {
     return String(value || "").trim().toLowerCase();
@@ -22,6 +23,8 @@ async function findPageByIdKeyOrSlug(pageId) {
 
 async function listPages(req, res, next) {
     try {
+        await ensureDefaultHomePage();
+
         const pages = await Page.find()
             .select("key title slug description isPublished updatedAt blocks")
             .sort({ updatedAt: -1 })
@@ -39,7 +42,11 @@ async function listPages(req, res, next) {
 
 async function getPage(req, res, next) {
     try {
-        const page = await findPageByIdKeyOrSlug(req.params.pageId).lean();
+        let page = await findPageByIdKeyOrSlug(req.params.pageId).lean();
+
+        if (!page && shouldBootstrapHome(req.params.pageId)) {
+            page = await ensureDefaultHomePage().then((createdPage) => createdPage.toObject());
+        }
 
         if (!page) {
             return res.status(404).json({ error: "Página no encontrada." });

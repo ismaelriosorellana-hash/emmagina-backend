@@ -1,18 +1,23 @@
 "use strict";
 
 const Page = require("../models/Page");
+const { ensureDefaultHomePage, shouldBootstrapHome } = require("../services/pageBuilderDefaults");
 
 async function getPublicPage(req, res, next) {
     try {
         const key = String(req.params.key || "").trim().toLowerCase();
 
-        const page = await Page.findOne({
+        let page = await Page.findOne({
             $or: [
                 { key },
                 { slug: key }
             ],
             isPublished: true
         }).lean();
+
+        if (!page && shouldBootstrapHome(key)) {
+            page = await ensureDefaultHomePage().then((createdPage) => createdPage.toObject());
+        }
 
         if (!page) {
             return res.status(404).json({ error: "Página no encontrada." });
