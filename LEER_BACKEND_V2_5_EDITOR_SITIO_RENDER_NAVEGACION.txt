@@ -1,0 +1,18 @@
+Emmagina Backend v2.5 - Editor del Sitio con render y navegación editable
+
+Cambios principales:
+- Mantiene el motor definitivo site_editor_pages.
+- Agrega endpoint público GET /api/pages/_navigation para construir el menú superior desde páginas publicadas.
+- Las páginas creadas desde Editor del Sitio pueden aparecer en la navegación si activas "Mostrar en navegación".
+- Soporta orden de navegación mediante sortOrder.
+- Mantiene compatibilidad con /api/pages/home y /api/admin/editor-sitio/pages.
+
+Instalación:
+rm -f package-lock.json
+rm -rf node_modules
+npm config set registry https://registry.npmjs.org/
+npm install
+npm run check
+git add .
+git commit -m "Emmagina backend v2.5 editor sitio render navegacion"
+git push

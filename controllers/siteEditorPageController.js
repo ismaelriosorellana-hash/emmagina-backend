@@ -16,6 +16,15 @@ async function getPublicPage(req, res, next) {
     }
 }
 
+async function getNavigation(req, res, next) {
+    try {
+        res.set("Cache-Control", "no-store");
+        res.json({ items: await store.listNavigationPages() });
+    } catch (error) {
+        next(error);
+    }
+}
+
 async function status(req, res, next) {
     try {
         res.set("Cache-Control", "no-store");
@@ -27,5 +36,6 @@ async function status(req, res, next) {
 
 module.exports = {
     getPublicPage,
+    getNavigation,
     status
 };

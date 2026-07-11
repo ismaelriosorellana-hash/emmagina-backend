@@ -882,6 +882,59 @@ async function reorderBlocks(pageValue, order = [], userId = null) {
     return saveNormalizedPage({ ...page, sections }, userId);
 }
 
+
+function normalizeNavigationHref(page = {}) {
+    if (page.key === "home" || page.slug === "inicio") return "index.html";
+    return `pagina.html?slug=${encodeURIComponent(page.slug || page.key || "")}`;
+}
+
+function defaultNavigationItems() {
+    return [
+        { label: "Inicio", href: "index.html", source: "system", sortOrder: 1, isSystem: true },
+        { label: "Tienda", href: "catalogo.html", source: "system", sortOrder: 10, isSystem: true },
+        { label: "Crea tu Escena", href: "pedido-personalizado.html", source: "system", sortOrder: 20, isSystem: true },
+        { label: "Sobre Nosotros", href: "quienes-somos.html", source: "system", sortOrder: 90, isSystem: true },
+        { label: "Contáctanos", href: "contacto.html", source: "system", sortOrder: 100, isSystem: true },
+        { label: "Preguntas Frecuentes", href: "preguntas-frecuentes.html", source: "system", sortOrder: 110, isSystem: true }
+    ];
+}
+
+async function listNavigationPages() {
+    await ensureIndexes();
+    await ensureHomePage();
+    const docs = await collection()
+        .find({
+            deletedAt: null,
+            isPublished: { $ne: false },
+            showInNavigation: true
+        })
+        .sort({ sortOrder: 1, title: 1 })
+        .toArray();
+
+    const dynamicItems = docs
+        .map(serializePage)
+        .filter((page) => page.key !== "home" && page.slug !== "inicio")
+        .map((page) => ({
+            label: cleanText(page.navigationLabel, page.title) || page.title || "Página",
+            href: normalizeNavigationHref(page),
+            pageId: page._id,
+            slug: page.slug,
+            source: "cms",
+            sortOrder: toNumber(page.sortOrder, 50),
+            isSystem: false
+        }));
+
+    const seen = new Set();
+    return [...defaultNavigationItems(), ...dynamicItems]
+        .sort((a, b) => toNumber(a.sortOrder, 999) - toNumber(b.sortOrder, 999) || String(a.label).localeCompare(String(b.label), "es"))
+        .filter((item) => {
+            const key = `${item.href}|${item.label}`.toLowerCase();
+            if (seen.has(key)) return false;
+            seen.add(key);
+            return true;
+        });
+}
+
 async function diagnostic() {
     await ensureIndexes();
     const col = collection();
@@ -892,7 +945,7 @@ async function diagnostic() {
         ok: true,
         module: "Editor del Sitio",
         storage: COLLECTION_NAME,
-        version: "2.4-sections",
+        version: "2.5-render-navigation",
         totalPages,
         visiblePages,
         home: {
@@ -919,6 +972,7 @@ module.exports = {
     listPages,
     findPage,
     findPublicPage,
+    listNavigationPages,
     createPage,
     updatePage,
     deletePage,

@@ -1,7 +1,7 @@
 {
   "name": "emmagina-backend",
-  "version": "2.4.0-editor-sitio-secciones",
-  "description": "API de Emmagina con Editor del Sitio por secciones y bloques modulares.",
+  "version": "2.5.0-editor-sitio-render-navegacion",
+  "description": "API de Emmagina con Editor del Sitio, secciones, bloques renderizables y navegación editable.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
