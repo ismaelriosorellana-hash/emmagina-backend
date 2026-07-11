@@ -1,0 +1,15 @@
+EMMAGINA BACKEND v2.3 - Editor del Sitio Final Render Fix
+
+Corrección definitiva del desacople entre Editor del Sitio y Home pública:
+- Normaliza tipos de bloques a formato estable con guion bajo: hero_banner, info_cards, product_marquee, etc.
+- Migra automáticamente bloques antiguos con guion medio: hero-banner, info-cards, product-marquee.
+- Mantiene la colección definitiva site_editor_pages.
+- Mantiene npm limpio: sin package-lock generado en entorno externo.
+
+Instalación:
+1. Reemplazar backend completo sin borrar .git.
+2. Ejecutar npm install.
+3. Ejecutar npm run check.
+4. git add .
+5. git commit -m "Emmagina backend v2.3 editor sitio render fix"
+6. git push

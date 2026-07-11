@@ -66,8 +66,45 @@ function blockId(value) {
     return String(value?._id || value?.id || newId());
 }
 
+const BLOCK_TYPE_ALIASES = {
+    "hero-banner": "hero_banner",
+    "hero_banner": "hero_banner",
+    "hero": "hero_banner",
+    "banner-principal": "hero_banner",
+    "info-cards": "info_cards",
+    "info_cards": "info_cards",
+    "bloques-informativos": "info_cards",
+    "tarjetas-informativas": "info_cards",
+    "product-marquee": "product_marquee",
+    "product_marquee": "product_marquee",
+    "carrusel-productos": "product_marquee",
+    "product-grid": "product_grid",
+    "product_grid": "product_grid",
+    "grilla-productos": "product_grid",
+    "image-banner": "image_banner",
+    "image_banner": "image_banner",
+    "banner-imagen": "image_banner",
+    "reviews-marquee": "reviews_marquee",
+    "reviews_marquee": "reviews_marquee",
+    "carrusel-resenas": "reviews_marquee",
+    "resenas": "reviews_marquee",
+    "html-block": "html_block",
+    "html_block": "html_block",
+    "custom-html": "custom_html",
+    "custom_html": "custom_html",
+    "contenido-html": "custom_html"
+};
+
+function normalizeBlockType(value) {
+    const raw = String(value || "custom_html").trim();
+    if (!raw) return "custom_html";
+    if (BLOCK_TYPE_ALIASES[raw]) return BLOCK_TYPE_ALIASES[raw];
+    const safe = slugify(raw);
+    return BLOCK_TYPE_ALIASES[safe] || safe.replace(/-/g, "_") || "custom_html";
+}
+
 function normalizeBlock(block = {}, index = 0) {
-    const type = slugify(block.type || "custom_html");
+    const type = normalizeBlockType(block.type || "custom_html");
     const id = isObjectId(block._id || block.id) ? asObjectId(block._id || block.id) : newId();
     return {
         _id: id,
@@ -323,6 +360,7 @@ async function ensureHomePage() {
 
     const normalized = normalizePage(existing);
     if (!normalized.blocks.length) normalized.blocks = defaultHomePage().blocks;
+    normalized.blocks = sortBlocks(normalized.blocks);
     normalized.key = "home";
     normalized.slug = "inicio";
     normalized.isPublished = true;
@@ -559,6 +597,7 @@ async function diagnostic() {
 module.exports = {
     COLLECTION_NAME,
     slugify,
+    normalizeBlockType,
     shouldBootstrapHome,
     defaultHomePage,
     ensureHomePage,
