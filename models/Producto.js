@@ -67,11 +67,27 @@ const seoSchema = new mongoose.Schema(
 
 const variantSchema = new mongoose.Schema(
     {
+        key: {
+            type: String,
+            trim: true,
+            maxlength: 120,
+            default: ""
+        },
         nombre: {
             type: String,
             trim: true,
             maxlength: 120,
             default: ""
+        },
+        tipo: {
+            type: String,
+            trim: true,
+            maxlength: 60,
+            default: "opcion"
+        },
+        opciones: {
+            type: mongoose.Schema.Types.Mixed,
+            default: () => ({})
         },
         codigoHex: {
             type: String,
@@ -84,7 +100,27 @@ const variantSchema = new mongoose.Schema(
             default: 0,
             min: 0
         },
+        stockReservado: {
+            type: Number,
+            default: 0,
+            min: 0
+        },
+        stockDisponible: {
+            type: Number,
+            default: 0,
+            min: 0
+        },
+        stockMinimo: {
+            type: Number,
+            default: 5,
+            min: 0
+        },
         precio: {
+            type: Number,
+            default: null,
+            min: 0
+        },
+        precioOriginal: {
             type: Number,
             default: null,
             min: 0
@@ -100,9 +136,27 @@ const variantSchema = new mongoose.Schema(
             type: Boolean,
             default: true
         },
+        estadoComercial: {
+            type: String,
+            trim: true,
+            maxlength: 80,
+            default: ""
+        },
+        imagenPrincipal: {
+            type: String,
+            trim: true,
+            maxlength: 1200,
+            default: ""
+        },
         imagenes: {
             type: [mongoose.Schema.Types.Mixed],
             default: []
+        },
+        diasPreparacion: {
+            type: Number,
+            default: 3,
+            min: 1,
+            max: 90
         },
         pesoGramos: {
             type: Number,
@@ -178,6 +232,20 @@ const productSchema = new mongoose.Schema(
             type: String,
             default: "",
             maxlength: 10000
+        },
+
+        descripcionCorta: {
+            type: String,
+            trim: true,
+            maxlength: 360,
+            default: ""
+        },
+
+        imagenPrincipal: {
+            type: String,
+            trim: true,
+            maxlength: 1200,
+            default: ""
         },
 
         imagenes: {
@@ -289,6 +357,45 @@ const productSchema = new mongoose.Schema(
         caracteristicas: {
             type: mongoose.Schema.Types.Mixed,
             default: []
+        },
+
+        contenidoPDP: {
+            tituloBeneficio: {
+                type: String,
+                trim: true,
+                maxlength: 120,
+                default: ""
+            },
+            textoBeneficio: {
+                type: String,
+                trim: true,
+                maxlength: 800,
+                default: ""
+            },
+            beneficios: {
+                type: [String],
+                default: []
+            },
+            cuidados: {
+                type: [String],
+                default: []
+            },
+            preguntasFrecuentes: {
+                type: [mongoose.Schema.Types.Mixed],
+                default: []
+            },
+            mensajeCompra: {
+                type: String,
+                trim: true,
+                maxlength: 240,
+                default: ""
+            },
+            garantia: {
+                type: String,
+                trim: true,
+                maxlength: 500,
+                default: ""
+            }
         },
 
         precioBasePersonalizacion: {
@@ -404,6 +511,8 @@ productSchema.index({
 
 productSchema.index({ sku: 1 });
 productSchema.index({ "variantes.sku": 1 });
+productSchema.index({ "variantes.key": 1 });
+productSchema.index({ "variantes.stockDisponible": 1 });
 productSchema.index({ marca: 1 });
 
 module.exports =

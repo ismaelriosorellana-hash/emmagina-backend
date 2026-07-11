@@ -7,7 +7,8 @@ const {
     getAdminProduct,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    updateVariantInventory
 } = require("../../controllers/adminProductController");
 
 const {
@@ -18,6 +19,12 @@ const router = express.Router();
 
 router.get("/", listAdminProducts);
 router.post("/", createProduct);
+
+router.patch(
+    "/:id/variantes/inventario",
+    validateObjectId("id"),
+    updateVariantInventory
+);
 
 router.get(
     "/:id",

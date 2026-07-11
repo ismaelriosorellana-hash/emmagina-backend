@@ -131,6 +131,7 @@ async function assignProductSkus(
             }
 
             variant.sku = requestedVariantSku;
+            variant.key = variant.key || requestedVariantSku;
             usedLocal.add(requestedVariantSku);
             continue;
         }
@@ -142,6 +143,7 @@ async function assignProductSkus(
             usedLocal,
             excludeId
         );
+        variant.key = variant.key || variant.sku;
     }
 
     return data;

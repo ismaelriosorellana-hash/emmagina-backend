@@ -255,10 +255,71 @@ async function deleteProduct(
     }
 }
 
+async function updateVariantInventory(
+    req,
+    res,
+    next
+) {
+    try {
+        const product = await Producto.findById(req.params.id);
+
+        if (!product) {
+            return res.status(404).json({
+                error: "Producto no encontrado."
+            });
+        }
+
+        const updates = Array.isArray(req.body?.variantes)
+            ? req.body.variantes
+            : [];
+
+        if (!updates.length) {
+            return res.status(400).json({
+                error: "No se recibieron variantes para actualizar."
+            });
+        }
+
+        const nextVariants = (product.variantes || []).map((variant) => {
+            const key = String(variant.key || variant.sku || variant.nombre || "");
+            const update = updates.find((item) => {
+                const candidate = String(item.key || item.sku || item.nombre || "");
+                return candidate && candidate === key;
+            });
+
+            if (!update) return variant;
+
+            const stock = Math.max(0, Math.round(Number(update.stock ?? variant.stock ?? 0) || 0));
+            const reserved = Math.max(0, Math.round(Number(update.stockReservado ?? variant.stockReservado ?? 0) || 0));
+
+            return {
+                ...variant,
+                stock,
+                stockReservado: reserved,
+                stockDisponible: Math.max(0, stock - reserved),
+                stockMinimo: Math.max(0, Math.round(Number(update.stockMinimo ?? variant.stockMinimo ?? 5) || 0)),
+                estadoComercial: String(update.estadoComercial ?? variant.estadoComercial ?? "").slice(0, 80)
+            };
+        });
+
+        product.variantes = nextVariants;
+        product.stock = nextVariants.reduce((sum, variant) => {
+            if (variant.activo === false) return sum;
+            return sum + Math.max(0, Math.round(Number(variant.stockDisponible ?? variant.stock ?? 0) || 0));
+        }, 0);
+
+        await product.save();
+
+        res.json(normalizeProductOutput(product));
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     listAdminProducts,
     getAdminProduct,
     createProduct,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    updateVariantInventory
 };
