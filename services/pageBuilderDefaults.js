@@ -1,6 +1,6 @@
 "use strict";
 
-const Page = require("../models/Page");
+const Page = require("../models/CmsPage");
 
 const HOME_KEYS = ["home", "inicio"];
 
@@ -43,9 +43,9 @@ function getDefaultHomePage() {
                         "Coleccionables",
                         "Decoración",
                         "Herramientas",
-                        "Linea Memories",
+                        "Línea Memories",
                         "Librería",
-                        "Linea Alma",
+                        "Línea Alma",
                         "Ofertas",
                         "Vasos Temáticos",
                         "Todos"
@@ -56,7 +56,8 @@ function getDefaultHomePage() {
                     heightMobile: 220,
                     marginTop: 0,
                     marginBottom: 24
-                }
+                },
+                settings: {}
             },
             {
                 type: "info_cards",
@@ -74,7 +75,8 @@ function getDefaultHomePage() {
                 style: {
                     marginTop: 0,
                     marginBottom: 24
-                }
+                },
+                settings: {}
             },
             {
                 type: "product_marquee",
@@ -89,7 +91,8 @@ function getDefaultHomePage() {
                 style: {
                     marginTop: 0,
                     marginBottom: 24
-                }
+                },
+                settings: {}
             },
             {
                 type: "product_marquee",
@@ -104,7 +107,8 @@ function getDefaultHomePage() {
                 style: {
                     marginTop: 0,
                     marginBottom: 24
-                }
+                },
+                settings: {}
             },
             {
                 type: "image_banner",
@@ -123,7 +127,8 @@ function getDefaultHomePage() {
                     heightMobile: 88,
                     marginTop: 0,
                     marginBottom: 18
-                }
+                },
+                settings: {}
             },
             {
                 type: "image_banner",
@@ -142,7 +147,8 @@ function getDefaultHomePage() {
                     heightMobile: 88,
                     marginTop: 0,
                     marginBottom: 18
-                }
+                },
+                settings: {}
             },
             {
                 type: "reviews_marquee",
@@ -157,7 +163,8 @@ function getDefaultHomePage() {
                 style: {
                     marginTop: 0,
                     marginBottom: 24
-                }
+                },
+                settings: {}
             }
         ]
     };
@@ -176,10 +183,29 @@ function hasBlocks(page) {
     return Array.isArray(page?.blocks) && page.blocks.length > 0;
 }
 
+function sortBlocks(blocks = []) {
+    return [...blocks]
+        .sort((a, b) => Number(a.position || 0) - Number(b.position || 0))
+        .map((block, index) => ({
+            ...block,
+            position: index + 1
+        }));
+}
+
+async function findHomeCandidates() {
+    return Page.find({
+        $or: [
+            { key: { $in: HOME_KEYS } },
+            { slug: { $in: HOME_KEYS } },
+            { pageType: "home" },
+            { template: "home" }
+        ]
+    }).sort({ updatedAt: -1, createdAt: -1 });
+}
+
 function chooseCanonicalHome(candidates) {
     const list = Array.isArray(candidates) ? candidates : [];
-
-    return list.find((page) => page.key === "home" && page.slug === "inicio") ||
+    return list.find((page) => page.key === "home" && page.slug === "inicio" && hasBlocks(page)) ||
         list.find((page) => page.key === "home" && hasBlocks(page)) ||
         list.find((page) => page.slug === "inicio" && hasBlocks(page)) ||
         list.find((page) => hasBlocks(page)) ||
@@ -213,36 +239,35 @@ async function archiveDuplicateHomePages(candidates, canonicalId) {
     }
 }
 
-async function findHomeCandidates() {
-    return Page.find({
-        $or: [
-            { key: { $in: HOME_KEYS } },
-            { slug: { $in: HOME_KEYS } }
-        ]
-    }).sort({ updatedAt: -1, createdAt: -1 });
-}
-
 async function ensureDefaultHomePage() {
     const defaults = getDefaultHomePage();
     let candidates = await findHomeCandidates();
 
     if (!candidates.length) {
-        try {
-            return await Page.create(defaults);
-        } catch (error) {
-            if (error?.code !== 11000) throw error;
-            candidates = await findHomeCandidates();
-            if (!candidates.length) throw error;
-        }
+        return Page.create(defaults);
     }
 
-    let canonical = chooseCanonicalHome(candidates);
+    const canonical = chooseCanonicalHome(candidates);
+
+    if (!canonical) {
+        return Page.create(defaults);
+    }
 
     await archiveDuplicateHomePages(candidates, canonical._id);
+
+    const existingBlocks = hasBlocks(canonical)
+        ? sortBlocks(canonical.blocks.map((block) => typeof block.toObject === "function" ? block.toObject() : block))
+        : defaults.blocks;
+
+    const existingSeo = canonical.seo && typeof canonical.seo === "object"
+        ? canonical.seo
+        : {};
 
     const update = {
         key: "home",
         slug: "inicio",
+        title: canonical.title || defaults.title,
+        description: canonical.description || defaults.description,
         isPublished: true,
         isSystem: true,
         canDelete: false,
@@ -251,31 +276,20 @@ async function ensureDefaultHomePage() {
         showInSiteEditor: true,
         showInNavigation: false,
         navigationLabel: canonical.navigationLabel || canonical.title || "Inicio",
-        sortOrder: 1
+        sortOrder: 1,
+        seo: {
+            ...defaults.seo,
+            ...existingSeo,
+            title: existingSeo.title || defaults.seo.title
+        },
+        blocks: existingBlocks
     };
 
-    if (!canonical.title) update.title = defaults.title;
-    if (!canonical.description) update.description = defaults.description;
-    if (!canonical.seo || !canonical.seo.title) update.seo = defaults.seo;
-    if (!hasBlocks(canonical)) update.blocks = defaults.blocks;
-
-    try {
-        await Page.updateOne(
-            { _id: canonical._id },
-            { $set: update },
-            { runValidators: false }
-        );
-    } catch (error) {
-        if (error?.code !== 11000) throw error;
-        candidates = await findHomeCandidates();
-        canonical = chooseCanonicalHome(candidates);
-        await archiveDuplicateHomePages(candidates, canonical._id);
-        await Page.updateOne(
-            { _id: canonical._id },
-            { $set: update },
-            { runValidators: false }
-        );
-    }
+    await Page.updateOne(
+        { _id: canonical._id },
+        { $set: update },
+        { runValidators: false }
+    );
 
     return Page.findById(canonical._id);
 }
@@ -286,6 +300,7 @@ async function getPageBuilderStatus() {
     return {
         ok: true,
         module: "Editor del Sitio",
+        storage: "site_pages",
         totalPages,
         home: {
             id: home._id,

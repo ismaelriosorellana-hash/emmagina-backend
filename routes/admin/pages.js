@@ -4,6 +4,7 @@ const express = require("express");
 
 const {
     status,
+    diagnostic,
     repair,
     listPages,
     getPage,
@@ -19,6 +20,7 @@ const {
 const router = express.Router();
 
 router.get("/_status", status);
+router.get("/_diagnostic", diagnostic);
 router.post("/_repair", repair);
 router.get("/", listPages);
 router.post("/", createPage);

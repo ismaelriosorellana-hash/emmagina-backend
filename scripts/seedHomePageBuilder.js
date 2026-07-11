@@ -9,7 +9,7 @@ const { ensureDefaultHomePage } = require("../services/pageBuilderDefaults");
 async function main() {
     await connectDatabase();
     await ensureDefaultHomePage();
-    console.log("✅ Página Home creada/actualizada en colección pages.");
+    console.log("✅ Página Home creada/actualizada en colección site_pages.");
 }
 
 main()

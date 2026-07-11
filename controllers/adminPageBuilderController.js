@@ -1,7 +1,7 @@
 "use strict";
 
 const mongoose = require("mongoose");
-const Page = require("../models/Page");
+const Page = require("../models/CmsPage");
 const {
     ensureDefaultHomePage,
     shouldBootstrapHome,
@@ -159,6 +159,43 @@ async function repair(req, res, next) {
         res.json({
             message: "Editor del Sitio reparado.",
             page: normalizePageForResponse(home)
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function diagnostic(req, res, next) {
+    try {
+        const collectionName = Page.collection?.collectionName || "site_pages";
+        const totalPages = await Page.countDocuments({});
+        const visiblePages = await Page.countDocuments({ showInSiteEditor: { $ne: false } });
+        const homeCandidates = await Page.find({
+            $or: [
+                { key: { $in: ["home", "inicio"] } },
+                { slug: { $in: ["home", "inicio"] } },
+                { pageType: "home" },
+                { template: "home" }
+            ]
+        }).select("key slug title isPublished isSystem blocks updatedAt createdAt").lean();
+
+        res.json({
+            ok: true,
+            module: "Editor del Sitio",
+            collection: collectionName,
+            totalPages,
+            visiblePages,
+            homeCandidates: homeCandidates.map((page) => ({
+                id: page._id,
+                key: page.key,
+                slug: page.slug,
+                title: page.title,
+                isPublished: page.isPublished !== false,
+                isSystem: page.isSystem === true,
+                blocksCount: Array.isArray(page.blocks) ? page.blocks.length : 0,
+                updatedAt: page.updatedAt,
+                createdAt: page.createdAt
+            }))
         });
     } catch (error) {
         next(error);
@@ -455,6 +492,7 @@ async function reorderBlocks(req, res, next) {
 
 module.exports = {
     status,
+    diagnostic,
     repair,
     listPages,
     getPage,

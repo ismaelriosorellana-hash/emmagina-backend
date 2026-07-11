@@ -1,6 +1,6 @@
 "use strict";
 
-const Page = require("../models/Page");
+const Page = require("../models/CmsPage");
 const { ensureDefaultHomePage, shouldBootstrapHome } = require("../services/pageBuilderDefaults");
 
 function cleanKey(value) {
