@@ -8,6 +8,10 @@ function cleanText(value, fallback = "") {
     return String(value ?? fallback).trim();
 }
 
+function safeUserId(req) {
+    return String(req?.user?._id || req?.user?.id || "admin");
+}
+
 function toBool(value, fallback = false) {
     if (typeof value === "boolean") return value;
     if (value === "true") return true;
@@ -149,8 +153,8 @@ async function getPage(req, res, next) {
 async function createPage(req, res, next) {
     try {
         const payload = await normalizePagePayload(req.body, {});
-        payload.createdBy = req.user?._id || null;
-        payload.updatedBy = req.user?._id || null;
+        payload.createdBy = safeUserId(req);
+        payload.updatedBy = safeUserId(req);
 
         if (!Array.isArray(payload.blocks) || !payload.blocks.length) {
             payload.blocks = [
@@ -177,56 +181,72 @@ async function createPage(req, res, next) {
 
 async function updatePage(req, res, next) {
     try {
-        const page = await findPageByIdKeyOrSlug(req.params.pageId);
+        const existing = await findPageByIdKeyOrSlug(req.params.pageId).lean();
 
-        if (!page) {
+        if (!existing) {
             return res.status(404).json({ error: "Página no encontrada." });
         }
 
+        const set = {};
+
         if (Object.prototype.hasOwnProperty.call(req.body, "title")) {
-            page.title = cleanText(req.body.title, page.title) || page.title;
+            set.title = cleanText(req.body.title, existing.title) || existing.title || "Página";
         }
         if (Object.prototype.hasOwnProperty.call(req.body, "description")) {
-            page.description = cleanText(req.body.description, "");
+            set.description = cleanText(req.body.description, "");
         }
         if (Object.prototype.hasOwnProperty.call(req.body, "isPublished")) {
-            page.isPublished = toBool(req.body.isPublished, page.isPublished !== false);
+            set.isPublished = toBool(req.body.isPublished, existing.isPublished !== false);
         }
         if (Object.prototype.hasOwnProperty.call(req.body, "showInNavigation")) {
-            page.showInNavigation = toBool(req.body.showInNavigation, page.showInNavigation === true);
+            set.showInNavigation = toBool(req.body.showInNavigation, existing.showInNavigation === true);
         }
         if (Object.prototype.hasOwnProperty.call(req.body, "navigationLabel")) {
-            page.navigationLabel = cleanText(req.body.navigationLabel, page.title);
+            set.navigationLabel = cleanText(req.body.navigationLabel, set.title || existing.title || "Página");
         }
         if (Object.prototype.hasOwnProperty.call(req.body, "sortOrder")) {
             const sortOrder = Number(req.body.sortOrder);
-            if (Number.isFinite(sortOrder)) page.sortOrder = sortOrder;
+            if (Number.isFinite(sortOrder)) set.sortOrder = sortOrder;
         }
-        if (req.body.pageType && !page.isSystem) {
+
+        if (req.body.pageType && !existing.isSystem) {
             const value = String(req.body.pageType).toLowerCase();
             if (["home", "landing", "content", "catalog", "product", "checkout", "custom"].includes(value)) {
-                page.pageType = value;
+                set.pageType = value;
             }
         }
-        if (req.body.template && !page.isSystem) {
-            page.template = slugify(req.body.template);
+        if (req.body.template && !existing.isSystem) {
+            set.template = slugify(req.body.template);
         }
-        if (req.body.slug && !page.isSystem) {
-            page.slug = await uniqueValue("slug", req.body.slug, page._id);
+        if (req.body.slug && !existing.isSystem) {
+            set.slug = await uniqueValue("slug", req.body.slug, existing._id);
         }
-        if (req.body.key && !page.isSystem) {
-            page.key = await uniqueValue("key", req.body.key, page._id);
+        if (req.body.key && !existing.isSystem) {
+            set.key = await uniqueValue("key", req.body.key, existing._id);
         }
         if (req.body.seo && typeof req.body.seo === "object") {
-            page.seo = {
-                ...(page.seo?.toObject ? page.seo.toObject() : page.seo || {}),
+            set.seo = {
+                ...(existing.seo || {}),
                 ...req.body.seo
             };
         }
 
-        page.updatedBy = req.user?._id || null;
-        await page.save();
-        res.json(page);
+        set.updatedBy = safeUserId(req);
+
+        const page = await Page.findByIdAndUpdate(
+            existing._id,
+            { $set: set },
+            { new: true, runValidators: false }
+        ).lean();
+
+        const response = {
+            ...page,
+            blocks: sortBlocks(page.blocks || []),
+            publicPath: publicPagePath(page),
+            canDelete: page.canDelete !== false && page.isSystem !== true
+        };
+
+        res.json(response);
     } catch (error) {
         next(error);
     }
@@ -275,7 +295,7 @@ async function addBlock(req, res, next) {
 
         page.blocks.push(block);
         page.blocks = sortBlocks(page.blocks);
-        page.updatedBy = req.user?._id || null;
+        page.updatedBy = safeUserId(req);
         await page.save();
 
         const created = page.blocks.find((item) => item.position === nextPosition) || page.blocks[page.blocks.length - 1];
@@ -308,7 +328,7 @@ async function updateBlock(req, res, next) {
         if (Object.prototype.hasOwnProperty.call(req.body, "settings")) block.settings = req.body.settings && typeof req.body.settings === "object" ? req.body.settings : {};
 
         page.blocks = sortBlocks(page.blocks);
-        page.updatedBy = req.user?._id || null;
+        page.updatedBy = safeUserId(req);
         await page.save();
 
         res.json({ page, block });
@@ -333,7 +353,7 @@ async function deleteBlock(req, res, next) {
 
         block.deleteOne();
         page.blocks = sortBlocks(page.blocks);
-        page.updatedBy = req.user?._id || null;
+        page.updatedBy = safeUserId(req);
         await page.save();
 
         res.json({ message: "Bloque eliminado.", page });
@@ -366,7 +386,7 @@ async function reorderBlocks(req, res, next) {
         });
 
         page.blocks = sortBlocks(page.blocks);
-        page.updatedBy = req.user?._id || null;
+        page.updatedBy = safeUserId(req);
         await page.save();
 
         res.json(page);

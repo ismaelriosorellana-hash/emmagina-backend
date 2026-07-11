@@ -1,7 +1,7 @@
 {
   "name": "emmagina-backend",
-  "version": "1.9.0-emmagina-cms-editor",
-  "description": "API de Emmagina con Editor del Sitio centralizado, páginas flexibles, catálogo, pedidos, Cloudinary, MongoDB y panel administrativo.",
+  "version": "1.9.1-emmagina-cms-editor-fix",
+  "description": "API de Emmagina con Editor del Sitio centralizado, páginas flexibles y guardado robusto.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

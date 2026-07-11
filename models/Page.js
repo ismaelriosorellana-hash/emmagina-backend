@@ -108,7 +108,6 @@ const pageSchema = new mongoose.Schema(
             type: String,
             trim: true,
             lowercase: true,
-            enum: ["home", "landing", "content", "catalog", "product", "checkout", "custom"],
             default: "custom"
         },
         showInSiteEditor: {
@@ -155,13 +154,11 @@ const pageSchema = new mongoose.Schema(
             }
         },
         createdBy: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Usuario",
+            type: mongoose.Schema.Types.Mixed,
             default: null
         },
         updatedBy: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Usuario",
+            type: mongoose.Schema.Types.Mixed,
             default: null
         }
     },

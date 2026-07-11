@@ -50,13 +50,17 @@ function getDefaultHomePage() {
                 position: 2,
                 isVisible: true,
                 content: {
+                    title: "Explora Emmagina",
                     cards: [
-                        { title: "Destacados", text: "Selección especial de productos", image: "" },
-                        { title: "Más vendidos", text: "Lo favorito de nuestros clientes", image: "" },
-                        { title: "Más vistos", text: "Lo más explorado de la tienda", image: "" }
+                        { title: "Destacados", text: "Selección especial de productos", image: "", href: "catalogo.html?grupo=destacados" },
+                        { title: "Más vendidos", text: "Lo favorito de nuestros clientes", image: "", href: "catalogo.html?grupo=vendidos" },
+                        { title: "Más vistos", text: "Lo más explorado de la tienda", image: "", href: "catalogo.html?grupo=vistos" }
                     ]
                 },
-                style: {}
+                style: {
+                    marginTop: 0,
+                    marginBottom: 24
+                }
             },
             {
                 type: "product_marquee",
@@ -68,7 +72,10 @@ function getDefaultHomePage() {
                     filter: "desde14990",
                     limit: 12
                 },
-                style: {}
+                style: {
+                    marginTop: 0,
+                    marginBottom: 24
+                }
             },
             {
                 type: "product_marquee",
@@ -80,7 +87,10 @@ function getDefaultHomePage() {
                     filter: "lanzamiento",
                     limit: 12
                 },
-                style: {}
+                style: {
+                    marginTop: 0,
+                    marginBottom: 24
+                }
             },
             {
                 type: "image_banner",
@@ -127,9 +137,13 @@ function getDefaultHomePage() {
                 isVisible: true,
                 content: {
                     title: "Lo que dicen nuestros clientes",
-                    minRating: 4
+                    minRating: 4,
+                    hideWhenEmpty: true
                 },
-                style: {}
+                style: {
+                    marginTop: 0,
+                    marginBottom: 24
+                }
             }
         ]
     };
@@ -138,6 +152,10 @@ function getDefaultHomePage() {
 function shouldBootstrapHome(value) {
     const key = String(value || "").trim().toLowerCase();
     return key === "home" || key === "inicio" || key === "";
+}
+
+function hasBlocks(page) {
+    return Array.isArray(page?.blocks) && page.blocks.length > 0;
 }
 
 async function ensureDefaultHomePage() {
@@ -151,21 +169,46 @@ async function ensureDefaultHomePage() {
     });
 
     if (!page) {
-        return Page.create(defaultHomePage);
+        try {
+            return await Page.create(defaultHomePage);
+        } catch (error) {
+            if (error?.code !== 11000) throw error;
+            page = await Page.findOne({
+                $or: [
+                    { key: defaultHomePage.key },
+                    { slug: defaultHomePage.slug }
+                ]
+            });
+            if (!page) throw error;
+        }
     }
 
-    page.isSystem = true;
-    page.canDelete = false;
-    page.showInSiteEditor = true;
-    page.pageType = "home";
-    page.template = "home";
-    page.sortOrder = 1;
+    const update = {
+        key: "home",
+        slug: "inicio",
+        isPublished: true,
+        isSystem: true,
+        canDelete: false,
+        template: "home",
+        pageType: "home",
+        showInSiteEditor: true,
+        showInNavigation: false,
+        navigationLabel: page.navigationLabel || page.title || "Inicio",
+        sortOrder: 1
+    };
 
-    if (!Array.isArray(page.blocks) || !page.blocks.length) {
-        page.blocks = defaultHomePage.blocks;
-    }
+    if (!page.title) update.title = defaultHomePage.title;
+    if (!page.description) update.description = defaultHomePage.description;
+    if (!page.seo || !page.seo.title) update.seo = defaultHomePage.seo;
+    if (!hasBlocks(page)) update.blocks = defaultHomePage.blocks;
 
-    return page.save();
+    await Page.updateOne(
+        { _id: page._id },
+        { $set: update },
+        { runValidators: false }
+    );
+
+    return Page.findById(page._id);
 }
 
 module.exports = {
