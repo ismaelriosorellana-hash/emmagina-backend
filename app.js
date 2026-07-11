@@ -196,6 +196,11 @@ const adminEditorSitioPagesRoutes =
         "./routes/admin/editorSitioPages"
     );
 
+const adminCmsArchitectureRoutes =
+    require(
+        "./routes/admin/cmsArchitecture"
+    );
+
 const seoRoutes =
     require(
         "./routes/seo"
@@ -507,6 +512,11 @@ app.use(
 app.use(
     "/api/admin/editor-sitio",
     adminEditorSitioPagesRoutes
+);
+
+app.use(
+    "/api/admin/cms",
+    adminCmsArchitectureRoutes
 );
 
 app.use(

@@ -1,7 +1,7 @@
 {
   "name": "emmagina-backend",
-  "version": "3.3.0-carrito-checkout-variantes",
-  "description": "API de Emmagina con carrito avanzado, validación de variantes y checkout preparado.",
+  "version": "3.4.0-cms-schema-flexible",
+  "description": "API de Emmagina con arquitectura CMS flexible JSON para constructor visual profesional.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -28,7 +28,8 @@
     "operations-check": "npm run check && node --test tests/operations-dashboard-v2250.test.js",
     "seed-key-soul": "node scripts/seedKeySoulProducts.js",
     "seed-emmagina": "node scripts/seedEmmaginaProducts.js",
-    "seed-pagebuilder-home": "node scripts/seedHomePageBuilder.js"
+    "seed-pagebuilder-home": "node scripts/seedHomePageBuilder.js",
+    "seed-cms-architecture": "node scripts/seedCmsArchitecture.js"
   },
   "keywords": [
     "cloudinary",

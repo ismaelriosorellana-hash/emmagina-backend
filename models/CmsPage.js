@@ -1,6 +1,39 @@
 "use strict";
 
+const crypto = require("crypto");
 const mongoose = require("mongoose");
+
+const BLOCK_TYPES = [
+    "hero_banner",
+    "category_sidebar",
+    "category_grid",
+    "info_cards",
+    "product_carousel",
+    "product_grid",
+    "image_banner",
+    "reviews_carousel",
+    "text_block",
+    "faq_block",
+    "contact_block",
+    "cart_summary",
+    "checkout_form",
+    "spacer",
+    "custom_html"
+];
+
+const SECTION_TYPES = [
+    "hero_section",
+    "content_section",
+    "products_section",
+    "brand_section",
+    "reviews_section",
+    "checkout_section",
+    "generic_section"
+];
+
+function makeId(prefix) {
+    return `${prefix}_${crypto.randomUUID().replace(/-/g, "").slice(0, 16)}`;
+}
 
 function slugify(value) {
     return String(value || "")
@@ -14,201 +47,149 @@ function slugify(value) {
 
 const blockSchema = new mongoose.Schema(
     {
-        type: {
-            type: String,
-            required: true,
-            trim: true,
-            lowercase: true,
-            default: "custom_html"
-        },
-        position: {
-            type: Number,
-            required: true,
-            default: 1,
-            min: 1
-        },
-        name: {
-            type: String,
-            trim: true,
-            default: "Bloque"
-        },
-        isVisible: {
-            type: Boolean,
-            default: true
-        },
-        content: {
-            type: mongoose.Schema.Types.Mixed,
-            default: {}
-        },
-        style: {
-            type: mongoose.Schema.Types.Mixed,
-            default: {}
-        },
-        settings: {
-            type: mongoose.Schema.Types.Mixed,
-            default: {}
-        }
+        id: { type: String, default: () => makeId("blk"), trim: true, maxlength: 80 },
+        tipo: { type: String, required: true, enum: BLOCK_TYPES, index: true },
+        nombre: { type: String, default: "Bloque", trim: true, maxlength: 160 },
+        orden: { type: Number, default: 1, min: 1, max: 9999 },
+        visible: { type: Boolean, default: true },
+        contenido: { type: mongoose.Schema.Types.Mixed, default: {} },
+        estilo: { type: mongoose.Schema.Types.Mixed, default: {} },
+        configuracion: { type: mongoose.Schema.Types.Mixed, default: {} },
+        fuentesDatos: { type: mongoose.Schema.Types.Mixed, default: {} },
+        reglas: { type: mongoose.Schema.Types.Mixed, default: {} }
     },
+    { _id: false, minimize: false }
+);
+
+const sectionSchema = new mongoose.Schema(
     {
-        timestamps: true
-    }
+        id: { type: String, default: () => makeId("sec"), trim: true, maxlength: 80 },
+        tipo: { type: String, required: true, enum: SECTION_TYPES, index: true },
+        nombre: { type: String, default: "Sección", trim: true, maxlength: 160 },
+        orden: { type: Number, default: 1, min: 1, max: 9999 },
+        visible: { type: Boolean, default: true },
+        layout: {
+            type: String,
+            enum: ["stack", "grid", "hero_with_sidebar", "two_columns", "carousel", "full_width"],
+            default: "stack"
+        },
+        contenido: { type: mongoose.Schema.Types.Mixed, default: {} },
+        estilo: { type: mongoose.Schema.Types.Mixed, default: {} },
+        configuracion: { type: mongoose.Schema.Types.Mixed, default: {} },
+        bloques: { type: [blockSchema], default: [] }
+    },
+    { _id: false, minimize: false }
+);
+
+const regionSchema = new mongoose.Schema(
+    {
+        id: { type: String, default: () => makeId("reg"), trim: true, maxlength: 80 },
+        tipo: { type: String, default: "main", trim: true, maxlength: 80 },
+        nombre: { type: String, default: "Contenido principal", trim: true, maxlength: 160 },
+        orden: { type: Number, default: 1, min: 1, max: 9999 },
+        visible: { type: Boolean, default: true },
+        configuracion: { type: mongoose.Schema.Types.Mixed, default: {} },
+        estilo: { type: mongoose.Schema.Types.Mixed, default: {} },
+        secciones: { type: [sectionSchema], default: [] }
+    },
+    { _id: false, minimize: false }
+);
+
+const layoutSchema = new mongoose.Schema(
+    {
+        versionEsquema: { type: String, default: "cms-layout-v1", trim: true, maxlength: 40 },
+        templateKey: { type: String, default: "default_page", trim: true, lowercase: true, maxlength: 80 },
+        configuracion: { type: mongoose.Schema.Types.Mixed, default: {} },
+        regiones: { type: [regionSchema], default: [] }
+    },
+    { _id: false, minimize: false }
+);
+
+const seoSchema = new mongoose.Schema(
+    {
+        titulo: { type: String, default: "", trim: true, maxlength: 180 },
+        descripcion: { type: String, default: "", trim: true, maxlength: 320 },
+        imagen: { type: String, default: "", trim: true, maxlength: 1000 },
+        noIndex: { type: Boolean, default: false }
+    },
+    { _id: false }
+);
+
+const navigationSchema = new mongoose.Schema(
+    {
+        mostrarEnMenu: { type: Boolean, default: false },
+        mostrarEnFooter: { type: Boolean, default: false },
+        etiqueta: { type: String, default: "", trim: true, maxlength: 120 },
+        orden: { type: Number, default: 100, min: 1, max: 9999 },
+        urlExterna: { type: String, default: "", trim: true, maxlength: 1000 }
+    },
+    { _id: false }
+);
+
+const versionSchema = new mongoose.Schema(
+    {
+        id: { type: String, default: () => makeId("ver"), trim: true, maxlength: 80 },
+        numero: { type: Number, required: true, min: 1 },
+        nota: { type: String, default: "", trim: true, maxlength: 300 },
+        layout: { type: layoutSchema, required: true },
+        seo: { type: seoSchema, default: () => ({}) },
+        creadoPor: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario", default: null },
+        creadoEn: { type: Date, default: Date.now }
+    },
+    { _id: false, minimize: false }
 );
 
 const cmsPageSchema = new mongoose.Schema(
     {
-        key: {
+        clave: { type: String, required: true, unique: true, index: true, trim: true, lowercase: true, maxlength: 100 },
+        titulo: { type: String, required: true, trim: true, maxlength: 180 },
+        slug: { type: String, required: true, unique: true, index: true, trim: true, lowercase: true, maxlength: 180 },
+        tipoPagina: {
             type: String,
-            required: true,
-            trim: true,
-            lowercase: true,
+            enum: ["home", "page", "category", "product", "cart", "checkout", "landing"],
+            default: "page",
             index: true
         },
-        title: {
-            type: String,
-            required: true,
-            trim: true,
-            default: "Nueva página"
-        },
-        slug: {
-            type: String,
-            required: true,
-            trim: true,
-            lowercase: true,
-            index: true
-        },
-        description: {
-            type: String,
-            trim: true,
-            default: ""
-        },
-        isPublished: {
-            type: Boolean,
-            default: true,
-            index: true
-        },
-        isSystem: {
-            type: Boolean,
-            default: false,
-            index: true
-        },
-        canDelete: {
-            type: Boolean,
-            default: true
-        },
-        template: {
-            type: String,
-            trim: true,
-            lowercase: true,
-            default: "page"
-        },
-        pageType: {
-            type: String,
-            trim: true,
-            lowercase: true,
-            default: "custom"
-        },
-        showInSiteEditor: {
-            type: Boolean,
-            default: true,
-            index: true
-        },
-        showInNavigation: {
-            type: Boolean,
-            default: false
-        },
-        navigationLabel: {
-            type: String,
-            trim: true,
-            default: ""
-        },
-        sortOrder: {
-            type: Number,
-            default: 100
-        },
-        blocks: {
-            type: [blockSchema],
-            default: []
-        },
-        seo: {
-            title: {
-                type: String,
-                trim: true,
-                default: ""
-            },
-            description: {
-                type: String,
-                trim: true,
-                default: ""
-            },
-            image: {
-                type: String,
-                trim: true,
-                default: ""
-            },
-            noIndex: {
-                type: Boolean,
-                default: false
-            }
-        },
-        createdBy: {
-            type: mongoose.Schema.Types.Mixed,
-            default: null
-        },
-        updatedBy: {
-            type: mongoose.Schema.Types.Mixed,
-            default: null
-        }
+        templateKey: { type: String, default: "default_page", trim: true, lowercase: true, maxlength: 80, index: true },
+        estado: { type: String, enum: ["borrador", "publicada", "archivada"], default: "borrador", index: true },
+        sistema: { type: Boolean, default: false },
+        editable: { type: Boolean, default: true },
+        eliminable: { type: Boolean, default: true },
+        navegacion: { type: navigationSchema, default: () => ({}) },
+        seo: { type: seoSchema, default: () => ({}) },
+        layoutBorrador: { type: layoutSchema, required: true, default: () => ({}) },
+        layoutPublicado: { type: layoutSchema, default: null },
+        tieneCambiosSinPublicar: { type: Boolean, default: true },
+        versionActual: { type: Number, default: 0, min: 0 },
+        versiones: { type: [versionSchema], default: [] },
+        creadoPor: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario", default: null },
+        actualizadoPor: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario", default: null },
+        publicadoPor: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario", default: null },
+        publicadoEn: { type: Date, default: null },
+        eliminadoEn: { type: Date, default: null }
     },
     {
         timestamps: true,
-        collection: "site_pages"
+        collection: "cms_pages",
+        minimize: false
     }
 );
 
 cmsPageSchema.pre("validate", function normalizeCmsPage(next) {
-    const title = String(this.title || "Nueva página").trim() || "Nueva página";
-    this.title = title;
-
-    this.slug = slugify(this.slug || this.key || title);
-    this.key = slugify(this.key || this.slug || title);
-
-    if (!this.navigationLabel) {
-        this.navigationLabel = title;
-    }
-
-    if (!this.seo) {
-        this.seo = {};
-    }
-
-    if (!this.seo.title) {
-        this.seo.title = title;
-    }
-
-    if (Array.isArray(this.blocks)) {
-        this.blocks = this.blocks
-            .map((block, index) => {
-                if (!block.type) block.type = "custom_html";
-                if (!block.name) block.name = block.type;
-                block.position = Number(block.position || index + 1);
-                if (!Number.isFinite(block.position) || block.position < 1) {
-                    block.position = index + 1;
-                }
-                return block;
-            })
-            .sort((a, b) => Number(a.position || 0) - Number(b.position || 0));
-
-        this.blocks.forEach((block, index) => {
-            block.position = index + 1;
-        });
-    }
-
+    this.clave = slugify(this.clave || this.slug || this.titulo);
+    this.slug = slugify(this.slug || this.clave || this.titulo);
+    this.templateKey = slugify(this.templateKey || this.tipoPagina || "default_page").replace(/-/g, "_");
+    if (!this.navegacion.etiqueta) this.navegacion.etiqueta = this.titulo;
+    if (!this.seo.titulo) this.seo.titulo = this.titulo;
+    if (!this.layoutBorrador) this.layoutBorrador = {};
+    if (!this.layoutBorrador.versionEsquema) this.layoutBorrador.versionEsquema = "cms-layout-v1";
+    if (!this.layoutBorrador.templateKey) this.layoutBorrador.templateKey = this.templateKey;
     next();
 });
 
-cmsPageSchema.index({ key: 1, isPublished: 1 });
-cmsPageSchema.index({ slug: 1, isPublished: 1 });
-cmsPageSchema.index({ showInSiteEditor: 1, sortOrder: 1 });
+cmsPageSchema.index({ estado: 1, tipoPagina: 1, eliminadoEn: 1 });
+cmsPageSchema.index({ "navegacion.mostrarEnMenu": 1, "navegacion.orden": 1 });
 
-cmsPageSchema.statics.slugify = slugify;
-
-module.exports = mongoose.model("CmsPage", cmsPageSchema);
+module.exports = mongoose.models.CmsPage || mongoose.model("CmsPage", cmsPageSchema);
+module.exports.BLOCK_TYPES = BLOCK_TYPES;
+module.exports.SECTION_TYPES = SECTION_TYPES;
