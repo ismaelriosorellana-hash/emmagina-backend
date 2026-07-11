@@ -1,7 +1,7 @@
 {
   "name": "emmagina-backend",
-  "version": "2.2.1-editor-sitio-final-npm-clean",
-  "description": "API de Emmagina con Editor del Sitio final estable y package limpio para npm registry público.",
+  "version": "2.4.0-editor-sitio-secciones",
+  "description": "API de Emmagina con Editor del Sitio por secciones y bloques modulares.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

@@ -79,6 +79,46 @@ async function deletePage(req, res, next) {
     }
 }
 
+async function addSection(req, res, next) {
+    try {
+        const result = await store.addSection(req.params.pageId, req.body || {}, userId(req));
+        if (!result) return notFound(res);
+        res.status(201).json(result);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function updateSection(req, res, next) {
+    try {
+        const result = await store.updateSection(req.params.pageId, req.params.sectionId, req.body || {}, userId(req));
+        if (!result) return notFound(res);
+        res.json(result);
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function deleteSection(req, res, next) {
+    try {
+        const page = await store.deleteSection(req.params.pageId, req.params.sectionId, userId(req));
+        if (!page) return notFound(res);
+        res.json({ message: "Sección eliminada.", page });
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function reorderSections(req, res, next) {
+    try {
+        const page = await store.reorderSections(req.params.pageId, req.body?.sections || [], userId(req));
+        if (!page) return notFound(res);
+        res.json(page);
+    } catch (error) {
+        next(error);
+    }
+}
+
 async function addBlock(req, res, next) {
     try {
         const result = await store.addBlock(req.params.pageId, req.body || {}, userId(req));
@@ -128,6 +168,10 @@ module.exports = {
     createPage,
     updatePage,
     deletePage,
+    addSection,
+    updateSection,
+    deleteSection,
+    reorderSections,
     addBlock,
     updateBlock,
     deleteBlock,
