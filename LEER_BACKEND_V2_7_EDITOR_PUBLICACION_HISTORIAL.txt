@@ -1,0 +1,16 @@
+Emmagina Backend v2.7 - Editor del Sitio con publicación e historial
+
+Incluye:
+- Borrador separado de la versión publicada.
+- Publicar cambios desde el Editor del Sitio.
+- Historial de publicaciones por página.
+- Restaurar una publicación anterior como borrador.
+- La Home pública lee la versión publicada, no cada cambio de borrador.
+
+Instalación:
+npm config set registry https://registry.npmjs.org/
+npm install
+npm run check
+git add .
+git commit -m "Emmagina backend v2.7 editor sitio publicacion historial"
+git push

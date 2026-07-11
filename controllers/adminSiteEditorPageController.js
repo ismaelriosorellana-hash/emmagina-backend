@@ -159,6 +159,37 @@ async function reorderBlocks(req, res, next) {
     }
 }
 
+async function publishPage(req, res, next) {
+    try {
+        const page = await store.publishPage(req.params.pageId, userId(req));
+        if (!page) return notFound(res);
+        res.json({ message: "Cambios publicados.", page });
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function listHistory(req, res, next) {
+    try {
+        const history = await store.listHistory(req.params.pageId);
+        if (!history) return notFound(res);
+        res.set("Cache-Control", "no-store");
+        res.json({ history });
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function restoreRevision(req, res, next) {
+    try {
+        const page = await store.restoreRevision(req.params.pageId, req.params.revisionId, userId(req));
+        if (!page) return notFound(res);
+        res.json({ message: "Versión restaurada como borrador.", page });
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     status,
     diagnostic: status,
@@ -175,5 +206,8 @@ module.exports = {
     addBlock,
     updateBlock,
     deleteBlock,
-    reorderBlocks
+    reorderBlocks,
+    publishPage,
+    listHistory,
+    restoreRevision
 };

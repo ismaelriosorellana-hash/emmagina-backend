@@ -145,6 +145,22 @@ function plainObject(value) {
     return value && typeof value === "object" && !Array.isArray(value) ? value : {};
 }
 
+function cloneData(value) {
+    return JSON.parse(JSON.stringify(value || {}));
+}
+
+function cloneArray(value) {
+    return JSON.parse(JSON.stringify(Array.isArray(value) ? value : []));
+}
+
+function revisionId() {
+    return String(newId());
+}
+
+function limitHistory(history = []) {
+    return (Array.isArray(history) ? history : []).slice(0, 12);
+}
+
 function normalizeBlock(block = {}, index = 0, sectionId = null) {
     const id = isObjectId(block._id || block.id) ? asObjectId(block._id || block.id) : newId();
     const type = normalizeBlockType(block.type || "custom_html");
@@ -409,6 +425,19 @@ function defaultHomePage() {
         },
         sections,
         blocks: flattenSections(sections),
+        publishedSections: cloneArray(sections),
+        publishedBlocks: flattenSections(sections),
+        publishedSeo: {
+            title: "Emmagina | Productos impresos en 3D",
+            description: "Figuras, decoraciones y productos impresos en 3D para regalar, crear y conservar recuerdos.",
+            image: "",
+            noIndex: false
+        },
+        version: 1,
+        hasUnpublishedChanges: false,
+        publishedAt: createdAt,
+        publishedBy: null,
+        history: [],
         createdBy: null,
         updatedBy: null,
         createdAt,
@@ -465,6 +494,14 @@ function normalizePage(page = {}) {
         seo: normalizeSeo(page.seo, title),
         sections,
         blocks: flattened,
+        publishedSections: Array.isArray(page.publishedSections) ? sortSections(page.publishedSections) : [],
+        publishedBlocks: Array.isArray(page.publishedBlocks) ? page.publishedBlocks.map((block, index) => normalizeBlock(block, index, block.sectionId || "")) : [],
+        publishedSeo: normalizeSeo(page.publishedSeo || page.seo || {}, title),
+        version: Math.max(0, toNumber(page.version, 0)),
+        hasUnpublishedChanges: toBool(page.hasUnpublishedChanges, false),
+        publishedAt: page.publishedAt ? new Date(page.publishedAt) : null,
+        publishedBy: page.publishedBy || null,
+        history: limitHistory(Array.isArray(page.history) ? page.history : []),
         createdBy: page.createdBy || null,
         updatedBy: page.updatedBy || null,
         createdAt: page.createdAt ? new Date(page.createdAt) : now(),
@@ -525,6 +562,9 @@ function pageSummary(page = {}) {
         sectionsCount: normalized.sections.length,
         blocksCount: normalized.blocks.length,
         publicPath: normalized.publicPath,
+        hasUnpublishedChanges: normalized.hasUnpublishedChanges === true,
+        version: normalized.version || 0,
+        publishedAt: normalized.publishedAt || null,
         updatedAt: normalized.updatedAt,
         createdAt: normalized.createdAt
     };
@@ -562,6 +602,14 @@ async function ensureHomePage() {
     if (!normalized.sections.length) normalized.sections = defaultHomeSections();
     normalized.sections = ensureHomeHeroCategorySidebar(sortSections(normalized.sections));
     normalized.blocks = flattenSections(normalized.sections);
+    if (!Array.isArray(normalized.publishedSections) || !normalized.publishedSections.length) {
+        normalized.publishedSections = cloneArray(normalized.sections);
+        normalized.publishedBlocks = flattenSections(normalized.publishedSections);
+        normalized.publishedSeo = normalizeSeo(normalized.seo, normalized.title);
+        normalized.publishedAt = normalized.publishedAt || normalized.updatedAt || now();
+        normalized.version = Math.max(1, toNumber(normalized.version, 0));
+        normalized.hasUnpublishedChanges = false;
+    }
     normalized.key = "home";
     normalized.slug = "inicio";
     normalized.isPublished = true;
@@ -594,7 +642,7 @@ async function uniqueSlug(field, base, ignoreId = null) {
 }
 
 async function saveNormalizedPage(page, userId = null) {
-    const normalized = normalizePage({ ...page, updatedBy: userId ?? page.updatedBy, updatedAt: now() });
+    const normalized = normalizePage({ ...page, updatedBy: userId ?? page.updatedBy, updatedAt: now(), hasUnpublishedChanges: true });
     await collection().updateOne({ _id: normalized._id }, { $set: normalized }, { upsert: false });
     return findPage(normalized._id);
 }
@@ -617,11 +665,18 @@ async function findPage(value = "home") {
 async function findPublicPage(value = "home") {
     const page = await findPage(value);
     if (!page || page.isPublished === false) return null;
-    const sections = (page.sections || []).filter((section) => section.isVisible !== false).map((section) => ({
+    const sourceSections = Array.isArray(page.publishedSections) && page.publishedSections.length ? page.publishedSections : page.sections;
+    const sections = (sourceSections || []).filter((section) => section.isVisible !== false).map((section) => ({
         ...section,
         blocks: (section.blocks || []).filter((block) => block.isVisible !== false)
     }));
-    return { ...page, sections, blocks: flattenSections(sections).map(serializeBlock) };
+    return {
+        ...page,
+        seo: page.publishedSeo || page.seo,
+        sections,
+        blocks: flattenSections(sections).map(serializeBlock),
+        isPreview: false
+    };
 }
 
 async function createPage(body = {}, userId = null) {
@@ -651,6 +706,14 @@ async function createPage(body = {}, userId = null) {
         showInSiteEditor: true,
         navigationLabel: cleanText(body.navigationLabel, title) || title,
         sections: Array.isArray(body.sections) && body.sections.length ? body.sections : [section],
+        publishedSections: [],
+        publishedBlocks: [],
+        publishedSeo: normalizeSeo(body.seo || {}, title),
+        version: 0,
+        hasUnpublishedChanges: true,
+        publishedAt: null,
+        publishedBy: null,
+        history: [],
         createdBy: userId,
         updatedBy: userId,
         createdAt: now(),
@@ -673,6 +736,7 @@ async function updatePage(value, body = {}, userId = null) {
         showInNavigation: isHome ? false : toBool(body.showInNavigation, current.showInNavigation === true),
         navigationLabel: cleanText(body.navigationLabel, current.navigationLabel || current.title) || current.title,
         seo: normalizeSeo(body.seo || current.seo || {}, body.title || current.title),
+        hasUnpublishedChanges: true,
         updatedBy: userId,
         updatedAt: now()
     };
@@ -899,6 +963,85 @@ function defaultNavigationItems() {
     ];
 }
 
+function createRevision(page = {}, label = "Publicación", userId = null) {
+    const normalized = normalizePage(page);
+    const sections = sortSections(normalized.sections || []);
+    const version = Math.max(1, toNumber(normalized.version, 0) + 1);
+    return {
+        id: revisionId(),
+        version,
+        label: cleanText(label, `Versión ${version}`) || `Versión ${version}`,
+        title: normalized.title,
+        slug: normalized.slug,
+        seo: cloneData(normalized.seo),
+        sections: cloneArray(sections),
+        blocks: flattenSections(sections),
+        createdAt: now(),
+        createdBy: userId || null
+    };
+}
+
+async function publishPage(value = "home", userId = null) {
+    const page = await findPage(value);
+    if (!page) return null;
+    const revision = createRevision(page, `Publicación ${toNumber(page.version, 0) + 1}`, userId);
+    const history = limitHistory([revision, ...(Array.isArray(page.history) ? page.history : [])]);
+    const set = {
+        publishedSections: cloneArray(page.sections || []),
+        publishedBlocks: flattenSections(page.sections || []),
+        publishedSeo: normalizeSeo(page.seo || {}, page.title),
+        publishedAt: revision.createdAt,
+        publishedBy: userId || null,
+        version: revision.version,
+        history,
+        hasUnpublishedChanges: false,
+        isPublished: true,
+        updatedAt: now(),
+        updatedBy: userId || page.updatedBy || null
+    };
+    await collection().updateOne({ _id: asObjectId(page._id) }, { $set: set });
+    return findPage(page._id);
+}
+
+async function listHistory(value = "home") {
+    const page = await findPage(value);
+    if (!page) return null;
+    return limitHistory(page.history || []).map((item) => ({
+        id: item.id,
+        version: item.version,
+        label: item.label,
+        title: item.title,
+        slug: item.slug,
+        createdAt: item.createdAt,
+        createdBy: item.createdBy || null,
+        sectionsCount: Array.isArray(item.sections) ? item.sections.length : 0,
+        blocksCount: Array.isArray(item.blocks) ? item.blocks.length : 0
+    }));
+}
+
+async function restoreRevision(value = "home", revisionValue = "", userId = null) {
+    const page = await findPage(value);
+    if (!page) return null;
+    const revision = limitHistory(page.history || []).find((item) => String(item.id) === String(revisionValue) || String(item.version) === String(revisionValue));
+    if (!revision) {
+        const error = new Error("Versión no encontrada.");
+        error.statusCode = 404;
+        error.expose = true;
+        throw error;
+    }
+    const update = {
+        title: page.key === "home" ? page.title : cleanText(revision.title, page.title),
+        seo: normalizeSeo(revision.seo || page.seo || {}, revision.title || page.title),
+        sections: sortSections(revision.sections || []),
+        blocks: flattenSections(revision.sections || []),
+        hasUnpublishedChanges: true,
+        updatedAt: now(),
+        updatedBy: userId || null
+    };
+    await collection().updateOne({ _id: asObjectId(page._id) }, { $set: update });
+    return findPage(page._id);
+}
+
 async function listNavigationPages() {
     await ensureIndexes();
     await ensureHomePage();
@@ -945,7 +1088,7 @@ async function diagnostic() {
         ok: true,
         module: "Editor del Sitio",
         storage: COLLECTION_NAME,
-        version: "2.6-visual-editors",
+        version: "2.7-draft-publish-history",
         totalPages,
         visiblePages,
         home: {
@@ -984,6 +1127,9 @@ module.exports = {
     updateBlock,
     deleteBlock,
     reorderBlocks,
+    publishPage,
+    listHistory,
+    restoreRevision,
     diagnostic,
     serializePage,
     pageSummary,
