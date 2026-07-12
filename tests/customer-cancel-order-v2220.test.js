@@ -28,7 +28,7 @@ test("cancelacion queda auditada sin borrar el pedido", () => {
 });
 
 test("correo visible de produccion usa venta@rhemadisenos.cl", () => {
-    assert.match(envExample, /EMAIL_FROM=Rhema Diseños <venta@emmagina\.cl>/);
-    assert.match(envExample, /EMAIL_REPLY_TO=venta@emmagina\.cl/);
-    assert.match(envExample, /NOTIFICATION_ADMIN_EMAIL=venta@emmagina\.cl/);
+    assert.match(envExample, /EMAIL_FROM=Rhema Diseños <venta@rhemadisenos\.cl>/);
+    assert.match(envExample, /EMAIL_REPLY_TO=venta@rhemadisenos\.cl/);
+    assert.match(envExample, /NOTIFICATION_ADMIN_EMAIL=venta@rhemadisenos\.cl/);
 });
