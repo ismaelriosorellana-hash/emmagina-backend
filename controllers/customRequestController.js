@@ -190,12 +190,28 @@ async function getCustomRequestPublic(req, res, next) {
             return res.status(404).json({ error: "Solicitud no encontrada." });
         }
 
+        const quoteVisible = ["cotizada", "aceptada", "convertida_pedido"].includes(request.estado);
+
         return res.json({
             solicitud: {
                 folio: request.folio,
                 tipoSolicitud: request.tipoSolicitud,
                 estado: request.estado,
                 resumen: request.resumen,
+                cotizacion: quoteVisible ? {
+                    montoEstimado: request.cotizacion?.montoEstimado || 0,
+                    moneda: request.cotizacion?.moneda || "CLP",
+                    tiempoEstimado: request.cotizacion?.tiempoEstimado || "",
+                    observaciones: request.cotizacion?.observaciones || "",
+                    condiciones: request.cotizacion?.condiciones || "",
+                    validezDias: request.cotizacion?.validezDias || 7,
+                    requiereAbono: Boolean(request.cotizacion?.requiereAbono),
+                    montoAbono: request.cotizacion?.montoAbono || 0,
+                    enviadaEn: request.cotizacion?.enviadaEn || null
+                } : null,
+                pedido: request.pedido?.numeroPedido ? {
+                    numeroPedido: request.pedido.numeroPedido
+                } : null,
                 createdAt: request.createdAt,
                 updatedAt: request.updatedAt
             }

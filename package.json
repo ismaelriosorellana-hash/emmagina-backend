@@ -1,7 +1,7 @@
 {
   "name": "rhema-disenos-backend",
-  "version": "3.7.0-rhema-solicitudes-personalizadas",
-  "description": "API de Rhema Diseños con solicitudes personalizadas, cotización e impresión 3D a pedido.",
+  "version": "3.8.0-rhema-cotizaciones-solicitudes",
+  "description": "API de Rhema Diseños con solicitudes personalizadas, flujo de cotización y conversión a pedido.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

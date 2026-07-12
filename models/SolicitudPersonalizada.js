@@ -37,7 +37,7 @@ const solicitudPersonalizadaSchema = new mongoose.Schema(
         },
         estado: {
             type: String,
-            enum: ["recibida", "en_revision", "cotizada", "aceptada", "rechazada", "cerrada"],
+            enum: ["recibida", "en_revision", "cotizada", "aceptada", "convertida_pedido", "rechazada", "cerrada"],
             default: "recibida",
             index: true
         },
@@ -79,12 +79,32 @@ const solicitudPersonalizadaSchema = new mongoose.Schema(
             moneda: { type: String, trim: true, default: "CLP" },
             tiempoEstimado: { type: String, trim: true, default: "" },
             observaciones: { type: String, trim: true, default: "" },
-            enviadaEn: { type: Date, default: null }
+            condiciones: { type: String, trim: true, default: "" },
+            validezDias: { type: Number, default: 7, min: 1, max: 60 },
+            requiereAbono: { type: Boolean, default: false },
+            montoAbono: { type: Number, default: 0, min: 0 },
+            enviadaEn: { type: Date, default: null },
+            enviadaPor: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario", default: null },
+            aceptadaEn: { type: Date, default: null }
         },
         notasInternas: [
             {
                 nota: { type: String, trim: true, maxlength: 1200 },
                 creadaEn: { type: Date, default: Date.now },
+                usuario: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario", default: null }
+            }
+        ],
+        pedido: {
+            pedidoId: { type: mongoose.Schema.Types.ObjectId, ref: "Pedido", default: null },
+            numeroPedido: { type: String, trim: true, default: "" },
+            convertidoEn: { type: Date, default: null },
+            convertidoPor: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario", default: null }
+        },
+        historial: [
+            {
+                evento: { type: String, trim: true, maxlength: 80 },
+                detalle: { type: String, trim: true, maxlength: 1200 },
+                fecha: { type: Date, default: Date.now },
                 usuario: { type: mongoose.Schema.Types.ObjectId, ref: "Usuario", default: null }
             }
         ]
