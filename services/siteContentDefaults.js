@@ -4,9 +4,9 @@ const CONTENT_DEFAULTS = {
     "quienes-somos": {
         "slug": "quienes-somos",
         "label": "Quiénes somos",
-        "kicker": "Conoce Emmagina",
+        "kicker": "Conoce Rhema Diseños",
         "title": "Detalles creados con intención",
-        "summary": "Emmagina es un emprendimiento independiente dedicado a productos personalizados y regalos preparados con cuidado, comunicación cercana y revisión previa de cada diseño.",
+        "summary": "Rhema Diseños es un emprendimiento independiente dedicado a productos personalizados y regalos preparados con cuidado, comunicación cercana y revisión previa de cada diseño.",
         "sections": [
             {
                 "title": "Nuestra forma de trabajar",
@@ -33,15 +33,15 @@ const CONTENT_DEFAULTS = {
         "contactCards": [
             {
                 "title": "Atención cercana",
-                "detail": "Puedes comunicarte con Emmagina por WhatsApp para resolver dudas antes o después de realizar un pedido.",
+                "detail": "Puedes comunicarte con Rhema Diseños por WhatsApp para resolver dudas antes o después de realizar un pedido.",
                 "actionLabel": "Hablar por WhatsApp",
                 "actionUrl": "https://wa.me/56954633848"
             }
         ],
         "notice": "El catálogo y los procesos pueden actualizarse a medida que el emprendimiento incorpore nuevos productos, medios de pago y opciones de entrega.",
         "published": true,
-        "seoTitle": "Quiénes somos | Emmagina",
-        "seoDescription": "Conoce cómo trabaja Emmagina y cómo acompañamos cada pedido personalizado."
+        "seoTitle": "Quiénes somos | Rhema Diseños",
+        "seoDescription": "Conoce cómo trabaja Rhema Diseños y cómo acompañamos cada pedido personalizado."
     },
     "contacto": {
         "slug": "contacto",
@@ -76,21 +76,21 @@ const CONTENT_DEFAULTS = {
             },
             {
                 "title": "Ubicación general",
-                "detail": "Emmagina opera en Santiago de Chile. Los puntos y horarios de retiro se coordinan al confirmar cada pedido.",
+                "detail": "Rhema Diseños opera en Santiago de Chile. Los puntos y horarios de retiro se coordinan al confirmar cada pedido.",
                 "actionLabel": "",
                 "actionUrl": ""
             },
             {
                 "title": "Correo corporativo",
-                "detail": "El correo @emmagina.cl se publicará cuando el dominio y el servicio de correo estén habilitados.",
+                "detail": "El correo @rhemadisenos.cl se publicará cuando el dominio y el servicio de correo estén habilitados.",
                 "actionLabel": "",
                 "actionUrl": ""
             }
         ],
-        "notice": "No realices transferencias a datos recibidos desde cuentas o números que no hayan sido confirmados por Emmagina.",
+        "notice": "No realices transferencias a datos recibidos desde cuentas o números que no hayan sido confirmados por Rhema Diseños.",
         "published": true,
-        "seoTitle": "Contacto | Emmagina",
-        "seoDescription": "Canales oficiales de contacto y soporte de Emmagina."
+        "seoTitle": "Contacto | Rhema Diseños",
+        "seoDescription": "Canales oficiales de contacto y soporte de Rhema Diseños."
     },
     "preguntas-frecuentes": {
         "slug": "preguntas-frecuentes",
@@ -110,7 +110,7 @@ const CONTENT_DEFAULTS = {
             },
             {
                 "question": "¿El comprobante confirma automáticamente el pago?",
-                "answer": "No. El comprobante queda en revisión y el pedido se marca como pagado únicamente después de que Emmagina valide la transferencia."
+                "answer": "No. El comprobante queda en revisión y el pedido se marca como pagado únicamente después de que Rhema Diseños valide la transferencia."
             },
             {
                 "question": "¿Cuánto tiempo tengo para enviar el comprobante?",
@@ -126,7 +126,7 @@ const CONTENT_DEFAULTS = {
             },
             {
                 "question": "¿Cómo apruebo un diseño personalizado?",
-                "answer": "Cuando el pago esté confirmado, Emmagina puede publicar una propuesta por producto. Desde tu cuenta podrás aprobarla o solicitar cambios con observaciones."
+                "answer": "Cuando el pago esté confirmado, Rhema Diseños puede publicar una propuesta por producto. Desde tu cuenta podrás aprobarla o solicitar cambios con observaciones."
             },
             {
                 "question": "¿Puedo coordinar por WhatsApp?",
@@ -151,7 +151,7 @@ const CONTENT_DEFAULTS = {
         ],
         "notice": "Los plazos y condiciones particulares informados en cada producto prevalecen cuando sean diferentes de esta guía general.",
         "published": true,
-        "seoTitle": "Preguntas frecuentes | Emmagina",
+        "seoTitle": "Preguntas frecuentes | Rhema Diseños",
         "seoDescription": "Respuestas sobre pedidos, transferencias, personalización, diseños y entregas."
     },
     "despachos-retiros": {
@@ -183,7 +183,7 @@ const CONTENT_DEFAULTS = {
             },
             {
                 "title": "Seguimiento",
-                "body": "Consulta el estado desde tu cuenta. Emmagina también puede coordinar detalles por WhatsApp cuando sea necesario.",
+                "body": "Consulta el estado desde tu cuenta. Rhema Diseños también puede coordinar detalles por WhatsApp cuando sea necesario.",
                 "items": []
             }
         ],
@@ -196,9 +196,9 @@ const CONTENT_DEFAULTS = {
                 "actionUrl": "https://wa.me/56954633848"
             }
         ],
-        "notice": "No se recomienda acudir a un punto de retiro sin confirmación previa de Emmagina.",
+        "notice": "No se recomienda acudir a un punto de retiro sin confirmación previa de Rhema Diseños.",
         "published": true,
-        "seoTitle": "Despachos y retiros | Emmagina",
+        "seoTitle": "Despachos y retiros | Rhema Diseños",
         "seoDescription": "Información sobre fechas preferidas, despacho, retiro y recepción por terceros."
     },
     "cambios-pedidos": {
@@ -237,7 +237,7 @@ const CONTENT_DEFAULTS = {
         "faqs": [
             {
                 "question": "¿Puedo cancelar un pedido pendiente de transferencia?",
-                "answer": "Cuando aún no existe un pago confirmado, comunícate con Emmagina. Los pedidos sin comprobante pueden cancelarse automáticamente al vencer el plazo."
+                "answer": "Cuando aún no existe un pago confirmado, comunícate con Rhema Diseños. Los pedidos sin comprobante pueden cancelarse automáticamente al vencer el plazo."
             },
             {
                 "question": "¿Qué pasa si solicito cambios al diseño?",
@@ -258,7 +258,7 @@ const CONTENT_DEFAULTS = {
         ],
         "notice": "Cada solicitud se evalúa según el estado del pedido, el tipo de producto y los antecedentes disponibles.",
         "published": true,
-        "seoTitle": "Cambios y problemas con pedidos | Emmagina",
+        "seoTitle": "Cambios y problemas con pedidos | Rhema Diseños",
         "seoDescription": "Cómo solicitar cambios, informar daños o resolver problemas con un pedido."
     },
     "privacidad": {
@@ -266,7 +266,7 @@ const CONTENT_DEFAULTS = {
         "label": "Política de privacidad",
         "kicker": "Información para clientes",
         "title": "Política de privacidad",
-        "summary": "Emmagina es un emprendimiento independiente. Utilizamos los datos entregados por cada cliente para gestionar cuentas, pedidos, personalizaciones, pagos, entregas y atención posterior.",
+        "summary": "Rhema Diseños es un emprendimiento independiente. Utilizamos los datos entregados por cada cliente para gestionar cuentas, pedidos, personalizaciones, pagos, entregas y atención posterior.",
         "sections": [
             {
                 "title": "Datos que podemos solicitar",
@@ -287,7 +287,7 @@ const CONTENT_DEFAULTS = {
             },
             {
                 "title": "Servicios tecnológicos",
-                "body": "El sitio puede utilizar Netlify, Render, MongoDB Atlas y Cloudinary. Cuando se habiliten otros proveedores de pago o correo, esta página podrá actualizarse. Emmagina no solicita ni almacena claves bancarias.",
+                "body": "El sitio puede utilizar Netlify, Render, MongoDB Atlas y Cloudinary. Cuando se habiliten otros proveedores de pago o correo, esta página podrá actualizarse. Rhema Diseños no solicita ni almacena claves bancarias.",
                 "items": []
             },
             {
@@ -307,13 +307,13 @@ const CONTENT_DEFAULTS = {
                 "title": "Consultas de privacidad",
                 "detail": "Utiliza el canal oficial y explica brevemente tu solicitud.",
                 "actionLabel": "Contactar por WhatsApp",
-                "actionUrl": "https://wa.me/56954633848?text=Consulta%20sobre%20privacidad%20en%20Emmagina"
+                "actionUrl": "https://wa.me/56954633848?text=Consulta%20sobre%20privacidad%20en%20Rhema Diseños"
             }
         ],
         "notice": "Esta página describe el funcionamiento actual del emprendimiento y podrá actualizarse cuando cambien sus procesos o servicios.",
         "published": true,
-        "seoTitle": "Política de privacidad | Emmagina",
-        "seoDescription": "Cómo Emmagina utiliza y protege los datos necesarios para gestionar cuentas y pedidos."
+        "seoTitle": "Política de privacidad | Rhema Diseños",
+        "seoDescription": "Cómo Rhema Diseños utiliza y protege los datos necesarios para gestionar cuentas y pedidos."
     },
     "terminos": {
         "slug": "terminos",
@@ -334,7 +334,7 @@ const CONTENT_DEFAULTS = {
             },
             {
                 "title": "Pago por transferencia",
-                "body": "El pedido se considera pagado únicamente después de que Emmagina valide la recepción real del abono. Cargar un comprobante no equivale por sí solo a confirmar el pago.",
+                "body": "El pedido se considera pagado únicamente después de que Rhema Diseños valide la recepción real del abono. Cargar un comprobante no equivale por sí solo a confirmar el pago.",
                 "items": []
             },
             {
@@ -349,7 +349,7 @@ const CONTENT_DEFAULTS = {
             },
             {
                 "title": "Uso permitido",
-                "body": "No se deben enviar archivos ilegales, dañinos, engañosos o respecto de los cuales el cliente no tenga autorización de uso. Emmagina puede rechazar contenido que no pueda procesarse de forma segura o adecuada.",
+                "body": "No se deben enviar archivos ilegales, dañinos, engañosos o respecto de los cuales el cliente no tenga autorización de uso. Rhema Diseños puede rechazar contenido que no pueda procesarse de forma segura o adecuada.",
                 "items": []
             }
         ],
@@ -364,19 +364,19 @@ const CONTENT_DEFAULTS = {
         ],
         "notice": "Estas condiciones son una guía operativa del emprendimiento y pueden actualizarse. Las condiciones específicas informadas en un producto o pedido forman parte del proceso de compra.",
         "published": true,
-        "seoTitle": "Términos de uso | Emmagina",
-        "seoDescription": "Condiciones operativas para comprar, personalizar, pagar y recibir productos de Emmagina."
+        "seoTitle": "Términos de uso | Rhema Diseños",
+        "seoDescription": "Condiciones operativas para comprar, personalizar, pagar y recibir productos de Rhema Diseños."
     },
     "seguridad": {
         "slug": "seguridad",
         "label": "Seguridad del sitio",
         "kicker": "Compra con confianza",
-        "title": "Seguridad e identidad de Emmagina",
+        "title": "Seguridad e identidad de Rhema Diseños",
         "summary": "Esta página explica cómo reconocer el sitio, proteger tu cuenta y utilizar de manera segura los canales oficiales.",
         "sections": [
             {
                 "title": "Acceso a la cuenta",
-                "body": "Usa una contraseña exclusiva para Emmagina. Nunca ingreses la contraseña de tu correo, banco, Google u otro servicio dentro de la tienda.",
+                "body": "Usa una contraseña exclusiva para Rhema Diseños. Nunca ingreses la contraseña de tu correo, banco, Google u otro servicio dentro de la tienda.",
                 "items": []
             },
             {
@@ -411,7 +411,7 @@ const CONTENT_DEFAULTS = {
         ],
         "notice": "El dominio propio y el correo corporativo se publicarán cuando estén habilitados. Hasta entonces, verifica siempre las direcciones visibles dentro de la tienda oficial.",
         "published": true,
-        "seoTitle": "Seguridad del sitio | Emmagina",
+        "seoTitle": "Seguridad del sitio | Rhema Diseños",
         "seoDescription": "Consejos para proteger tu cuenta, reconocer canales oficiales y comprar de forma segura."
     }
 };

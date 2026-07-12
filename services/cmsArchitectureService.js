@@ -174,7 +174,7 @@ function templateSeed() {
         {
             templateKey: "home",
             nombre: "Home flexible",
-            descripcion: "Plantilla principal para la portada de Emmagina.",
+            descripcion: "Plantilla principal para la portada de Rhema Diseños.",
             tipoPagina: "home",
             regiones: [mainRegion],
             layoutInicial: homeLayoutJson()
@@ -286,7 +286,7 @@ function homeLayoutJson() {
                                 nombre: "Hero principal",
                                 orden: 2,
                                 visible: true,
-                                contenido: { titulo: "Emmagina", subtitulo: "Productos impresos en 3D para regalar, decorar y crear recuerdos.", botonTexto: "Ver productos", botonUrl: "catalogo.html", imagenDesktop: "", imagenMobile: "" },
+                                contenido: { titulo: "Rhema Diseños", subtitulo: "Productos impresos en 3D para regalar, decorar y crear recuerdos.", botonTexto: "Ver productos", botonUrl: "catalogo.html", imagenDesktop: "", imagenMobile: "" },
                                 estilo: { alturaDesktop: 420, alturaMobile: 320, alineacion: "left", fondo: "#EAF4F8" },
                                 configuracion: {},
                                 fuentesDatos: {},
@@ -345,7 +345,7 @@ async function ensureArchitecture() {
             editable: true,
             eliminable: false,
             navegacion: { mostrarEnMenu: true, mostrarEnFooter: false, etiqueta: "Inicio", orden: 1 },
-            seo: { titulo: "Emmagina | Productos impresos en 3D", descripcion: "Productos impresos en 3D para regalar, decorar y crear recuerdos.", imagen: "", noIndex: false },
+            seo: { titulo: "Rhema Diseños | Productos impresos en 3D", descripcion: "Productos impresos en 3D para regalar, decorar y crear recuerdos.", imagen: "", noIndex: false },
             layoutBorrador: homeLayoutJson(),
             layoutPublicado: homeLayoutJson(),
             tieneCambiosSinPublicar: false,

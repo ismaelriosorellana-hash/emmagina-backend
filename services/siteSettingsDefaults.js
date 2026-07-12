@@ -17,7 +17,7 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
         logo: {
             url: "",
             publicId: "",
-            alt: "Logo Emmagina",
+            alt: "Logo Rhema Diseños",
             width: 52,
             offsetX: 0,
             offsetY: 0
@@ -26,7 +26,7 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
             mode: "text",
             url: "",
             publicId: "",
-            text: "Emmagina",
+            text: "Rhema Diseños",
             width: 220,
             fontSize: 32,
             offsetX: 0,
@@ -103,20 +103,20 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
         items: [
             { label: "Inicio", href: "index.html", isVisible: true, sortOrder: 1, source: "system", opensNewTab: false },
             { label: "Tienda", href: "catalogo.html", isVisible: true, sortOrder: 10, source: "system", opensNewTab: false },
-            { label: "Crea tu Escena", href: "pedido-personalizado.html", isVisible: true, sortOrder: 20, source: "system", opensNewTab: false },
-            { label: "Sobre Nosotros", href: "quienes-somos.html", isVisible: true, sortOrder: 90, source: "system", opensNewTab: false },
-            { label: "Contáctanos", href: "contacto.html", isVisible: true, sortOrder: 100, source: "system", opensNewTab: false },
-            { label: "Preguntas Frecuentes", href: "preguntas-frecuentes.html", isVisible: true, sortOrder: 110, source: "system", opensNewTab: false }
+            { label: "Crea tu Figura", href: "pedido-personalizado.html", isVisible: true, sortOrder: 20, source: "system", opensNewTab: false },
+            { label: "Sobre Nosotros", href: "quienes-somos.html", isVisible: true, sortOrder: 40, source: "system", opensNewTab: false },
+            { label: "Preguntas Frecuentes", href: "preguntas-frecuentes.html", isVisible: true, sortOrder: 50, source: "system", opensNewTab: false },
+            { label: "Contáctanos", href: "contacto.html", isVisible: true, sortOrder: 60, source: "system", opensNewTab: false }
         ]
     },
     footer: {
         enabled: true,
-        brandTitle: "Emmagina",
-        brandText: "Productos impresos en 3D, figuras personalizadas y decoraciones pensadas para regalar, crear y recordar.",
+        brandTitle: "Rhema Diseños",
+        brandText: "Productos impresos en 3D, regalos personalizados, decoración y soluciones prácticas hechas con cercanía.",
         columns: [
             { title: "Tienda", isVisible: true, sortOrder: 10, links: [
                 { label: "Catálogo", href: "catalogo.html", isVisible: true },
-                { label: "Crea tu escena", href: "pedido-personalizado.html", isVisible: true },
+                { label: "Crea tu Figura", href: "pedido-personalizado.html", isVisible: true },
                 { label: "Carrito", href: "carrito.html", isVisible: true },
                 { label: "Comparación", href: "comparacion.html", isVisible: true }
             ] },
@@ -129,9 +129,9 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
         ],
         contactTitle: "Soporte",
         whatsapp: envText("STORE_SUPPORT_WHATSAPP", "56900000000").replace(/[^0-9]/g, "") || "56900000000",
-        email: envText("STORE_SUPPORT_EMAIL", "contacto@emmagina.cl"),
+        email: envText("STORE_SUPPORT_EMAIL", "contacto@rhemadisenos.cl"),
         supportButtonText: "Contactar soporte",
-        copyright: "© 2026 Emmagina. Todos los derechos reservados.",
+        copyright: "© 2026 Rhema Diseños. Todos los derechos reservados.",
         legalLinks: [
             { label: "Privacidad", href: "privacidad.html", isVisible: true },
             { label: "Términos", href: "terminos.html", isVisible: true }

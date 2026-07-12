@@ -206,7 +206,7 @@ const productSchema = new mongoose.Schema(
             type: String,
             trim: true,
             maxlength: 120,
-            default: "Emmagina"
+            default: "Rhema Diseños"
         },
 
         codigoBarras: {

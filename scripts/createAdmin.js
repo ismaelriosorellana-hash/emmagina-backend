@@ -15,7 +15,7 @@ async function createAdmin() {
     const nombre =
         String(
             process.env.ADMIN_NAME ||
-            "Administrador Emmagina"
+            "Administrador Rhema Diseños"
         ).trim();
 
     const email =

@@ -13,7 +13,7 @@ const assetSchema = new mongoose.Schema(
 const logoSchema = new mongoose.Schema(
     {
         ...assetSchema.obj,
-        alt: { type: String, default: "Logo Emmagina", trim: true, maxlength: 160 },
+        alt: { type: String, default: "Logo Rhema Diseños", trim: true, maxlength: 160 },
         width: { type: Number, default: 52, min: 24, max: 240 },
         offsetX: { type: Number, default: 0, min: -300, max: 300 },
         offsetY: { type: Number, default: 0, min: -160, max: 160 }
@@ -25,7 +25,7 @@ const titleSchema = new mongoose.Schema(
     {
         ...assetSchema.obj,
         mode: { type: String, enum: ["image", "text"], default: "image" },
-        text: { type: String, default: "Emmagina", trim: true, maxlength: 120 },
+        text: { type: String, default: "Rhema Diseños", trim: true, maxlength: 120 },
         width: { type: Number, default: 220, min: 60, max: 520 },
         fontSize: { type: Number, default: 32, min: 14, max: 92 },
         offsetX: { type: Number, default: 0, min: -300, max: 300 },
@@ -100,14 +100,14 @@ const footerColumnSchema = new mongoose.Schema(
 const footerSchema = new mongoose.Schema(
     {
         enabled: { type: Boolean, default: true },
-        brandTitle: { type: String, default: "Emmagina", trim: true, maxlength: 120 },
+        brandTitle: { type: String, default: "Rhema Diseños", trim: true, maxlength: 120 },
         brandText: { type: String, default: "Productos impresos en 3D, figuras personalizadas y decoraciones pensadas para regalar, crear y recordar.", trim: true, maxlength: 500 },
         columns: { type: [footerColumnSchema], default: () => [] },
         contactTitle: { type: String, default: "Soporte", trim: true, maxlength: 80 },
         whatsapp: { type: String, default: "56900000000", trim: true, maxlength: 20 },
-        email: { type: String, default: "contacto@emmagina.cl", trim: true, maxlength: 120 },
+        email: { type: String, default: "contacto@rhemadisenos.cl", trim: true, maxlength: 120 },
         supportButtonText: { type: String, default: "Contactar soporte", trim: true, maxlength: 80 },
-        copyright: { type: String, default: "© 2026 Emmagina. Todos los derechos reservados.", trim: true, maxlength: 200 },
+        copyright: { type: String, default: "© 2026 Rhema Diseños. Todos los derechos reservados.", trim: true, maxlength: 200 },
         legalLinks: { type: [footerLinkSchema], default: () => [] }
     },
     { _id: false }

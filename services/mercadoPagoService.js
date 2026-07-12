@@ -141,7 +141,7 @@ function buildPreferenceBody(order) {
             : [{
                 id: String(order._id),
                 title: `Pedido ${order.numeroPedido}`.slice(0, 120),
-                description: `${order.items.length} producto(s) Emmagina`.slice(0, 250),
+                description: `${order.items.length} producto(s) Rhema Diseños`.slice(0, 250),
                 quantity: 1,
                 currency_id: "CLP",
                 unit_price: expectedTotal

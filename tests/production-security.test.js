@@ -36,9 +36,9 @@ function withEnvironment(values, callback) {
 const validProductionEnvironment = {
     NODE_ENV: "production",
     MONGODB_URI: "mongodb+srv://user:password@cluster.mongodb.net/emmagina",
-    FRONTEND_URLS: "https://emmagina.cl",
-    PUBLIC_FRONTEND_URL: "https://emmagina.cl",
-    PUBLIC_BACKEND_URL: "https://api.emmagina.cl",
+    FRONTEND_URLS: "https://rhemadisenos.cl",
+    PUBLIC_FRONTEND_URL: "https://rhemadisenos.cl",
+    PUBLIC_BACKEND_URL: "https://api.rhemadisenos.cl",
     TRUST_PROXY_HOPS: "1",
     CLOUDINARY_CLOUD_NAME: "emmagina",
     CLOUDINARY_API_KEY: "123456789",
@@ -52,15 +52,15 @@ test("acepta una configuración de producción completa", () => {
     withEnvironment(validProductionEnvironment, () => {
         const report = validateProductionConfig();
         assert.equal(report.environment, "production");
-        assert.deepEqual(report.origins, ["https://emmagina.cl"]);
+        assert.deepEqual(report.origins, ["https://rhemadisenos.cl"]);
     });
 });
 
 test("rechaza orígenes inseguros o con rutas", () => {
     withEnvironment({
         ...validProductionEnvironment,
-        FRONTEND_URLS: "http://emmagina.cl/tienda",
-        PUBLIC_FRONTEND_URL: "http://emmagina.cl/tienda"
+        FRONTEND_URLS: "http://rhemadisenos.cl/tienda",
+        PUBLIC_FRONTEND_URL: "http://rhemadisenos.cl/tienda"
     }, () => {
         assert.throws(
             validateProductionConfig,
@@ -83,12 +83,12 @@ test("rechaza configuración productiva con localhost", () => {
 
 test("normaliza solo orígenes absolutos sin ruta", () => {
     assert.equal(
-        normalizeOrigin("https://emmagina.cl/"),
-        "https://emmagina.cl"
+        normalizeOrigin("https://rhemadisenos.cl/"),
+        "https://rhemadisenos.cl"
     );
 
     assert.equal(
-        normalizeOrigin("https://emmagina.cl/catalogo"),
+        normalizeOrigin("https://rhemadisenos.cl/catalogo"),
         ""
     );
 });

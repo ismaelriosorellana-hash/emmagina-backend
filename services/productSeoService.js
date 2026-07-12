@@ -11,8 +11,8 @@ const {
     normalizeProductOutput
 } = require("../utils/productNormalizer");
 
-const DEFAULT_SITE_URL = "https://emmagina.cl";
-const DEFAULT_BRAND = "Emmagina";
+const DEFAULT_SITE_URL = "https://rhemadisenos.cl";
+const DEFAULT_BRAND = "Rhema Diseños";
 const DEFAULT_IMAGE = process.env.DEFAULT_SEO_IMAGE || "";
 const DEFAULT_LOCALE = "es_CL";
 const DEFAULT_CURRENCY = "CLP";
@@ -199,18 +199,18 @@ function productAvailability(product) {
 function productMeta(rawProduct) {
     const product = normalizeProductOutput(rawProduct);
     const slug = createSlug(product.slug || product.nombre || product.id).slice(0, 140);
-    const productName = cleanText(product.nombre, "Producto Emmagina");
+    const productName = cleanText(product.nombre, "Producto Rhema Diseños");
     const title = truncate(
-        product.seo?.titulo || `${productName} | Emmagina`,
+        product.seo?.titulo || `${productName} | Rhema Diseños`,
         70,
-        `${productName} | Emmagina`
+        `${productName} | Rhema Diseños`
     );
     const description = truncate(
         product.seo?.descripcion ||
         product.descripcion ||
-        `Compra ${productName} en Emmagina. Revisa precio, opciones de personalización, tiempos de preparación y entrega coordinada.`,
+        `Compra ${productName} en Rhema Diseños. Revisa precio, opciones de personalización, tiempos de preparación y entrega coordinada.`,
         170,
-        `Compra ${productName} en Emmagina.`
+        `Compra ${productName} en Rhema Diseños.`
     );
     const images = productImages(product);
     const price = Math.max(0, numberValue(product.precio));
@@ -310,7 +310,7 @@ function seoMetaBlock(meta) {
         `<meta name="description" content="${escapeHtml(meta.description)}">`,
         `<meta name="robots" content="${escapeHtml(robots)}">`,
         `<link rel="canonical" href="${escapeHtml(meta.canonicalUrl)}">`,
-        `<meta property="og:site_name" content="Emmagina">`,
+        `<meta property="og:site_name" content="Rhema Diseños">`,
         `<meta property="og:locale" content="${DEFAULT_LOCALE}">`,
         `<meta property="og:type" content="product">`,
         `<meta property="og:title" content="${escapeHtml(meta.title)}">`,
@@ -353,7 +353,7 @@ function minimalProductHtml(meta) {
 <main>
 <h1>${escapeHtml(meta.product.nombre)}</h1>
 <p>${escapeHtml(meta.description)}</p>
-<p><a href="${escapeHtml(meta.frontendUrl)}">Ver producto en Emmagina</a></p>
+<p><a href="${escapeHtml(meta.frontendUrl)}">Ver producto en Rhema Diseños</a></p>
 </main>
 </body>
 </html>`;

@@ -65,7 +65,7 @@ async function main() {
                     {
                         $set: {
                             sku: data.sku,
-                            marca: data.marca || "Emmagina",
+                            marca: data.marca || "Rhema Diseños",
                             variantes: data.variantes,
                             dimensiones: data.dimensiones,
                             pesoGramos: data.pesoGramos,

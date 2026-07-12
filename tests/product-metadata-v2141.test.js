@@ -67,7 +67,7 @@ test("normaliza metadatos generales y de variantes manteniendo compatibilidad", 
         nombre: "Cuaderno Escolar",
         precio: 12990,
         sku: " cuaderno escolar ",
-        marca: "Emmagina",
+        marca: "Rhema Diseños",
         pesoGramos: 780.4,
         dimensiones: {
             largoCm: 31,
@@ -110,7 +110,7 @@ test("productos antiguos reciben estructura logística y SEO vacía al responder
         variantes: [{ nombre: "Rojo", stock: 2 }]
     });
 
-    assert.equal(product.marca, "Emmagina");
+    assert.equal(product.marca, "Rhema Diseños");
     assert.equal(product.pesoGramos, 0);
     assert.deepEqual(product.dimensiones, {
         largoCm: 0,

@@ -337,7 +337,7 @@ app.get(
     (req, res) => {
         res.json({
             nombre:
-                "API Emmagina",
+                "API Rhema Diseños",
             version:
                 APP_VERSION,
             estado:

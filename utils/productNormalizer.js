@@ -385,7 +385,7 @@ function normalizeProductOutput(rawProduct) {
         nombre: stringValue(raw.nombre),
         slug: createSlug(stringValue(raw.slug) || stringValue(raw.nombre)),
         sku: normalizeSku(raw.sku),
-        marca: stringValue(raw.marca, "Emmagina").slice(0, 120),
+        marca: stringValue(raw.marca, "Rhema Diseños").slice(0, 120),
         codigoBarras: stringValue(firstDefined(raw.codigoBarras, raw.barcode, raw.ean)).slice(0, 80),
         precio: integerCLP(raw.precio),
         precioOriginal: integerCLP(raw.precioOriginal),
@@ -470,7 +470,7 @@ function normalizeProductInput(input = {}) {
     normalized.stock = integerCLP(input.stock);
     normalized.slug = createSlug(stringValue(input.slug) || stringValue(input.nombre)).slice(0, 140);
     normalized.sku = normalizeSku(input.sku);
-    normalized.marca = stringValue(input.marca, "Emmagina").slice(0, 120);
+    normalized.marca = stringValue(input.marca, "Rhema Diseños").slice(0, 120);
     normalized.codigoBarras = stringValue(input.codigoBarras).slice(0, 80);
     normalized.descripcionCorta = stringValue(input.descripcionCorta).slice(0, 360);
     normalized.pesoGramos = Math.round(clampNumber(input.pesoGramos, 0, 100000));

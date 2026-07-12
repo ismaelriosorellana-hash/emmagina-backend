@@ -20,7 +20,7 @@ test("normaliza identidad, posiciones y colores válidos", () => {
     const value = normalizeSiteSettings({
         branding: {
             logo: { width: 80, offsetX: 12, offsetY: -4, alt: "Logo de prueba" },
-            title: { mode: "text", text: "Emmagina", fontSize: 40, gap: 18 }
+            title: { mode: "text", text: "Rhema Diseños", fontSize: 40, gap: 18 }
         },
         colors: { primary: "#ABCDEF", text: "#101010" },
         announcementBar: {

@@ -42,15 +42,15 @@ const sampleOrder = {
 
 test("buildNotification genera correo HTML con marca, resumen y contacto ventas", () => {
     resetEnv();
-    process.env.PUBLIC_FRONTEND_URL = "https://emmagina.cl";
-    process.env.EMAIL_REPLY_TO = "ventas@emmagina.cl";
+    process.env.PUBLIC_FRONTEND_URL = "https://rhemadisenos.cl";
+    process.env.EMAIL_REPLY_TO = "ventas@rhemadisenos.cl";
     process.env.WHATSAPP_SUPPORT_NUMBER = "56954633848";
 
     const { buildNotification } = require("../services/notificationService");
     const notification = buildNotification(sampleOrder, "order_created");
 
     assert.equal(notification.event, "order_created");
-    assert.match(notification.subject, /Emmagina/);
+    assert.match(notification.subject, /Rhema Diseños/);
     assert.match(notification.html, /Resumen del pedido/);
     assert.match(notification.html, /Taza personalizada/);
     assert.match(notification.html, /ventas@emmagina\.cl/);

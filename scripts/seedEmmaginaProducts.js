@@ -17,7 +17,7 @@ const categories = [
   ["Ofertas", "Promociones y productos de lanzamiento", "fa-solid fa-tag", "#f6dfcf", 80],
   ["Otros", "Solicitudes especiales y productos por evaluar", "fa-solid fa-ellipsis", "#edf2f5", 90],
   ["Vasos Temáticos", "Vasos y piezas temáticas personalizables", "fa-solid fa-mug-hot", "#d7e8ef", 100],
-  ["Todos", "Catálogo completo de Emmagina", "fa-solid fa-layer-group", "#f4efe8", 110]
+  ["Todos", "Catálogo completo de Rhema Diseños", "fa-solid fa-layer-group", "#f4efe8", 110]
 ].map(([nombre, descripcion, icono, color, orden]) => ({ nombre, descripcion, icono, color, orden }));
 
 function placeholder(title, subtitle) {
@@ -54,7 +54,7 @@ const products = [
   pesoGramos,
   diasPreparacion,
   orden,
-  marca: "Emmagina",
+  marca: "Rhema Diseños",
   precioOriginal: 0,
   imagenes: [placeholder(nombre, categoriaPrincipal)],
   destacado: ["EMM-MINI-ALMA", "EMM-FIGURA-ALMA", "EMM-FIGURA-PLACA", "EMM-ESCENA-DUO", "EMM-ESCENA-FAMILIAR"].includes(sku),
@@ -84,9 +84,9 @@ const products = [
     retiro: { habilitado: true, instrucciones: "Retiro en Santiago previa coordinación." }
   },
   seo: {
-    titulo: `${nombre} | Emmagina`,
+    titulo: `${nombre} | Rhema Diseños`,
     descripcion: descripcion.slice(0, 180),
-    palabrasClave: ["figuras 3D personalizadas", "regalos personalizados", "Emmagina"],
+    palabrasClave: ["figuras 3D personalizadas", "regalos personalizados", "Rhema Diseños"],
     noIndex: false
   }
 }));
@@ -111,12 +111,12 @@ async function main() {
   await connectDatabase();
   for (const category of categories) await upsertCategory(category);
   for (const product of products) await upsertProduct(product);
-  console.log(`Seed Emmagina aplicado: ${categories.length} categorías y ${products.length} productos.`);
+  console.log(`Seed Rhema Diseños aplicado: ${categories.length} categorías y ${products.length} productos.`);
 }
 
 main()
   .catch((error) => {
-    console.error("No fue posible aplicar seed Emmagina:", error);
+    console.error("No fue posible aplicar seed Rhema Diseños:", error);
     process.exitCode = 1;
   })
   .finally(async () => {

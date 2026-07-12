@@ -287,7 +287,7 @@ function defaultHomeSections() {
                     position: 2,
                     isVisible: true,
                     content: {
-                        title: "Emmagina",
+                        title: "Rhema Diseños",
                         subtitle: "Productos impresos en 3D para regalar, decorar y crear recuerdos.",
                         imageDesktop: "",
                         imageMobile: "",
@@ -311,7 +311,7 @@ function defaultHomeSections() {
                 position: 1,
                 isVisible: true,
                 content: {
-                    title: "Explora Emmagina",
+                    title: "Explora Rhema Diseños",
                     cards: [
                         { title: "Destacados", text: "Selección especial de productos", image: "", href: "catalogo.html?grupo=destacados" },
                         { title: "Más vendidos", text: "Lo favorito de nuestros clientes", image: "", href: "catalogo.html?grupo=vendidos" },
@@ -408,7 +408,7 @@ function defaultHomePage() {
         key: "home",
         title: "Inicio",
         slug: "inicio",
-        description: "Página principal editable de Emmagina.",
+        description: "Página principal editable de Rhema Diseños.",
         isPublished: true,
         isSystem: true,
         canDelete: false,
@@ -419,7 +419,7 @@ function defaultHomePage() {
         navigationLabel: "Inicio",
         sortOrder: 1,
         seo: {
-            title: "Emmagina | Productos impresos en 3D",
+            title: "Rhema Diseños | Productos impresos en 3D",
             description: "Figuras, decoraciones y productos impresos en 3D para regalar, crear y conservar recuerdos.",
             image: "",
             noIndex: false
@@ -429,7 +429,7 @@ function defaultHomePage() {
         publishedSections: cloneArray(sections),
         publishedBlocks: flattenSections(sections),
         publishedSeo: {
-            title: "Emmagina | Productos impresos en 3D",
+            title: "Rhema Diseños | Productos impresos en 3D",
             description: "Figuras, decoraciones y productos impresos en 3D para regalar, crear y conservar recuerdos.",
             image: "",
             noIndex: false
@@ -957,7 +957,7 @@ function defaultNavigationItems() {
     return [
         { label: "Inicio", href: "index.html", source: "system", sortOrder: 1, isSystem: true },
         { label: "Tienda", href: "catalogo.html", source: "system", sortOrder: 10, isSystem: true },
-        { label: "Crea tu Escena", href: "pedido-personalizado.html", source: "system", sortOrder: 20, isSystem: true },
+        { label: "Crea tu Figura", href: "pedido-personalizado.html", source: "system", sortOrder: 20, isSystem: true },
         { label: "Sobre Nosotros", href: "quienes-somos.html", source: "system", sortOrder: 90, isSystem: true },
         { label: "Contáctanos", href: "contacto.html", source: "system", sortOrder: 100, isSystem: true },
         { label: "Preguntas Frecuentes", href: "preguntas-frecuentes.html", source: "system", sortOrder: 110, isSystem: true }

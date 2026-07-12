@@ -128,7 +128,7 @@ const siteStudioSchema = new mongoose.Schema(
         },
         footer: {
             enabled: { type: Boolean, default: true },
-            heading: { type: String, default: "Emmagina", trim: true, maxlength: 160 },
+            heading: { type: String, default: "Rhema Diseños", trim: true, maxlength: 160 },
             description: { type: String, default: "", trim: true, maxlength: 1200 },
             copyright: { type: String, default: "", trim: true, maxlength: 300 },
             showNewsletter: { type: Boolean, default: true },

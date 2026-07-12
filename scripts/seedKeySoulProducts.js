@@ -41,7 +41,7 @@ const products = [
   ["KSD-EXTRA-CAJA", "Caja Regalo Premium", 3990, "Packs y Regalos", ["Packs y Regalos", "Placas y Extras"], "Extra", "Presentación especial para regalo: caja, protección interior y tarjeta breve. No se vende por separado.", 0, 1, 120]
 ].map(([sku, nombre, precio, categoriaPrincipal, categorias, insignia, descripcion, pesoGramos, diasPreparacion, orden]) => ({
   sku, nombre, precio, categoriaPrincipal, categorias, insignia, descripcion, pesoGramos, diasPreparacion, orden,
-  marca: "Emmagina",
+  marca: "Rhema Diseños",
   precioOriginal: 0,
   imagenes: [placeholder(nombre, categoriaPrincipal)],
   destacado: ["KSD-MINI-ALMA", "KSD-ALMA", "KSD-ALMA-PLACA", "KSD-DUO-ALMA", "KSD-FAMILIAR-ALMA"].includes(sku),
@@ -92,12 +92,12 @@ async function main() {
   await connectDatabase();
   for (const category of categories) await upsertCategory(category);
   for (const product of products) await upsertProduct(product);
-  console.log(`Seed Emmagina aplicado: ${categories.length} categorías y ${products.length} productos.`);
+  console.log(`Seed Rhema Diseños aplicado: ${categories.length} categorías y ${products.length} productos.`);
 }
 
 main()
   .catch((error) => {
-    console.error("No fue posible aplicar seed Emmagina:", error);
+    console.error("No fue posible aplicar seed Rhema Diseños:", error);
     process.exitCode = 1;
   })
   .finally(async () => {

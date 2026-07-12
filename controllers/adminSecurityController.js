@@ -169,10 +169,10 @@ function buildSecurityStatus() {
         createCheck(
             "final-store-domain",
             "Dominio final de tienda",
-            publicFrontend === "https://emmagina.cl" && publicSite === "https://emmagina.cl",
-            publicFrontend === "https://emmagina.cl" && publicSite === "https://emmagina.cl"
-                ? "Frontend y SEO usan emmagina.cl como dominio oficial."
-                : "Actualiza PUBLIC_FRONTEND_URL, PUBLIC_SITE_URL y SEO_PUBLIC_URL a https://emmagina.cl.",
+            publicFrontend === "https://rhemadisenos.cl" && publicSite === "https://rhemadisenos.cl",
+            publicFrontend === "https://rhemadisenos.cl" && publicSite === "https://rhemadisenos.cl"
+                ? "Frontend y SEO usan rhemadisenos.cl como dominio oficial."
+                : "Actualiza PUBLIC_FRONTEND_URL, PUBLIC_SITE_URL y SEO_PUBLIC_URL a https://rhemadisenos.cl.",
             "warning"
         ),
         createCheck(

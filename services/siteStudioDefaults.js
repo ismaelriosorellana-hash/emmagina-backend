@@ -7,8 +7,8 @@ const CORE_PAGES = [
         label: "Inicio",
         path: "index.html",
         enabled: true,
-        seoTitle: "Emmagina | Productos personalizados",
-        seoDescription: "Productos personalizados, sublimados y estampados de Emmagina.",
+        seoTitle: "Rhema Diseños | Productos personalizados",
+        seoDescription: "Productos personalizados, sublimados y estampados de Rhema Diseños.",
         layout: { maxWidth: 1320, contentPadding: 20, sectionGap: 54, backgroundColor: "#EAF4F8" },
         sections: [
             { id: "hero", type: "core", zone: "main", enabled: true, order: 10, eyebrow: "Regalos creados con intención", title: "Productos auténticos y únicos para quienes más quieres", body: "", buttonLabel: "Ver productos", buttonUrl: "#lo-mas-vendido", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
@@ -25,8 +25,8 @@ const CORE_PAGES = [
         label: "Catálogo",
         path: "catalogo.html",
         enabled: true,
-        seoTitle: "Catálogo | Emmagina",
-        seoDescription: "Explora todos los productos disponibles en Emmagina.",
+        seoTitle: "Catálogo | Rhema Diseños",
+        seoDescription: "Explora todos los productos disponibles en Rhema Diseños.",
         layout: { maxWidth: 1320, contentPadding: 20, sectionGap: 34, backgroundColor: "#EAF4F8" },
         sections: [
             { id: "heading", type: "core", zone: "main", enabled: true, order: 10, eyebrow: "Catálogo", title: "Todos los productos", body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 },
@@ -40,7 +40,7 @@ const CORE_PAGES = [
         label: "Detalle de producto",
         path: "producto.html",
         enabled: true,
-        seoTitle: "Producto | Emmagina",
+        seoTitle: "Producto | Rhema Diseños",
         seoDescription: "Detalle, opciones y personalización del producto.",
         layout: { maxWidth: 1320, contentPadding: 20, sectionGap: 42, backgroundColor: "#EAF4F8" },
         sections: [
@@ -54,7 +54,7 @@ const CORE_PAGES = [
         label: "Carrito",
         path: "carrito.html",
         enabled: true,
-        seoTitle: "Carrito de compras | Emmagina",
+        seoTitle: "Carrito de compras | Rhema Diseños",
         seoDescription: "Revisa productos, cantidades, sugerencias y meta de envío gratis.",
         layout: { maxWidth: 1220, contentPadding: 20, sectionGap: 32, backgroundColor: "#EAF4F8" },
         sections: [
@@ -71,7 +71,7 @@ const CORE_PAGES = [
         label: "Finalizar compra",
         path: "finalizar-compra.html",
         enabled: true,
-        seoTitle: "Finalizar compra | Emmagina",
+        seoTitle: "Finalizar compra | Rhema Diseños",
         seoDescription: "Completa tus datos, entrega y medio de pago.",
         layout: { maxWidth: 1260, contentPadding: 20, sectionGap: 24, backgroundColor: "#EAF4F8" },
         sections: [
@@ -89,7 +89,7 @@ const CORE_PAGES = [
         label: "Acceso clientes",
         path: "acceso.html",
         enabled: true,
-        seoTitle: "Acceso | Emmagina",
+        seoTitle: "Acceso | Rhema Diseños",
         seoDescription: "Inicia sesión o crea tu cuenta de cliente.",
         layout: { maxWidth: 980, contentPadding: 20, sectionGap: 28, backgroundColor: "#EAF4F8" },
         sections: [
@@ -103,7 +103,7 @@ const CORE_PAGES = [
         label: "Mi cuenta",
         path: "cuenta.html",
         enabled: true,
-        seoTitle: "Mi cuenta | Emmagina",
+        seoTitle: "Mi cuenta | Rhema Diseños",
         seoDescription: "Gestiona tu perfil y revisa tus pedidos.",
         layout: { maxWidth: 1180, contentPadding: 20, sectionGap: 28, backgroundColor: "#EAF4F8" },
         sections: [
@@ -119,7 +119,7 @@ const CORE_PAGES = [
         label: "Detalle de pedido",
         path: "pedido.html",
         enabled: true,
-        seoTitle: "Pedido | Emmagina",
+        seoTitle: "Pedido | Rhema Diseños",
         seoDescription: "Consulta el detalle y seguimiento de tu pedido.",
         layout: { maxWidth: 1080, contentPadding: 20, sectionGap: 28, backgroundColor: "#EAF4F8" },
         sections: [
@@ -133,7 +133,7 @@ const CORE_PAGES = [
         label: "Resultado de pago",
         path: "pago.html",
         enabled: true,
-        seoTitle: "Resultado de pago | Emmagina",
+        seoTitle: "Resultado de pago | Rhema Diseños",
         seoDescription: "Revisa el resultado y estado de tu pago.",
         layout: { maxWidth: 900, contentPadding: 20, sectionGap: 28, backgroundColor: "#EAF4F8" },
         sections: [
@@ -160,8 +160,8 @@ for (const [id, label, path] of CONTENT_PAGE_DEFINITIONS) {
         label,
         path,
         enabled: true,
-        seoTitle: `${label} | Emmagina`,
-        seoDescription: `${label} de Emmagina.`,
+        seoTitle: `${label} | Rhema Diseños`,
+        seoDescription: `${label} de Rhema Diseños.`,
         layout: { maxWidth: 1040, contentPadding: 20, sectionGap: 28, backgroundColor: "#EAF4F8" },
         sections: [
             { id: "content", type: "core", zone: "main", enabled: true, order: 10, eyebrow: "", title: label, body: "", buttonLabel: "", buttonUrl: "", alignment: "left", backgroundColor: "", textColor: "", paddingY: 0, borderRadius: 0 }
@@ -181,9 +181,9 @@ const DEFAULT_SITE_STUDIO = Object.freeze({
     },
     footer: {
         enabled: true,
-        heading: "Emmagina",
+        heading: "Rhema Diseños",
         description: "Productos personalizados creados con dedicación para cada ocasión.",
-        copyright: "Emmagina. Todos los derechos reservados.",
+        copyright: "Rhema Diseños. Todos los derechos reservados.",
         showNewsletter: true,
         links: [
             { label: "Quiénes somos", url: "quienes-somos.html", enabled: true, order: 10 },

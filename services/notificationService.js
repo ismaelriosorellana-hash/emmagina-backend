@@ -178,7 +178,7 @@ function firstName(order) {
 
 function productSummary(order) {
     const items = Array.isArray(order?.items) ? order.items : [];
-    if (!items.length) return "productos Emmagina";
+    if (!items.length) return "productos Rhema Diseños";
 
     if (items.length === 1) {
         const item = items[0];
@@ -201,11 +201,11 @@ function paymentLabel(status) {
 
 
 function brandName() {
-    return clean(process.env.EMAIL_BRAND_NAME || "Emmagina") || "Emmagina";
+    return clean(process.env.EMAIL_BRAND_NAME || "Rhema Diseños") || "Rhema Diseños";
 }
 
 function supportEmail() {
-    return clean(process.env.EMAIL_REPLY_TO || "venta@emmagina.cl") || "venta@emmagina.cl";
+    return clean(process.env.EMAIL_REPLY_TO || "venta@rhemadisenos.cl") || "venta@rhemadisenos.cl";
 }
 
 function emailLogoUrl() {
@@ -249,7 +249,7 @@ function orderItemsRows(order) {
         return `
             <tr>
                 <td style="padding:12px 0;border-top:1px solid rgba(2, 48, 71, 0.14)">
-                    <strong style="color:#023047">${escapeHtml(item?.nombre || "Producto Emmagina")}</strong>
+                    <strong style="color:#023047">${escapeHtml(item?.nombre || "Producto Rhema Diseños")}</strong>
                     ${variant ? `<br><span style="font-size:13px;color:#125373">${escapeHtml(variant)}</span>` : ""}
                 </td>
                 <td style="padding:12px 8px;border-top:1px solid rgba(2, 48, 71, 0.14);text-align:center;color:#125373">${quantity}</td>
@@ -289,7 +289,7 @@ function emailFooterHtml() {
         <div style="background:#EAF4F8;border-top:1px solid rgba(2, 48, 71, 0.14);padding:18px 22px;color:#125373;font-size:13px;line-height:1.5">
             <p style="margin:0 0 6px"><strong style="color:#65445A">${escapeHtml(brandName())}</strong></p>
             <p style="margin:0">Correo: <a href="mailto:${escapeHtml(email)}" style="color:#219EBC">${escapeHtml(email)}</a>${whatsappUrl ? ` · WhatsApp: <a href="${escapeHtml(whatsappUrl)}" style="color:#219EBC">${escapeHtml(whatsapp)}</a>` : ""}</p>
-            <p style="margin:8px 0 0">Este correo fue enviado por una compra o actualización solicitada en emmagina.cl.</p>
+            <p style="margin:8px 0 0">Este correo fue enviado por una compra o actualización solicitada en rhemadisenos.cl.</p>
         </div>
     `;
 }
@@ -385,7 +385,7 @@ function buildAdminEmailHtml(order, data) {
     return wrapBrandedEmail({
         preheader: `${data.label}: ${data.number}`,
         title: data.label,
-        introHtml: `<p style="margin:0 0 14px">Hay una actualización operativa en Emmagina.</p><p style="margin:0 0 14px"><strong>Pedido:</strong> ${escapeHtml(data.number)}</p>`,
+        introHtml: `<p style="margin:0 0 14px">Hay una actualización operativa en Rhema Diseños.</p><p style="margin:0 0 14px"><strong>Pedido:</strong> ${escapeHtml(data.number)}</p>`,
         mainHtml,
         ctaUrl: adminUrl,
         ctaLabel: "Abrir pedido en admin",
@@ -456,7 +456,7 @@ function eventBody(order, eventName) {
         ],
         delivered: [
             `${data.greeting}, tu pedido ${data.number} figura como entregado.`,
-            "Gracias por confiar en Emmagina."
+            "Gracias por confiar en Rhema Diseños."
         ],
         cancelled: [
             `${data.greeting}, tu pedido ${data.number} fue cancelado.`,
@@ -489,7 +489,7 @@ function buildNotification(order, eventName = "status_update") {
         label: EVENT_LABELS[body.event] || "Actualización de pedido",
         to: clean(order?.cliente?.email),
         customerPhone,
-        subject: `Emmagina · ${body.subject}`,
+        subject: `Rhema Diseños · ${body.subject}`,
         text: body.text,
         html: buildCustomerEmailHtml(order, body),
         whatsappText: body.text,
@@ -625,7 +625,7 @@ function buildAdminNotification(order, event, customerNotification) {
     });
 
     return {
-        subject: `[Emmagina] ${label} · ${number}`,
+        subject: `[Rhema Diseños] ${label} · ${number}`,
         text,
         html
     };

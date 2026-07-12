@@ -254,12 +254,12 @@ function normalizeSiteSettings(input = {}, fallbackValue = cloneDefaultSiteSetti
         },
         footer: {
             enabled: footer.enabled === undefined ? fallback.footer?.enabled !== false : Boolean(footer.enabled),
-            brandTitle: cleanText(footer.brandTitle ?? fallback.footer?.brandTitle ?? "Emmagina", { field: "El título del footer", maxLength: 120, required: true }),
+            brandTitle: cleanText(footer.brandTitle ?? fallback.footer?.brandTitle ?? "Rhema Diseños", { field: "El título del footer", maxLength: 120, required: true }),
             brandText: cleanText(footer.brandText ?? fallback.footer?.brandText ?? "", { field: "El texto del footer", maxLength: 500, allowNewlines: true }),
             columns: normalizeFooterColumns(footer.columns, fallback.footer?.columns || []),
             contactTitle: cleanText(footer.contactTitle ?? fallback.footer?.contactTitle ?? "Soporte", { field: "El título de contacto del footer", maxLength: 80 }),
             whatsapp: cleanPhone(footer.whatsapp ?? fallback.footer?.whatsapp ?? "56900000000", { field: "El WhatsApp del footer", required: false }).replace(/[^0-9]/g, ""),
-            email: cleanText(footer.email ?? fallback.footer?.email ?? "contacto@emmagina.cl", { field: "El correo del footer", maxLength: 120 }),
+            email: cleanText(footer.email ?? fallback.footer?.email ?? "contacto@rhemadisenos.cl", { field: "El correo del footer", maxLength: 120 }),
             supportButtonText: cleanText(footer.supportButtonText ?? fallback.footer?.supportButtonText ?? "Contactar soporte", { field: "El botón del footer", maxLength: 80 }),
             copyright: cleanText(footer.copyright ?? fallback.footer?.copyright ?? "", { field: "El copyright", maxLength: 200 }),
             legalLinks: normalizeFooterLinks(footer.legalLinks, fallback.footer?.legalLinks || [])

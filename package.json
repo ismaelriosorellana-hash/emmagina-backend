@@ -1,7 +1,7 @@
 {
-  "name": "emmagina-backend",
-  "version": "3.5.0-cms-render-publico",
-  "description": "API de Emmagina con arquitectura CMS flexible y endpoint público para motor universal de renderizado.",
+  "name": "rhema-disenos-backend",
+  "version": "3.6.0-rhema-brand-base",
+  "description": "API de Rhema Diseños con arquitectura CMS flexible y motor universal de renderizado.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -29,18 +29,19 @@
     "seed-key-soul": "node scripts/seedKeySoulProducts.js",
     "seed-emmagina": "node scripts/seedEmmaginaProducts.js",
     "seed-pagebuilder-home": "node scripts/seedHomePageBuilder.js",
-    "seed-cms-architecture": "node scripts/seedCmsArchitecture.js"
+    "seed-cms-architecture": "node scripts/seedCmsArchitecture.js",
+    "seed-rhema-products": "node scripts/seedEmmaginaProducts.js",
+    "seed-rhema-architecture": "node scripts/seedCmsArchitecture.js"
   },
   "keywords": [
     "cloudinary",
     "ecommerce",
-    "emmagina",
+    "rhema-disenos",
     "express",
-    "figuras-3d",
     "impresion-3d",
     "mongodb"
   ],
-  "author": "Emmagina",
+  "author": "Rhema Diseños",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^3.0.2",

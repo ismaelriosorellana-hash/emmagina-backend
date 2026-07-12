@@ -76,7 +76,7 @@ async function start() {
                 port,
                 () => {
                     console.log(
-                        `🚀 Servidor Emmagina v${APP_VERSION} en puerto ${port}`
+                        `🚀 Servidor Rhema Diseños v${APP_VERSION} en puerto ${port}`
                     );
                 }
             );

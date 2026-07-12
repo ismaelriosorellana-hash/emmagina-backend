@@ -22,17 +22,17 @@ test("construye metadatos Open Graph y Schema.org para un producto", () => {
         descripcion: "Taza personalizada para regalar.",
         precio: 7990,
         stock: 4,
-        marca: "Emmagina",
+        marca: "Rhema Diseños",
         categoriaPrincipal: "Tazas",
         imagenes: ["https://res.cloudinary.com/demo/image/upload/taza.jpg"],
         seo: {
-            titulo: "Taza Mamá Especial | Emmagina",
+            titulo: "Taza Mamá Especial | Rhema Diseños",
             descripcion: "Taza personalizada para regalar a mamá.",
             imagen: "https://res.cloudinary.com/demo/image/upload/taza-seo.jpg"
         }
     });
 
-    assert.equal(meta.title, "Taza Mamá Especial | Emmagina");
+    assert.equal(meta.title, "Taza Mamá Especial | Rhema Diseños");
     assert.equal(meta.price, 7990);
     assert.equal(meta.currency, "CLP");
     assert.equal(meta.category, "Tazas");
@@ -54,11 +54,11 @@ test("renderiza HTML prerenderizado usando el shell del frontend sin scripts inl
         imagenes: ["https://res.cloudinary.com/demo/image/upload/cuaderno.jpg"]
     });
 
-    const shellHtml = `<!doctype html><html lang="es-CL"><head><meta charset="utf-8"><title>Producto personalizado | Emmagina</title><meta name="description" content="genérica"><link rel="canonical" href="https://emmagina.onrender.com/producto.html"><script defer src="js/config.js"></script><script defer src="js/products.js"></script></head><body data-page="product"><main id="product-detail"></main></body></html>`;
+    const shellHtml = `<!doctype html><html lang="es-CL"><head><meta charset="utf-8"><title>Producto personalizado | Rhema Diseños</title><meta name="description" content="genérica"><link rel="canonical" href="https://emmagina.onrender.com/producto.html"><script defer src="js/config.js"></script><script defer src="js/products.js"></script></head><body data-page="product"><main id="product-detail"></main></body></html>`;
     const html = await renderProductHtml(meta, { shellHtml });
 
     assert.match(html, /<base href="https:\/\/emmagina.onrender.com\/">/);
-    assert.match(html, /<meta property="og:title" content="Cuaderno Devocional \| Emmagina">/);
+    assert.match(html, /<meta property="og:title" content="Cuaderno Devocional \| Rhema Diseños">/);
     assert.match(html, /<meta property="product:price:currency" content="CLP">/);
     assert.match(html, /application\/ld\+json/);
     assert.match(html, /https:\/\/schema.org\/OutOfStock/);
