@@ -4,6 +4,9 @@ const path = require("path");
 const crypto = require("crypto");
 
 const SolicitudPersonalizada = require("../models/SolicitudPersonalizada");
+const Pedido = require("../models/Pedido");
+const { createPreference } = require("../services/mercadoPagoService");
+const { isMercadoPagoReady } = require("../config/mercadoPago");
 const { cleanSegment, uploadBuffer, toAsset, deleteAsset } = require("../services/uploadService");
 const { notifyCustomRequest } = require("../services/customRequestNotificationService");
 
@@ -282,8 +285,170 @@ async function respondCustomRequestQuote(req, res, next) {
     }
 }
 
+async function createOrderFromAcceptedQuote(req, res, next) {
+    try {
+        const query = contactQuery(req.params.folio, {
+            correo: req.body.contactoCorreo || req.body.correo,
+            whatsapp: req.body.contactoWhatsapp || req.body.whatsapp
+        });
+        const request = await SolicitudPersonalizada.findOne(query);
+        if (!request) {
+            return res.status(404).json({ error: "Solicitud no encontrada o los datos de contacto no coinciden." });
+        }
+
+        if (!["aceptada", "convertida_pedido"].includes(request.estado)) {
+            return res.status(409).json({ error: "Primero debes aceptar la cotización antes de crear el pedido." });
+        }
+
+        if (!request.cotizacion?.montoEstimado || request.cotizacion.montoEstimado <= 0) {
+            return res.status(409).json({ error: "La cotización no tiene un monto válido para crear el pedido." });
+        }
+
+        if (request.pedido?.pedidoId) {
+            const existing = await Pedido.findById(request.pedido.pedidoId).select("+consultaToken");
+            if (existing) {
+                let payment = null;
+                if (existing.estadoPago !== "pagado" && isMercadoPagoReady()) {
+                    payment = await createPreference(existing).catch(() => null);
+                }
+                return res.json({
+                    ok: true,
+                    created: false,
+                    pedido: {
+                        pedidoId: existing._id,
+                        numeroPedido: existing.numeroPedido,
+                        total: existing.total,
+                        estadoPago: existing.estadoPago,
+                        consultaToken: existing.consultaToken
+                    },
+                    pago: payment
+                });
+            }
+        }
+
+        const email = clean(req.body.correo || request.cliente?.correo).toLowerCase();
+        const telefono = clean(req.body.whatsapp || request.cliente?.whatsapp);
+        const metodoEntrega = clean(req.body.metodoEntrega).toLowerCase();
+        const direccion = clean(req.body.direccion);
+        const comuna = clean(req.body.comuna || request.cliente?.comuna);
+
+        if (!email) return res.status(400).json({ error: "Ingresa un correo para crear el pedido y recibir la confirmación." });
+        if (!telefono) return res.status(400).json({ error: "Ingresa un WhatsApp para coordinar el pedido." });
+        if (!["retiro", "envio"].includes(metodoEntrega)) return res.status(400).json({ error: "Selecciona retiro coordinado o envío." });
+        if (metodoEntrega === "envio" && (!direccion || !comuna)) {
+            return res.status(400).json({ error: "Para envío debes ingresar dirección y comuna." });
+        }
+
+        const fullAmount = Number(request.cotizacion.montoEstimado);
+        const chargeAmount = request.cotizacion.requiereAbono && Number(request.cotizacion.montoAbono) > 0
+            ? Number(request.cotizacion.montoAbono)
+            : fullAmount;
+        const itemName = request.proyecto?.formato || request.proyecto?.uso || "Proyecto personalizado Rhema Diseños";
+        const description = [
+            `Cotización ${request.folio}`,
+            request.resumen,
+            request.cotizacion?.observaciones
+        ].filter(Boolean).join(" · ").slice(0, 2800);
+
+        const order = await Pedido.create({
+            cliente: {
+                nombre: request.cliente.nombre,
+                email,
+                telefono,
+                direccion: metodoEntrega === "envio" ? direccion : "",
+                comuna
+            },
+            items: [{
+                productoId: String(request._id),
+                nombre: itemName,
+                imagen: request.archivos?.[0]?.url || "",
+                sku: request.folio,
+                cantidad: 1,
+                precioUnitario: chargeAmount,
+                subtotal: chargeAmount,
+                personalizacion: {
+                    solicitudId: String(request._id),
+                    folio: request.folio,
+                    tipoSolicitud: request.tipoSolicitud,
+                    proyecto: request.proyecto,
+                    archivos: request.archivos
+                },
+                personalizacionResumen: {
+                    titulo: itemName,
+                    detalle: request.resumen || request.proyecto?.descripcion || "Proyecto personalizado"
+                }
+            }],
+            subtotal: chargeAmount,
+            costoEnvio: 0,
+            descuento: 0,
+            total: chargeAmount,
+            metodoPago: "mercadopago",
+            estadoPago: "pendiente",
+            estadoPedido: "pendiente",
+            entrega: {
+                metodo: metodoEntrega,
+                instrucciones: metodoEntrega === "retiro"
+                    ? "Retiro coordinado con Rhema Diseños."
+                    : "Envío coordinado después de confirmar el pago.",
+                direccion: metodoEntrega === "envio" ? direccion : "",
+                comuna,
+                zonaEnvio: comuna ? "santiago" : "",
+                diasPreparacion: 3
+            },
+            observaciones: description,
+            notasInternas: `Pedido creado automáticamente desde la solicitud ${request.folio}. Monto total cotizado: ${fullAmount}.`,
+            origen: "web",
+            historial: [{
+                estado: "pendiente",
+                detalle: request.cotizacion.requiereAbono && chargeAmount < fullAmount
+                    ? `Pedido creado desde cotización aceptada. Pago inicial correspondiente al abono de $${chargeAmount}.`
+                    : "Pedido creado desde cotización aceptada. Pago pendiente mediante Mercado Pago."
+            }]
+        });
+
+        request.estado = "convertida_pedido";
+        request.pedido = {
+            pedidoId: order._id,
+            numeroPedido: order.numeroPedido,
+            convertidoEn: new Date(),
+            convertidoPor: null
+        };
+        request.historial.push({
+            evento: "pedido_creado_desde_cotizacion",
+            detalle: `Se creó automáticamente el pedido ${order.numeroPedido}.`
+        });
+        await request.save();
+
+        let payment = null;
+        if (isMercadoPagoReady()) {
+            payment = await createPreference(order).catch(() => null);
+        }
+
+        return res.status(201).json({
+            ok: true,
+            created: true,
+            pedido: {
+                pedidoId: order._id,
+                numeroPedido: order.numeroPedido,
+                total: order.total,
+                estadoPago: order.estadoPago,
+                consultaToken: order.consultaToken,
+                esAbono: request.cotizacion.requiereAbono && chargeAmount < fullAmount,
+                montoCotizado: fullAmount
+            },
+            pago: payment,
+            mensaje: payment?.checkoutUrl || payment?.initPoint
+                ? "Pedido creado. Continúa con Mercado Pago."
+                : "Pedido creado. Mercado Pago todavía no está disponible; Rhema Diseños coordinará el siguiente paso."
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     createCustomRequest,
     getCustomRequestPublic,
-    respondCustomRequestQuote
+    respondCustomRequestQuote,
+    createOrderFromAcceptedQuote
 };
