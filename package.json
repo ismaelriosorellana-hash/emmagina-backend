@@ -1,7 +1,7 @@
 {
   "name": "rhema-disenos-backend",
-  "version": "3.12.0",
-  "description": "API de Rhema Diseños con catálogo inicial de lanzamiento, stock inmediato, fabricación a pedido, Memories, Alma y cotizaciones.",
+  "version": "3.13.0",
+  "description": "API de Rhema Diseños con catálogo, solicitudes personalizadas y flujo público de cotizaciones.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -32,7 +32,8 @@
     "seed-cms-architecture": "node scripts/seedCmsArchitecture.js",
     "seed-rhema-products": "node scripts/seedEmmaginaProducts.js",
     "seed-rhema-architecture": "node scripts/seedCmsArchitecture.js",
-    "seed-rhema-launch": "node scripts/seedRhemaLaunchProducts.js"
+    "seed-rhema-launch": "node scripts/seedRhemaLaunchProducts.js",
+    "quotes-check": "npm run check && node --test tests/quote-response-v3130.test.js"
   },
   "keywords": [
     "cloudinary",

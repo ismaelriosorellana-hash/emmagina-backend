@@ -176,46 +176,107 @@ async function createCustomRequest(req, res, next) {
     }
 }
 
+function contactQuery(folio, source = {}) {
+    const email = clean(source.correo).toLowerCase();
+    const whatsapp = clean(source.whatsapp);
+    if (!email && !whatsapp) {
+        const error = new Error("Ingresa el correo o WhatsApp utilizado en la solicitud.");
+        error.statusCode = 400;
+        throw error;
+    }
+    const query = { folio: clean(folio).toUpperCase() };
+    if (email) query["cliente.correo"] = email;
+    if (whatsapp) query["cliente.whatsapp"] = whatsapp;
+    return query;
+}
+
+function quoteExpiry(cotizacion = {}) {
+    if (!cotizacion.enviadaEn) return null;
+    const sent = new Date(cotizacion.enviadaEn);
+    if (Number.isNaN(sent.getTime())) return null;
+    const expiry = new Date(sent);
+    expiry.setDate(expiry.getDate() + Math.max(1, Number(cotizacion.validezDias) || 7));
+    return expiry;
+}
+
+function publicRequestPayload(request) {
+    const quoteVisible = ["cotizada", "aceptada", "convertida_pedido", "rechazada"].includes(request.estado);
+    const expiresAt = quoteVisible ? quoteExpiry(request.cotizacion || {}) : null;
+    const expired = Boolean(expiresAt && expiresAt.getTime() < Date.now() && request.estado === "cotizada");
+    return {
+        folio: request.folio,
+        tipoSolicitud: request.tipoSolicitud,
+        estado: request.estado,
+        resumen: request.resumen,
+        cotizacion: quoteVisible ? {
+            montoEstimado: request.cotizacion?.montoEstimado || 0,
+            moneda: request.cotizacion?.moneda || "CLP",
+            tiempoEstimado: request.cotizacion?.tiempoEstimado || "",
+            observaciones: request.cotizacion?.observaciones || "",
+            condiciones: request.cotizacion?.condiciones || "",
+            validezDias: request.cotizacion?.validezDias || 7,
+            requiereAbono: Boolean(request.cotizacion?.requiereAbono),
+            montoAbono: request.cotizacion?.montoAbono || 0,
+            enviadaEn: request.cotizacion?.enviadaEn || null,
+            aceptadaEn: request.cotizacion?.aceptadaEn || null,
+            venceEn: expiresAt,
+            vencida: expired
+        } : null,
+        pedido: request.pedido?.numeroPedido ? {
+            numeroPedido: request.pedido.numeroPedido
+        } : null,
+        createdAt: request.createdAt,
+        updatedAt: request.updatedAt
+    };
+}
+
 async function getCustomRequestPublic(req, res, next) {
     try {
-        const folio = clean(req.params.folio).toUpperCase();
-        const email = clean(req.query.correo).toLowerCase();
-        const whatsapp = clean(req.query.whatsapp);
-        const query = { folio };
-        if (email) query["cliente.correo"] = email;
-        if (whatsapp) query["cliente.whatsapp"] = whatsapp;
-
+        const query = contactQuery(req.params.folio, req.query || {});
         const request = await SolicitudPersonalizada.findOne(query).lean();
-        if (!request) {
-            return res.status(404).json({ error: "Solicitud no encontrada." });
+        if (!request) return res.status(404).json({ error: "Solicitud no encontrada o los datos de contacto no coinciden." });
+        return res.json({ solicitud: publicRequestPayload(request) });
+    } catch (error) {
+        next(error);
+    }
+}
+
+async function respondCustomRequestQuote(req, res, next) {
+    try {
+        const action = clean(req.body.accion).toLowerCase();
+        if (!["aceptar", "rechazar"].includes(action)) {
+            return res.status(400).json({ error: "La respuesta debe ser aceptar o rechazar." });
         }
 
-        const quoteVisible = ["cotizada", "aceptada", "convertida_pedido"].includes(request.estado);
+        const query = contactQuery(req.params.folio, req.body || {});
+        const request = await SolicitudPersonalizada.findOne(query);
+        if (!request) return res.status(404).json({ error: "Solicitud no encontrada o los datos de contacto no coinciden." });
+        if (request.estado !== "cotizada") {
+            return res.status(409).json({ error: "Esta cotización ya fue respondida o todavía no está disponible." });
+        }
 
-        return res.json({
-            solicitud: {
-                folio: request.folio,
-                tipoSolicitud: request.tipoSolicitud,
-                estado: request.estado,
-                resumen: request.resumen,
-                cotizacion: quoteVisible ? {
-                    montoEstimado: request.cotizacion?.montoEstimado || 0,
-                    moneda: request.cotizacion?.moneda || "CLP",
-                    tiempoEstimado: request.cotizacion?.tiempoEstimado || "",
-                    observaciones: request.cotizacion?.observaciones || "",
-                    condiciones: request.cotizacion?.condiciones || "",
-                    validezDias: request.cotizacion?.validezDias || 7,
-                    requiereAbono: Boolean(request.cotizacion?.requiereAbono),
-                    montoAbono: request.cotizacion?.montoAbono || 0,
-                    enviadaEn: request.cotizacion?.enviadaEn || null
-                } : null,
-                pedido: request.pedido?.numeroPedido ? {
-                    numeroPedido: request.pedido.numeroPedido
-                } : null,
-                createdAt: request.createdAt,
-                updatedAt: request.updatedAt
-            }
-        });
+        const expiresAt = quoteExpiry(request.cotizacion || {});
+        if (expiresAt && expiresAt.getTime() < Date.now()) {
+            return res.status(409).json({ error: "Esta cotización venció. Solicita una actualización a Rhema Diseños." });
+        }
+
+        if (action === "aceptar") {
+            request.estado = "aceptada";
+            request.cotizacion.aceptadaEn = new Date();
+            request.historial.push({
+                evento: "cotizacion_aceptada_cliente",
+                detalle: "El cliente aceptó la cotización desde el sitio web."
+            });
+        } else {
+            request.estado = "rechazada";
+            request.historial.push({
+                evento: "cotizacion_rechazada_cliente",
+                detalle: clean(req.body.motivo).slice(0, 500) || "El cliente rechazó la cotización desde el sitio web."
+            });
+        }
+
+        await request.save();
+        return res.json({ ok: true, solicitud: publicRequestPayload(request.toObject()) });
     } catch (error) {
         next(error);
     }
@@ -223,5 +284,6 @@ async function getCustomRequestPublic(req, res, next) {
 
 module.exports = {
     createCustomRequest,
-    getCustomRequestPublic
+    getCustomRequestPublic,
+    respondCustomRequestQuote
 };
