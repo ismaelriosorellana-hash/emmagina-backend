@@ -1,7 +1,7 @@
 {
   "name": "rhema-disenos-backend",
-  "version": "3.9.0-rhema-memories-alma",
-  "description": "API de Rhema Diseños para tienda 3D local en Santiago, líneas Memories y Alma, solicitudes personalizadas y cotizaciones.",
+  "version": "3.10.0-lanzamiento-santiago",
+  "description": "API de Rhema Diseños para lanzamiento local en Santiago, logística, catálogo, líneas Memories y Alma y cotizaciones personalizadas.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

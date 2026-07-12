@@ -52,8 +52,8 @@ const DEFAULT_SITE_SETTINGS = Object.freeze({
                 url: "despachos-retiros.html"
             },
             {
-                text: "Productos personalizados para cada ocasión",
-                url: "catalogo.html"
+                text: "Lanzamiento local de Rhema Diseños en Santiago",
+                url: "lanzamiento-santiago.html"
             }
         ]
     },
