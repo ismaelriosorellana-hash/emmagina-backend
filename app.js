@@ -226,6 +226,11 @@ const healthRoutes =
         "./routes/health"
     );
 
+const pricingGuideRoutes =
+    require(
+        "./routes/pricingGuide"
+    );
+
 const adminSystemRoutes =
     require(
         "./routes/admin/system"
@@ -369,6 +374,11 @@ app.use(
 );
 
 // Rutas públicas
+app.use(
+    "/api/guia-precios",
+    pricingGuideRoutes
+);
+
 app.use(
     "/api/productos",
     productosRoutes
