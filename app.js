@@ -81,6 +81,11 @@ const pedidosRoutes =
         "./routes/pedidos"
     );
 
+const solicitudesPersonalizadasRoutes =
+    require(
+        "./routes/solicitudesPersonalizadas"
+    );
+
 const authRoutes =
     require(
         "./routes/auth"
@@ -149,6 +154,11 @@ const adminProductosRoutes =
 const adminPedidosRoutes =
     require(
         "./routes/admin/pedidos"
+    );
+
+const adminSolicitudesPersonalizadasRoutes =
+    require(
+        "./routes/admin/solicitudesPersonalizadas"
     );
 
 const adminInventarioRoutes =
@@ -380,6 +390,11 @@ app.use(
 );
 
 app.use(
+    "/api/solicitudes-personalizadas",
+    solicitudesPersonalizadasRoutes
+);
+
+app.use(
     "/api/auth",
     authRoutes
 );
@@ -488,6 +503,11 @@ app.use(
 app.use(
     "/api/admin/pedidos",
     adminPedidosRoutes
+);
+
+app.use(
+    "/api/admin/solicitudes-personalizadas",
+    adminSolicitudesPersonalizadasRoutes
 );
 
 app.use(

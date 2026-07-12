@@ -1,7 +1,7 @@
 {
   "name": "rhema-disenos-backend",
-  "version": "3.6.0-rhema-brand-base",
-  "description": "API de Rhema Diseños con arquitectura CMS flexible y motor universal de renderizado.",
+  "version": "3.7.0-rhema-solicitudes-personalizadas",
+  "description": "API de Rhema Diseños con solicitudes personalizadas, cotización e impresión 3D a pedido.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
