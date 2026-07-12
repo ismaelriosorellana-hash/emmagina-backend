@@ -1,7 +1,7 @@
 {
   "name": "rhema-disenos-backend",
-  "version": "3.11.0",
-  "description": "API de Rhema Diseños para costos referenciales, cobertura en Santiago, catálogo, Memories, Alma y cotizaciones personalizadas.",
+  "version": "3.12.0",
+  "description": "API de Rhema Diseños con catálogo inicial de lanzamiento, stock inmediato, fabricación a pedido, Memories, Alma y cotizaciones.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -31,7 +31,8 @@
     "seed-pagebuilder-home": "node scripts/seedHomePageBuilder.js",
     "seed-cms-architecture": "node scripts/seedCmsArchitecture.js",
     "seed-rhema-products": "node scripts/seedEmmaginaProducts.js",
-    "seed-rhema-architecture": "node scripts/seedCmsArchitecture.js"
+    "seed-rhema-architecture": "node scripts/seedCmsArchitecture.js",
+    "seed-rhema-launch": "node scripts/seedRhemaLaunchProducts.js"
   },
   "keywords": [
     "cloudinary",
