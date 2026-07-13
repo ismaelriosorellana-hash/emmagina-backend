@@ -145,7 +145,7 @@ const variantSchema = new mongoose.Schema(
         imagenPrincipal: {
             type: String,
             trim: true,
-            maxlength: 1200,
+            maxlength: 10000,
             default: ""
         },
         imagenes: {
@@ -244,7 +244,7 @@ const productSchema = new mongoose.Schema(
         imagenPrincipal: {
             type: String,
             trim: true,
-            maxlength: 1200,
+            maxlength: 10000,
             default: ""
         },
 
