@@ -11,7 +11,7 @@ const {
     normalizeProductOutput
 } = require("../utils/productNormalizer");
 
-const DEFAULT_SITE_URL = "https://rhemadisenos.cl";
+const DEFAULT_SITE_URL = "https://emmagina-frontend.onrender.com";
 const DEFAULT_BRAND = "Rhema Diseños";
 const DEFAULT_IMAGE = process.env.DEFAULT_SEO_IMAGE || "";
 const DEFAULT_LOCALE = "es_CL";
@@ -39,6 +39,7 @@ function siteUrl() {
     return cleanUrl(
         firstDefined(
             process.env.PUBLIC_SITE_URL,
+            process.env.PUBLIC_FRONTEND_URL,
             process.env.FRONTEND_URL,
             process.env.SITE_URL
         ),
@@ -52,6 +53,7 @@ function seoPublicUrl() {
             process.env.SEO_PUBLIC_URL,
             process.env.PUBLIC_SEO_URL,
             process.env.PUBLIC_SITE_URL,
+            process.env.PUBLIC_FRONTEND_URL,
             process.env.FRONTEND_URL,
             process.env.SITE_URL
         ),

@@ -1,7 +1,7 @@
 {
   "name": "rhema-disenos-backend",
-  "version": "3.18.0",
-  "description": "API de Rhema Diseños con SEO técnico, sitemap dinámico y preparación para dominio definitivo.",
+  "version": "3.19.0",
+  "description": "API de Rhema Diseños con seguridad de lanzamiento, validación de entorno y robots adaptado al dominio actual.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -37,7 +37,8 @@
     "quote-orders-check": "npm run check && node --test tests/quote-order-v3140.test.js",
     "production-tracking-check": "npm run check && node --test tests/production-tracking-v3150.test.js",
     "communications-check": "npm run check && node --test tests/communications-v3170.test.js",
-    "seo-local-check": "npm run check && node --test tests/seo-local-v3180.test.js"
+    "seo-local-check": "npm run check && node --test tests/seo-local-v3180.test.js",
+    "security-readiness-check": "npm run check && node --test tests/security-readiness-v3190.test.js"
   },
   "keywords": [
     "cloudinary",
