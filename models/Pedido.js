@@ -101,6 +101,30 @@ const transferSchema = new mongoose.Schema({
     permiteReenvio: { type: Boolean, default: false }
 }, { _id: false });
 
+
+const productionSchema = new mongoose.Schema({
+    etapa: {
+        type: String,
+        enum: [
+            "revision",
+            "diseno",
+            "preparacion",
+            "impresion",
+            "postprocesado",
+            "control_calidad",
+            "listo_entrega",
+            "en_ruta",
+            "completado",
+            "pausado"
+        ],
+        default: "revision"
+    },
+    progreso: { type: Number, default: 10, min: 0, max: 100 },
+    mensajeCliente: { type: String, default: "Estamos revisando los detalles de tu pedido.", maxlength: 1200 },
+    fechaEstimada: { type: Date, default: null },
+    actualizadoAt: { type: Date, default: Date.now }
+}, { _id: false });
+
 const orderSchema = new mongoose.Schema({
     numeroPedido: { type: String, unique: true, index: true },
     consultaToken: { type: String, default: () => crypto.randomBytes(24).toString("hex"), select: false },
@@ -141,6 +165,7 @@ const orderSchema = new mongoose.Schema({
     },
     observaciones: { type: String, default: "", maxlength: 3000 },
     notasInternas: { type: String, default: "", maxlength: 5000 },
+    produccion: { type: productionSchema, default: () => ({}) },
     origen: { type: String, enum: ["web", "whatsapp", "administrador"], default: "web" },
     canceladoPorCliente: { type: Boolean, default: false, index: true },
     canceladoAt: { type: Date, default: null },

@@ -213,7 +213,82 @@ async function createOrder(req, res, next) {
     }
 }
 
+function normalizeLookup(value) {
+    return String(value || "").trim().toLowerCase().replace(/\s+/g, "");
+}
+
+function publicHistory(order) {
+    const allowed = new Set([
+        "pendiente", "confirmado", "validacion_diseno", "en_produccion",
+        "listo", "enviado", "entregado", "cancelado",
+        "revision", "diseno", "preparacion", "impresion",
+        "postprocesado", "control_calidad", "listo_entrega",
+        "en_ruta", "completado", "pausado"
+    ]);
+    return (order.historial || [])
+        .filter((entry) => allowed.has(String(entry.estado || "")))
+        .map((entry) => ({
+            estado: entry.estado,
+            detalle: entry.detalle || "",
+            fecha: entry.fecha
+        }));
+}
+
+async function trackOrder(req, res, next) {
+    try {
+        const numeroPedido = String(req.body?.numeroPedido || "").trim();
+        const contacto = normalizeLookup(req.body?.contacto);
+
+        if (!numeroPedido || !contacto) {
+            const error = new Error("Ingresa el número de pedido y el correo o WhatsApp usado en la compra.");
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const order = await Pedido.findOne({ numeroPedido }).lean();
+        if (!order) {
+            return res.status(404).json({ error: "Pedido no encontrado o los datos no coinciden." });
+        }
+
+        const email = normalizeLookup(order.cliente?.email);
+        const phone = normalizeLookup(order.cliente?.telefono).replace(/\D/g, "");
+        const contactPhone = contacto.replace(/\D/g, "");
+        const matches = contacto === email || (contactPhone && phone && (phone.endsWith(contactPhone) || contactPhone.endsWith(phone)));
+
+        if (!matches) {
+            return res.status(404).json({ error: "Pedido no encontrado o los datos no coinciden." });
+        }
+
+        const production = order.produccion || {};
+        res.json({
+            numeroPedido: order.numeroPedido,
+            estadoPedido: order.estadoPedido,
+            estadoPago: order.estadoPago,
+            createdAt: order.createdAt,
+            cliente: { nombre: order.cliente?.nombre || "" },
+            items: (order.items || []).map((item) => ({ nombre: item.nombre, cantidad: item.cantidad, imagen: item.imagen || "" })),
+            entrega: {
+                metodo: order.entrega?.metodo || "",
+                comuna: order.entrega?.comuna || order.cliente?.comuna || "",
+                fechaMinima: order.entrega?.fechaMinima || null,
+                fechaEstimadaHasta: order.entrega?.fechaEstimadaHasta || null
+            },
+            produccion: {
+                etapa: production.etapa || "revision",
+                progreso: Number(production.progreso ?? 10),
+                mensajeCliente: production.mensajeCliente || "Estamos revisando los detalles de tu pedido.",
+                fechaEstimada: production.fechaEstimada || order.entrega?.fechaEstimadaHasta || null,
+                actualizadoAt: production.actualizadoAt || order.updatedAt
+            },
+            historial: publicHistory(order)
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
+    trackOrder,
     validateCart,
     createOrder,
     validateOrderData,

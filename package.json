@@ -1,7 +1,7 @@
 {
   "name": "rhema-disenos-backend",
-  "version": "3.14.0",
-  "description": "API de Rhema Diseños con conversión de cotizaciones aceptadas en pedidos listos para pago.",
+  "version": "3.15.0",
+  "description": "API de Rhema Diseños con flujo de producción y seguimiento público de pedidos.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -34,7 +34,8 @@
     "seed-rhema-architecture": "node scripts/seedCmsArchitecture.js",
     "seed-rhema-launch": "node scripts/seedRhemaLaunchProducts.js",
     "quotes-check": "npm run check && node --test tests/quote-response-v3130.test.js",
-    "quote-orders-check": "npm run check && node --test tests/quote-order-v3140.test.js"
+    "quote-orders-check": "npm run check && node --test tests/quote-order-v3140.test.js",
+    "production-tracking-check": "npm run check && node --test tests/production-tracking-v3150.test.js"
   },
   "keywords": [
     "cloudinary",

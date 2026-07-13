@@ -182,6 +182,27 @@ async function updateOrder(
                 );
         }
 
+        if (req.body.produccion && typeof req.body.produccion === "object") {
+            const incoming = req.body.produccion;
+            const previousStage = order.produccion?.etapa || "revision";
+            const nextStage = String(incoming.etapa || previousStage);
+            order.produccion = {
+                etapa: nextStage,
+                progreso: Math.max(0, Math.min(100, Number(incoming.progreso ?? order.produccion?.progreso ?? 10))),
+                mensajeCliente: String(incoming.mensajeCliente ?? order.produccion?.mensajeCliente ?? "").slice(0, 1200),
+                fechaEstimada: incoming.fechaEstimada ? new Date(incoming.fechaEstimada) : (order.produccion?.fechaEstimada || null),
+                actualizadoAt: new Date()
+            };
+
+            if (nextStage !== previousStage) {
+                order.historial.push({
+                    estado: nextStage,
+                    detalle: order.produccion.mensajeCliente || "Etapa de producción actualizada.",
+                    usuarioId: req.user._id
+                });
+            }
+        }
+
         if (statusChanged) {
             await dispatchNotification(
                 order,

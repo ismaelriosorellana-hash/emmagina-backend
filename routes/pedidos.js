@@ -1,10 +1,16 @@
 "use strict";
 
 const express = require("express");
-const { createOrder, validateCart } = require("../controllers/orderController");
+const { createOrder, validateCart, trackOrder } = require("../controllers/orderController");
 const { orderLimiter } = require("../middleware/rateLimits");
 
 const router = express.Router();
+
+router.post(
+    "/seguimiento",
+    orderLimiter,
+    trackOrder
+);
 
 router.post(
     "/validar-carrito",
