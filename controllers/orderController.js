@@ -90,6 +90,7 @@ async function validateCart(req, res, next) {
             costoEnvio: totals.costoEnvio,
             descuento: totals.descuento,
             total: totals.total,
+            diasPreparacionMaximos: items.reduce((max, item) => Math.max(max, Number(item.diasPreparacion || 3)), 1),
             metodosPago: {
                 transferencia: true,
                 mercadopago: isMercadoPagoReady()
@@ -109,9 +110,13 @@ async function createOrder(req, res, next) {
         const data = normalizeOrderInput(req.body);
 
         if (req.user?.rol === "cliente") {
-            data.usuarioClienteId = req.user._id;
+            data.usuarioClienteId = String(req.user._id);
             data.cliente.email = req.user.email;
             if (!data.cliente.nombre) data.cliente.nombre = req.user.nombre;
+            if (!data.cliente.telefono) data.cliente.telefono = req.user.telefono || "";
+            if (!data.cliente.rut) data.cliente.rut = req.user.rut || "";
+            if (!data.cliente.direccion) data.cliente.direccion = req.user.direccion || "";
+            if (!data.cliente.comuna) data.cliente.comuna = req.user.comuna || "";
         }
 
         validateOrderData(data);

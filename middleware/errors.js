@@ -33,11 +33,10 @@ function errorHandler(
         error.name ===
         "ValidationError"
     ) {
+        const firstIssue = Object.values(error.errors || {})[0];
         return res.status(400).json({
-            error:
-                "Los datos enviados no son válidos.",
-            requestId:
-                req.requestId
+            error: firstIssue?.message || "Los datos enviados no son válidos.",
+            requestId: req.requestId
         });
     }
 

@@ -299,6 +299,7 @@ async function priceOrderItems(requestedItems) {
             precioUnitario: Math.round(unitPrice),
             subtotal: Math.round(unitPrice) * quantity,
             personalizacion: customization,
+            diasPreparacion: Math.min(90, Math.max(1, Math.round(Number(variant?.diasPreparacion || product.diasPreparacion || 3)))),
             entrega: requested.entrega || product.entrega || null
         };
     });
