@@ -20,6 +20,31 @@ const {
     escapeRegex
 } = require("../utils/catalogQuery");
 
+
+const { previewImport, applyImport, buildTemplateBuffer } = require("../services/productSpreadsheetService");
+
+async function downloadProductTemplate(req, res, next) {
+    try {
+        const includeCurrent = String(req.query.incluirActuales || "true") !== "false";
+        const buffer = await buildTemplateBuffer(includeCurrent);
+        res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        res.setHeader("Content-Disposition", `attachment; filename="plantilla-productos-rhema-${new Date().toISOString().slice(0,10)}.xlsx"`);
+        res.send(buffer);
+    } catch (error) { next(error); }
+}
+
+async function importProductsExcel(req, res, next) {
+    try {
+        if (!req.file?.buffer) return res.status(400).json({ error: "Debes adjuntar una plantilla Excel." });
+        const apply = String(req.body?.aplicar || "false") === "true";
+        const result = apply ? await applyImport(req.file.buffer) : await previewImport(req.file.buffer);
+        res.status(result.errors?.length ? 422 : 200).json({
+            modo: apply ? "aplicado" : "vista_previa",
+            resumen: result.resumen, errores: result.errors, vistaPrevia: result.preview, aplicados: result.applied || []
+        });
+    } catch (error) { next(error); }
+}
+
 async function listAdminProducts(
     req,
     res,
@@ -321,5 +346,7 @@ module.exports = {
     createProduct,
     updateProduct,
     deleteProduct,
-    updateVariantInventory
+    updateVariantInventory,
+    downloadProductTemplate,
+    importProductsExcel
 };

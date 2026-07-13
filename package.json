@@ -1,7 +1,7 @@
 {
   "name": "rhema-disenos-backend",
-  "version": "3.20.0",
-  "description": "API de Rhema Diseños con diagnóstico final y preparación para lanzamiento controlado.",
+  "version": "3.21.0",
+  "description": "API Rhema Diseños con actualización masiva de productos por Excel.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -38,8 +38,7 @@
     "production-tracking-check": "npm run check && node --test tests/production-tracking-v3150.test.js",
     "communications-check": "npm run check && node --test tests/communications-v3170.test.js",
     "seo-local-check": "npm run check && node --test tests/seo-local-v3180.test.js",
-    "security-readiness-check": "npm run check && node --test tests/security-readiness-v3190.test.js",
-    "launch-readiness-check": "npm run check && node --test tests/launch-readiness-v3200.test.js"
+    "security-readiness-check": "npm run check && node --test tests/security-readiness-v3190.test.js"
   },
   "keywords": [
     "cloudinary",
@@ -62,7 +61,8 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.16.0",
     "morgan": "^1.10.0",
-    "multer": "^2.0.2"
+    "multer": "^2.0.2",
+    "exceljs": "^4.4.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"

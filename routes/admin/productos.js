@@ -8,15 +8,21 @@ const {
     createProduct,
     updateProduct,
     deleteProduct,
-    updateVariantInventory
+    updateVariantInventory,
+    downloadProductTemplate,
+    importProductsExcel
 } = require("../../controllers/adminProductController");
 
 const {
     validateObjectId
 } = require("../../middleware/validateObjectId");
 
+const productSpreadsheetUpload = require("../../middleware/productSpreadsheetUpload");
+
 const router = express.Router();
 
+router.get("/plantilla-excel", downloadProductTemplate);
+router.post("/importar-excel", productSpreadsheetUpload.single("archivo"), importProductsExcel);
 router.get("/", listAdminProducts);
 router.post("/", createProduct);
 
