@@ -4,8 +4,7 @@ const Pedido = require("../models/Pedido");
 const { normalizeOrderInput } = require("../services/orderService");
 const { resolveOrderDelivery } = require("../services/deliveryService");
 const { priceOrderItems, calculateOrderTotals } = require("../services/paymentPricingService");
-const { applyOrderStock } = require("../services/inventoryService");
-const { transferDeadline, transferHours } = require("../services/transferOrderService");
+const { createPreference } = require("../services/mercadoPagoService");
 const { isMercadoPagoReady } = require("../config/mercadoPago");
 const { summarizeCustomization } = require("../utils/customizationSummary");
 const { cleanText, cleanEmail, cleanPhone, cleanRut } = require("../utils/validation");
@@ -13,10 +12,7 @@ const { securityEvent } = require("../utils/securityLogger");
 const { dispatchNotification } = require("../services/notificationService");
 const { assertStoreOpen } = require("../services/storeStatusService");
 
-const ENABLED_PAYMENT_METHODS = new Set([
-    "transferencia",
-    "mercadopago"
-]);
+const ENABLED_PAYMENT_METHODS = new Set(["mercadopago"]);
 
 function validateOrderData(data) {
     data.cliente.nombre = cleanText(data.cliente.nombre, { field: "El nombre", maxLength: 120, required: true });
@@ -92,7 +88,7 @@ async function validateCart(req, res, next) {
             total: totals.total,
             diasPreparacionMaximos: items.reduce((max, item) => Math.max(max, Number(item.diasPreparacion || 3)), 1),
             metodosPago: {
-                transferencia: true,
+                transferencia: false,
                 mercadopago: isMercadoPagoReady()
             }
         });
@@ -103,7 +99,6 @@ async function validateCart(req, res, next) {
 
 async function createOrder(req, res, next) {
     let order = null;
-    let stockReserved = false;
 
     try {
         await assertStoreOpen();
@@ -139,33 +134,16 @@ async function createOrder(req, res, next) {
         data.cliente.comuna = cleanText(data.entrega.comuna, { field: "La comuna de entrega", maxLength: 120 });
         data.estadoPedido = "pendiente";
 
-        if (data.metodoPago === "transferencia") {
-            data.estadoPago = "pendiente_comprobante";
-            data.transferencia = {
-                venceAt: transferDeadline(),
-                canal: "cuenta"
-            };
-        } else {
-            data.estadoPago = "pendiente";
-            data.transferencia = {};
-        }
+        data.metodoPago = "mercadopago";
+        data.estadoPago = "pendiente";
+        data.transferencia = {};
 
         order = await Pedido.create(data);
 
-        if (data.metodoPago === "transferencia") {
-            await applyOrderStock(order, "reserve", req.user?._id || null);
-            stockReserved = true;
-            order.stockAplicado = true;
-            order.historial.push({
-                estado: "stock_reservado",
-                detalle: `Stock reservado durante ${transferHours()} horas mientras se espera el comprobante.`
-            });
-        } else {
-            order.historial.push({
-                estado: "pendiente",
-                detalle: "Pedido creado. Pago pendiente mediante Mercado Pago."
-            });
-        }
+        order.historial.push({
+            estado: "pendiente",
+            detalle: "Pedido creado. Pago pendiente mediante Mercado Pago."
+        });
 
         await dispatchNotification(order, "order_created", {
             userId: req.user?._id || null
@@ -184,32 +162,21 @@ async function createOrder(req, res, next) {
             paymentMethod: data.metodoPago
         });
 
-        const transferPayment = data.metodoPago === "transferencia";
+        const payment = await createPreference(order);
 
         res.status(201).json({
-            mensaje: transferPayment
-                ? `Pedido recibido. El stock quedó reservado durante ${transferHours()} horas.`
-                : "Pedido creado. Continúa en Mercado Pago para completar el pago.",
+            mensaje: "Pedido creado. Continúa en Mercado Pago para completar el pago.",
             numeroPedido: order.numeroPedido,
             pedidoId: order._id,
             total: order.total,
             cuentaVinculada: Boolean(data.usuarioClienteId),
             metodoPago: order.metodoPago,
             estadoPago: order.estadoPago,
-            venceAt: transferPayment ? order.transferencia.venceAt : null,
-            siguientePaso: transferPayment
-                ? "Sube el comprobante desde el detalle de tu pedido en Mi cuenta."
-                : "Serás redirigido a Mercado Pago."
+            checkoutUrl: payment.checkoutUrl,
+            preferenceId: payment.preferenceId,
+            siguientePaso: "Serás redirigido a Mercado Pago."
         });
     } catch (error) {
-        if (order && stockReserved) {
-            await applyOrderStock(
-                order,
-                "restore",
-                req.user?._id || null
-            ).catch(() => {});
-        }
-
         if (order) {
             await Pedido.deleteOne({ _id: order._id }).catch(() => {});
         }

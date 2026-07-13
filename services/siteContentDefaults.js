@@ -87,7 +87,7 @@ const CONTENT_DEFAULTS = {
                 "actionUrl": ""
             }
         ],
-        "notice": "No realices transferencias a datos recibidos desde cuentas o números que no hayan sido confirmados por Rhema Diseños.",
+        "notice": "Los pagos de la tienda se realizan únicamente mediante Mercado Pago. No compartas claves ni códigos de seguridad.",
         "published": true,
         "seoTitle": "Contacto | Rhema Diseños",
         "seoDescription": "Canales oficiales de contacto y soporte de Rhema Diseños."
@@ -97,7 +97,7 @@ const CONTENT_DEFAULTS = {
         "label": "Preguntas frecuentes",
         "kicker": "Respuestas rápidas",
         "title": "Preguntas frecuentes",
-        "summary": "Encuentra información sobre pedidos, pagos por transferencia, personalización, diseños, despacho y retiro.",
+        "summary": "Encuentra información sobre pedidos, pagos mediante Mercado Pago, personalización, diseños, despacho y retiro.",
         "sections": [],
         "faqs": [
             {
@@ -106,11 +106,11 @@ const CONTENT_DEFAULTS = {
             },
             {
                 "question": "¿Cómo se paga mientras Mercado Pago no está disponible?",
-                "answer": "El medio habilitado es la transferencia bancaria. Después de confirmar el pedido, recibirás las instrucciones oficiales y tendrás el plazo indicado para enviar el comprobante."
+                "answer": "El único medio de pago habilitado es Mercado Pago. Después de crear el pedido serás redirigido a su plataforma segura para completar el pago."
             },
             {
                 "question": "¿El comprobante confirma automáticamente el pago?",
-                "answer": "No. El comprobante queda en revisión y el pedido se marca como pagado únicamente después de que Rhema Diseños valide la transferencia."
+                "answer": "El pedido se marca como pagado únicamente después de que Mercado Pago confirme la aprobación del pago."
             },
             {
                 "question": "¿Cuánto tiempo tengo para enviar el comprobante?",
@@ -134,7 +134,7 @@ const CONTENT_DEFAULTS = {
             },
             {
                 "question": "¿Qué ocurre si un producto queda sin stock?",
-                "answer": "La tienda valida la disponibilidad al crear el pedido. En compras por transferencia, las unidades pueden quedar reservadas temporalmente durante el plazo de pago."
+                "answer": "La tienda valida disponibilidad y precio al crear el pedido. La producción comienza después de que Mercado Pago confirme el pago."
             },
             {
                 "question": "¿Dónde reviso mis notas y personalizaciones?",
@@ -152,7 +152,7 @@ const CONTENT_DEFAULTS = {
         "notice": "Los plazos y condiciones particulares informados en cada producto prevalecen cuando sean diferentes de esta guía general.",
         "published": true,
         "seoTitle": "Preguntas frecuentes | Rhema Diseños",
-        "seoDescription": "Respuestas sobre pedidos, transferencias, personalización, diseños y entregas."
+        "seoDescription": "Respuestas sobre pedidos, Mercado Pago, personalización, diseños y entregas."
     },
     "despachos-retiros": {
         "slug": "despachos-retiros",
@@ -236,7 +236,7 @@ const CONTENT_DEFAULTS = {
         ],
         "faqs": [
             {
-                "question": "¿Puedo cancelar un pedido pendiente de transferencia?",
+                "question": "¿Puedo cancelar un pedido pendiente de pago?",
                 "answer": "Cuando aún no existe un pago confirmado, comunícate con Rhema Diseños. Los pedidos sin comprobante pueden cancelarse automáticamente al vencer el plazo."
             },
             {
@@ -329,11 +329,11 @@ const CONTENT_DEFAULTS = {
             },
             {
                 "title": "Precios y disponibilidad",
-                "body": "Los precios se muestran en pesos chilenos. La disponibilidad y el stock se validan al crear el pedido. Un pedido pendiente de transferencia puede reservar unidades durante el plazo informado.",
+                "body": "Los precios se muestran en pesos chilenos. La disponibilidad y el stock se validan al crear el pedido. El pago se completa mediante Mercado Pago.",
                 "items": []
             },
             {
-                "title": "Pago por transferencia",
+                "title": "Pago mediante Mercado Pago",
                 "body": "El pedido se considera pagado únicamente después de que Rhema Diseños valide la recepción real del abono. Cargar un comprobante no equivale por sí solo a confirmar el pago.",
                 "items": []
             },
@@ -386,7 +386,7 @@ const CONTENT_DEFAULTS = {
             },
             {
                 "title": "Pagos",
-                "body": "La tienda no solicita claves bancarias. Para transferencias, verifica los datos oficiales antes de pagar y conserva el comprobante. El pago solo se confirma después de validar el abono.",
+                "body": "La tienda no solicita claves bancarias ni códigos de seguridad. El pago se realiza en Mercado Pago y se confirma cuando su plataforma informa que fue aprobado.",
                 "items": []
             },
             {
@@ -396,7 +396,7 @@ const CONTENT_DEFAULTS = {
             },
             {
                 "title": "Reconocer comunicaciones sospechosas",
-                "body": "Desconfía de mensajes que soliciten contraseñas, códigos de acceso o transferencias urgentes hacia datos no confirmados. Ante una duda, vuelve al sitio y abre el WhatsApp oficial desde aquí.",
+                "body": "Desconfía de mensajes que soliciten contraseñas, códigos de acceso o pagos por fuera de Mercado Pago. Ante una duda, vuelve al sitio y abre el WhatsApp oficial desde aquí.",
                 "items": []
             }
         ],

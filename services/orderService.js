@@ -69,7 +69,7 @@ function normalizeOrderInput(body) {
         },
         descuento: Math.max(0, numberValue(firstDefined(body.descuento, body.discount))),
         total: 0,
-        metodoPago: stringValue(firstDefined(body.metodoPago, body["pedido-pago"], body.formaPago), "transferencia").toLowerCase(),
+        metodoPago: stringValue(firstDefined(body.metodoPago, body["pedido-pago"], body.formaPago), "mercadopago").toLowerCase(),
         observaciones: stringValue(body.observaciones),
         origen: stringValue(body.origen, "web")
     };

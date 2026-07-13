@@ -139,11 +139,11 @@ const orderSchema = new mongoose.Schema({
     entrega: { type: orderDeliverySchema, required: true },
     descuento: { type: Number, default: 0, min: 0 },
     total: { type: Number, required: true, min: 0 },
-    metodoPago: { type: String, enum: ["mercadopago", "transferencia", "efectivo", "otro"], default: "transferencia" },
+    metodoPago: { type: String, enum: ["mercadopago", "transferencia", "efectivo", "otro"], default: "mercadopago" },
     estadoPago: {
         type: String,
         enum: ["pendiente", "pendiente_comprobante", "comprobante_recibido", "en_revision", "pagado", "rechazado", "vencido", "reembolsado"],
-        default: "pendiente_comprobante",
+        default: "pendiente",
         index: true
     },
     transferencia: { type: transferSchema, default: () => ({}) },
