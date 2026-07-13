@@ -251,6 +251,11 @@ const adminOperacionesRoutes =
         "./routes/admin/operaciones"
     );
 
+const adminLanzamientoRoutes =
+    require(
+        "./routes/admin/lanzamiento"
+    );
+
 const app =
     express();
 
@@ -503,6 +508,11 @@ app.use(
 app.use(
     "/api/admin/operaciones",
     adminOperacionesRoutes
+);
+
+app.use(
+    "/api/admin/lanzamiento",
+    adminLanzamientoRoutes
 );
 
 app.use(
