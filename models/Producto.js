@@ -307,6 +307,11 @@ const productSchema = new mongoose.Schema(
             default: false
         },
 
+        habilitarEscenaPersonalizada: {
+            type: Boolean,
+            default: false
+        },
+
         fabricadoPedido: {
             type: Boolean,
             default: false

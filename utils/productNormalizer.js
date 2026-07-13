@@ -403,6 +403,7 @@ function normalizeProductOutput(rawProduct) {
         destacado: booleanValue(raw.destacado, false),
         activo: booleanValue(raw.activo, true),
         personalizable: booleanValue(raw.personalizable, false),
+        habilitarEscenaPersonalizada: booleanValue(firstDefined(raw.habilitarEscenaPersonalizada, raw.crearEscenaPersonalizada), false),
         fabricadoPedido: booleanValue(firstDefined(raw.fabricadoPedido, raw.fabricadoAPedido, raw.madeToOrder), false),
         bajoPedido: booleanValue(raw.bajoPedido, false),
         publicarCatalogo: booleanValue(raw.publicarCatalogo, true),
