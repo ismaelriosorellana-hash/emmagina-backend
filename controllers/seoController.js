@@ -11,7 +11,9 @@ const {
     renderProductHtml,
     renderSitemap,
     renderRobots,
-    frontendProductUrl
+    frontendProductUrl,
+    siteUrl,
+    seoPublicUrl
 } = require("../services/productSeoService");
 
 function publicProductFilter(extra = {}) {
@@ -168,11 +170,39 @@ function renderRobotsTxt(req, res) {
     res.send(renderRobots());
 }
 
+function getSeoStatus(req, res) {
+    const publicSite = siteUrl();
+    const publicSeo = seoPublicUrl();
+    let hostname = "";
+
+    try {
+        hostname = new URL(publicSite).hostname;
+    } catch (error) {
+        hostname = "";
+    }
+
+    return res.json({
+        brand: "Rhema Diseños",
+        siteUrl: publicSite,
+        seoPublicUrl: publicSeo,
+        sitemapUrl: `${publicSeo}/sitemap.xml`,
+        robotsUrl: `${publicSeo}/robots.txt`,
+        locale: "es-CL",
+        currency: "CLP",
+        areaServed: "Santiago de Chile",
+        domainReady: Boolean(hostname && !hostname.endsWith("onrender.com")),
+        nextStep: hostname.endsWith("onrender.com")
+            ? "Cuando tengas dominio, actualiza PUBLIC_SITE_URL, PUBLIC_FRONTEND_URL y SEO_PUBLIC_URL."
+            : "Dominio personalizado detectado."
+    });
+}
+
 module.exports = {
     findProductBySlug,
     renderProductSeoPage,
     renderProductSeoFromQuery,
     getProductSeoJson,
     renderDynamicSitemap,
-    renderRobotsTxt
+    renderRobotsTxt,
+    getSeoStatus
 };

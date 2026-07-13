@@ -447,14 +447,22 @@ function renderSitemap(products = []) {
     const staticUrls = [
         ["/", "weekly", "1.0"],
         ["/catalogo.html", "weekly", "0.9"],
+        ["/pedido-personalizado.html", "monthly", "0.8"],
+        ["/memories.html", "monthly", "0.8"],
+        ["/alma.html", "monthly", "0.8"],
+        ["/servicio-3d.html", "monthly", "0.9"],
         ["/quienes-somos.html", "monthly", "0.6"],
         ["/contacto.html", "monthly", "0.6"],
         ["/preguntas-frecuentes.html", "monthly", "0.6"],
+        ["/ayuda.html", "monthly", "0.7"],
+        ["/como-comprar.html", "monthly", "0.6"],
         ["/despachos-retiros.html", "monthly", "0.6"],
-        ["/cambios-pedidos.html", "monthly", "0.6"],
-        ["/seguridad.html", "monthly", "0.5"],
-        ["/privacidad.html", "yearly", "0.4"],
-        ["/terminos.html", "yearly", "0.4"]
+        ["/cambios-pedidos.html", "monthly", "0.5"],
+        ["/lanzamiento-santiago.html", "monthly", "0.6"],
+        ["/precios-cobertura.html", "monthly", "0.6"],
+        ["/seguridad.html", "yearly", "0.3"],
+        ["/privacidad.html", "yearly", "0.3"],
+        ["/terminos.html", "yearly", "0.3"]
     ];
 
     function urlNode({ loc, lastmod = today, changefreq = "monthly", priority = "0.5" }) {
