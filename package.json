@@ -1,7 +1,7 @@
 {
   "name": "rhema-disenos-backend",
-  "version": "3.16.2",
-  "description": "API de Rhema Diseños con flujo de producción y seguimiento público de pedidos.",
+  "version": "3.17.0",
+  "description": "API de Rhema Diseños con comunicaciones de pedidos, correo, WhatsApp y seguimiento.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
@@ -35,7 +35,8 @@
     "seed-rhema-launch": "node scripts/seedRhemaLaunchProducts.js",
     "quotes-check": "npm run check && node --test tests/quote-response-v3130.test.js",
     "quote-orders-check": "npm run check && node --test tests/quote-order-v3140.test.js",
-    "production-tracking-check": "npm run check && node --test tests/production-tracking-v3150.test.js"
+    "production-tracking-check": "npm run check && node --test tests/production-tracking-v3150.test.js",
+    "communications-check": "npm run check && node --test tests/communications-v3170.test.js"
   },
   "keywords": [
     "cloudinary",

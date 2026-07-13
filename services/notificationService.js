@@ -33,7 +33,8 @@ const EVENT_LABELS = Object.freeze({
     shipped: "Pedido enviado",
     delivered: "Pedido entregado",
     cancelled: "Pedido cancelado",
-    status_update: "Estado actualizado"
+    status_update: "Estado actualizado",
+    production_update: "Avance de producción"
 });
 
 function clean(value) {
@@ -393,6 +394,22 @@ function buildAdminEmailHtml(order, data) {
     });
 }
 
+function productionStageLabel(value) {
+    const labels = {
+        revision: "revisión",
+        diseno: "diseño",
+        preparacion: "preparación",
+        impresion: "impresión",
+        postprocesado: "terminaciones",
+        control_calidad: "control de calidad",
+        listo_entrega: "listo para entrega",
+        en_ruta: "en ruta",
+        completado: "completado",
+        pausado: "pausado"
+    };
+    return labels[clean(value)] || "revisión";
+}
+
 function normalizedEvent(eventName, order) {
     const requested = clean(eventName) || "status_update";
     if (EVENT_LABELS[requested]) return requested;
@@ -466,7 +483,14 @@ function eventBody(order, eventName) {
             `${data.greeting}, actualizamos tu pedido ${data.number}.`,
             `Estado actual: ${data.status}.`,
             `Pago: ${data.payment}.`
-        ]
+        ],
+        production_update: [
+            `${data.greeting}, tenemos una actualización de producción para tu pedido ${data.number}.`,
+            `Etapa actual: ${productionStageLabel(order?.produccion?.etapa)}.`,
+            `Avance informado: ${Math.max(0, Math.min(100, Number(order?.produccion?.progreso || 0)))}%.`,
+            clean(order?.produccion?.mensajeCliente) || "Seguimos trabajando en tu pedido.",
+            order?.produccion?.fechaEstimada ? `Fecha estimada: ${new Intl.DateTimeFormat("es-CL", { dateStyle: "long", timeZone: "America/Santiago" }).format(new Date(order.produccion.fechaEstimada))}.` : ""
+        ].filter(Boolean)
     };
 
     const lines = linesByEvent[data.event] || linesByEvent.status_update;
@@ -513,7 +537,8 @@ function availableNotifications(order) {
         "shipped",
         "delivered",
         "cancelled",
-        "status_update"
+        "status_update",
+        "production_update"
     ];
 
     return entries.map((event) => buildNotification(order, event));

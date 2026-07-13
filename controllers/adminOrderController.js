@@ -144,6 +144,7 @@ async function updateOrder(
         }
 
         let statusChanged = false;
+        let productionChanged = false;
 
         if (
             newStatus !==
@@ -186,13 +187,23 @@ async function updateOrder(
             const incoming = req.body.produccion;
             const previousStage = order.produccion?.etapa || "revision";
             const nextStage = String(incoming.etapa || previousStage);
+            const previousProgress = Number(order.produccion?.progreso ?? 10);
+            const previousMessage = String(order.produccion?.mensajeCliente || "");
+            const previousDate = order.produccion?.fechaEstimada ? new Date(order.produccion.fechaEstimada).toISOString().slice(0, 10) : "";
+            const nextProgress = Math.max(0, Math.min(100, Number(incoming.progreso ?? previousProgress)));
+            const nextMessage = String(incoming.mensajeCliente ?? previousMessage).slice(0, 1200);
+            const nextDate = incoming.fechaEstimada ? new Date(incoming.fechaEstimada) : (order.produccion?.fechaEstimada || null);
+            const nextDateKey = nextDate ? new Date(nextDate).toISOString().slice(0, 10) : "";
+
             order.produccion = {
                 etapa: nextStage,
-                progreso: Math.max(0, Math.min(100, Number(incoming.progreso ?? order.produccion?.progreso ?? 10))),
-                mensajeCliente: String(incoming.mensajeCliente ?? order.produccion?.mensajeCliente ?? "").slice(0, 1200),
-                fechaEstimada: incoming.fechaEstimada ? new Date(incoming.fechaEstimada) : (order.produccion?.fechaEstimada || null),
+                progreso: nextProgress,
+                mensajeCliente: nextMessage,
+                fechaEstimada: nextDate,
                 actualizadoAt: new Date()
             };
+
+            productionChanged = nextStage !== previousStage || nextProgress !== previousProgress || nextMessage !== previousMessage || nextDateKey !== previousDate;
 
             if (nextStage !== previousStage) {
                 order.historial.push({
@@ -203,17 +214,23 @@ async function updateOrder(
             }
         }
 
-        if (statusChanged) {
+        await order.save();
+
+        const shouldNotify = req.body.notificarCliente !== false;
+        const notificationEvent = statusChanged
+            ? normalizedEvent("", order)
+            : (productionChanged ? "production_update" : "");
+
+        if (shouldNotify && notificationEvent) {
             await dispatchNotification(
                 order,
-                normalizedEvent("", order),
+                notificationEvent,
                 {
                     userId: req.user._id
                 }
             ).catch(() => {});
+            await order.save();
         }
-
-        await order.save();
 
         res.json(order);
     } catch (error) {
