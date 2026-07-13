@@ -1,7 +1,7 @@
 {
   "name": "rhema-disenos-backend",
-  "version": "3.22.0",
-  "description": "API Rhema Diseños con control de solicitud de escena personalizada por producto.",
+  "version": "3.22.1",
+  "description": "API Rhema Diseños con bloques informativos configurables en la ficha de producto.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

@@ -14,7 +14,7 @@ const PRODUCT_HEADERS = [
   "CategoriaPrincipal","Categorias","DescripcionCorta","Descripcion","ImagenPrincipal","Imagenes",
   "Insignia","TextoDisponibilidad","Destacado","HabilitarEscenaPersonalizada","Personalizable","FabricadoPedido","BajoPedido",
   "PublicarCatalogo","Activo","Orden","DiasPreparacion","PesoGramos","LargoCm","AnchoCm","AltoCm",
-  "Caracteristicas","Beneficios","Cuidados","PreguntasFrecuentes","MensajeCompra","Garantia",
+  "Caracteristicas","MostrarLoQueDebesSaber","TituloLoQueDebesSaber","TextoLoQueDebesSaber","Beneficios","Cuidados","PreguntasFrecuentes","MensajeCompra","Garantia",
   "SEO_Titulo","SEO_Descripcion","SEO_PalabrasClave","SEO_NoIndex","EnvioHabilitado","EnvioInstrucciones",
   "RetiroHabilitado","RetiroInstrucciones","AjusteImagenTarjeta","AjusteImagenDetalle","PosicionImagen"
 ];
@@ -82,6 +82,7 @@ function rowToProduct(row) {
     activo: bool(row.Activo, true), orden: Math.round(number(row.Orden)), diasPreparacion: Math.max(1, Math.round(number(row.DiasPreparacion, 3))),
     pesoGramos: Math.max(0, Math.round(number(row.PesoGramos))), dimensiones: { largoCm: number(row.LargoCm), anchoCm: number(row.AnchoCm), altoCm: number(row.AltoCm) },
     caracteristicas: keyValueList(row.Caracteristicas), contenidoPDP: {
+      mostrarLoQueDebesSaber: bool(row.MostrarLoQueDebesSaber, true), tituloBeneficio: text(row.TituloLoQueDebesSaber), textoBeneficio: text(row.TextoLoQueDebesSaber),
       beneficios: list(row.Beneficios), cuidados: list(row.Cuidados), preguntasFrecuentes: faqList(row.PreguntasFrecuentes),
       mensajeCompra: text(row.MensajeCompra), garantia: text(row.Garantia)
     },
@@ -245,6 +246,7 @@ function productToRow(product) {
     FabricadoPedido: p.fabricadoPedido ? "Sí" : "No", BajoPedido: p.bajoPedido ? "Sí" : "No", PublicarCatalogo: p.publicarCatalogo !== false ? "Sí" : "No", Activo: p.activo !== false ? "Sí" : "No",
     Orden: p.orden || 0, DiasPreparacion: p.diasPreparacion || 3, PesoGramos: p.pesoGramos || 0, LargoCm: p.dimensiones?.largoCm || 0, AnchoCm: p.dimensiones?.anchoCm || 0, AltoCm: p.dimensiones?.altoCm || 0,
     Caracteristicas: (p.caracteristicas || []).map((i) => `${i.titulo || i.etiqueta || "Detalle"}::${i.valor || ""}`).join(" | "),
+    MostrarLoQueDebesSaber: p.contenidoPDP?.mostrarLoQueDebesSaber !== false ? "Sí" : "No", TituloLoQueDebesSaber: p.contenidoPDP?.tituloBeneficio || "", TextoLoQueDebesSaber: p.contenidoPDP?.textoBeneficio || "",
     Beneficios: (p.contenidoPDP?.beneficios || []).join(" | "), Cuidados: (p.contenidoPDP?.cuidados || []).join(" | "),
     PreguntasFrecuentes: (p.contenidoPDP?.preguntasFrecuentes || []).map((i) => `${i.pregunta}::${i.respuesta}`).join(" | "),
     MensajeCompra: p.contenidoPDP?.mensajeCompra || "", Garantia: p.contenidoPDP?.garantia || "", SEO_Titulo: p.seo?.titulo || "", SEO_Descripcion: p.seo?.descripcion || "",

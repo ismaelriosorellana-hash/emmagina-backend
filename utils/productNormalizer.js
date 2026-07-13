@@ -228,6 +228,7 @@ function normalizePdpContent(value = {}) {
     const cuidadosSource = firstDefined(source.cuidados, source.care, source.instruccionesCuidado);
 
     return {
+        mostrarLoQueDebesSaber: booleanValue(firstDefined(source.mostrarLoQueDebesSaber, source.showWhatYouShouldKnow), true),
         tituloBeneficio: stringValue(firstDefined(source.tituloBeneficio, source.benefitTitle)).slice(0, 120),
         textoBeneficio: stringValue(firstDefined(source.textoBeneficio, source.benefitText)).slice(0, 800),
         beneficios: normalizeStringList(beneficiosSource).slice(0, 12),

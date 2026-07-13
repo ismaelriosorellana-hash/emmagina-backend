@@ -365,6 +365,10 @@ const productSchema = new mongoose.Schema(
         },
 
         contenidoPDP: {
+            mostrarLoQueDebesSaber: {
+                type: Boolean,
+                default: true
+            },
             tituloBeneficio: {
                 type: String,
                 trim: true,
