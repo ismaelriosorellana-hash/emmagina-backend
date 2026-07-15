@@ -8,17 +8,26 @@ const {
 } = require("./values");
 
 const FALLBACK_CATEGORIES = [
-    "Librería",
-    "Tazas",
+    "Librería y Escritorio",
+    "Juguetería",
+    "Coleccionables",
+    "Decoración",
+    "Hogar",
+    "Memories",
     "Vasos",
-    "Botellas",
-    "Vestuario",
-    "Regalos",
+    "Para regalar",
     "Educativos",
-    "Corporativos",
     "Infantiles",
+    "Babies",
     "Cristianos",
-    "Temporada"
+    "Niños",
+    "Niñas",
+    "Mascotas",
+    "Herramientas",
+    "Utilidades",
+    "Accesorios para automóvil",
+    "Accesorios para celular",
+    "Todos"
 ];
 
 function safeColor(value) {
@@ -85,13 +94,13 @@ function fallbackCategoryDocuments() {
         nombre,
         slug: createSlug(nombre),
         descripcion: "",
-        icono: nombre === "Temporada" ? "fa-solid fa-calendar-days" : "fa-solid fa-tag",
+        icono: nombre === "Todos" ? "fa-solid fa-border-all" : "fa-solid fa-tag",
         imagen: "",
         color: "#219EBC",
         activa: true,
         mostrarMenu: true,
-        mostrarInicio: nombre !== "Temporada",
-        destacada: index < 6,
+        mostrarInicio: true,
+        destacada: index < 8,
         orden: (index + 1) * 10
     }));
 }

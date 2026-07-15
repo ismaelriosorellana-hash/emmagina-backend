@@ -1,6 +1,7 @@
 "use strict";
 
 const Categoria = require("../models/Categoria");
+const { fallbackCategoryDocuments } = require("../utils/categoryNormalizer");
 
 const {
     normalizeCategoryInput,
@@ -96,8 +97,52 @@ async function deleteCategory(req, res, next) {
     }
 }
 
+async function installBaseCategories(req, res, next) {
+    try {
+        const base = fallbackCategoryDocuments();
+        const baseSlugs = base.map((item) => item.slug);
+
+        const operations = base.map((item) => ({
+            updateOne: {
+                filter: { slug: item.slug },
+                update: { $set: item },
+                upsert: true
+            }
+        }));
+
+        if (operations.length) {
+            await Categoria.bulkWrite(operations, { ordered: true });
+        }
+
+        const deactivateResult = await Categoria.updateMany(
+            { slug: { $nin: baseSlugs } },
+            {
+                $set: {
+                    activa: false,
+                    mostrarMenu: false,
+                    mostrarInicio: false,
+                    destacada: false
+                }
+            }
+        );
+
+        const categories = await Categoria.find({})
+            .sort({ orden: 1, nombre: 1 })
+            .lean();
+
+        res.json({
+            mensaje: "Categorías base instaladas correctamente.",
+            desactivadas: deactivateResult.modifiedCount || 0,
+            categorias: categories.map(normalizeCategoryOutput)
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     listAdminCategories,
+    installBaseCategories,
     createCategory,
     updateCategory,
     deleteCategory
