@@ -76,6 +76,8 @@ const productosRoutes =
         "./routes/productos"
     );
 
+const resenasRoutes = require("./routes/resenas");
+
 const pedidosRoutes =
     require(
         "./routes/pedidos"
@@ -150,6 +152,8 @@ const adminProductosRoutes =
     require(
         "./routes/admin/productos"
     );
+
+const adminResenasRoutes = require("./routes/admin/resenas");
 
 const adminPedidosRoutes =
     require(
@@ -394,6 +398,8 @@ app.use(
     productosRoutes
 );
 
+app.use("/api/resenas", resenasRoutes);
+
 app.use(
     "/api/pedidos",
     pedidosRoutes
@@ -509,6 +515,8 @@ app.use(
     "/api/admin/productos",
     adminProductosRoutes
 );
+
+app.use("/api/admin/resenas", adminResenasRoutes);
 
 app.use(
     "/api/admin/pedidos",
