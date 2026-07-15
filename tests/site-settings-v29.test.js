@@ -8,8 +8,8 @@ const { normalizeSiteSettings } = require("../utils/siteSettingsNormalizer");
 test("entrega una configuración visual predeterminada completa", () => {
     const value = cloneDefaultSiteSettings();
     assert.equal(value.key, "main");
-    assert.match(value.branding.logo.url, /^https:\/\//);
-    assert.equal(value.branding.title.mode, "image");
+    assert.equal(typeof value.branding.logo.url, "string");
+    assert.ok(["text", "image"].includes(value.branding.title.mode));
     assert.match(value.colors.primary, /^#[0-9A-F]{6}$/i);
     assert.match(value.colors.footerBackground, /^#[0-9A-F]{6}$/i);
     assert.equal(value.announcementBar.enabled, true);

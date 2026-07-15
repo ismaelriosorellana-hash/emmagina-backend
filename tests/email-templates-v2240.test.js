@@ -53,9 +53,9 @@ test("buildNotification genera correo HTML con marca, resumen y contacto ventas"
     assert.match(notification.subject, /Rhema Diseños/);
     assert.match(notification.html, /Resumen del pedido/);
     assert.match(notification.html, /Taza personalizada/);
-    assert.match(notification.html, /ventas@emmagina\.cl/);
+    assert.match(notification.html, /ventas@rhemadisenos\.cl/);
     assert.match(notification.html, /Ver seguimiento del pedido/);
-    assert.match(notification.trackingUrl, /emmagina\.cl\/seguimiento-pedido\.html/);
+    assert.match(notification.trackingUrl, /rhemadisenos\.cl\/seguimiento-pedido\.html/);
 });
 
 test("buildNotification mantiene texto plano para WhatsApp", () => {

@@ -1,6 +1,6 @@
 {
   "name": "rhema-disenos-backend",
-  "version": "3.26.0",
+  "version": "3.26.1",
   "description": "API Rhema Diseños con categorías administrables y ubicaciones configurables.",
   "main": "server.js",
   "scripts": {

@@ -95,7 +95,10 @@ test("normaliza solo orígenes absolutos sin ruta", () => {
 
 test("agrega no-store y encabezados a rutas sensibles", () => {
     const headers = new Map();
-    const req = { path: "/api/cuenta/pedidos" };
+    const req = {
+        path: "/api/cuenta/pedidos",
+        get() { return ""; }
+    };
     const res = {
         setHeader(name, value) {
             headers.set(name, value);

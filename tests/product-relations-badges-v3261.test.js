@@ -1,0 +1,2 @@
+"use strict";
+const test=require("node:test");const assert=require("node:assert/strict");const {relationScore}=require("../utils/productRelations");test("prioriza relacionados con categoría y badge compartidos",()=>{const base={categorias:["Hogar"],insignia:"Nuevo",precio:10000};const same={categorias:["Hogar"],insignia:"Nuevo",precio:10000};const categoryOnly={categorias:["Hogar"],insignia:"Oferta",precio:10000};assert.ok(relationScore(base,same)>relationScore(base,categoryOnly));});

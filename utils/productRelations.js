@@ -20,6 +20,17 @@ function normalizeCategories(product) {
     )];
 }
 
+
+function normalizeBadges(product) {
+    const values = [
+        ...normalizeStringList(product?.badges),
+        ...normalizeStringList(product?.insignias),
+        ...normalizeStringList(product?.insignia),
+        ...normalizeStringList(product?.badge)
+    ];
+    return [...new Set(values.map((item) => item.toLowerCase()).filter(Boolean))];
+}
+
 function relationScore(currentProduct, candidate) {
     const currentCategories = new Set(
         normalizeCategories(currentProduct)
@@ -29,9 +40,12 @@ function relationScore(currentProduct, candidate) {
     let score = 0;
 
     candidateCategories.forEach((category) => {
-        if (currentCategories.has(category)) {
-            score += 30;
-        }
+        if (currentCategories.has(category)) score += 30;
+    });
+
+    const currentBadges = new Set(normalizeBadges(currentProduct));
+    normalizeBadges(candidate).forEach((badge) => {
+        if (currentBadges.has(badge)) score += 18;
     });
 
     if (
@@ -73,6 +87,7 @@ function explicitRelatedIds(product) {
 
 module.exports = {
     normalizeCategories,
+    normalizeBadges,
     relationScore,
     explicitRelatedIds
 };

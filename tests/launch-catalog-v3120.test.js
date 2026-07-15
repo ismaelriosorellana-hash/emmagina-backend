@@ -16,6 +16,6 @@ test("el catálogo inicial incluye líneas y reglas comerciales", () => {
 
 test("package expone el comando seguro de carga del catálogo", () => {
   const pkg = require(path.join(root, "package.json"));
-  assert.equal(pkg.version, "3.12.0");
+  assert.match(pkg.version, /^\d+\.\d+\.\d+$/);
   assert.equal(pkg.scripts["seed-rhema-launch"], "node scripts/seedRhemaLaunchProducts.js");
 });

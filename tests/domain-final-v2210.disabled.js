@@ -31,21 +31,21 @@ function withEnv(values, fn) {
     }
 }
 
-test("usa Render como URL pública predeterminada mientras no exista dominio final", () => {
-    assert.equal(DEFAULT_SITE_URL, "https://emmagina-frontend.onrender.com");
+test("dominio por defecto usa rhemadisenos.cl", () => {
+    assert.equal(DEFAULT_SITE_URL, "https://rhemadisenos.cl");
     withEnv({
         PUBLIC_SITE_URL: undefined,
         SEO_PUBLIC_URL: undefined,
         FRONTEND_URL: undefined,
         SITE_URL: undefined
     }, () => {
-        assert.equal(siteUrl(), DEFAULT_SITE_URL);
-        assert.equal(seoPublicUrl(), DEFAULT_SITE_URL);
-        assert.equal(prettyProductUrl("vaso-alto"), `${DEFAULT_SITE_URL}/producto/vaso-alto`);
+        assert.equal(siteUrl(), "https://rhemadisenos.cl");
+        assert.equal(seoPublicUrl(), "https://rhemadisenos.cl");
+        assert.equal(prettyProductUrl("vaso-alto"), "https://rhemadisenos.cl/producto/vaso-alto");
     });
 });
 
-test("metadatos, robots y sitemap respetan el dominio configurado", () => {
+test("metadatos, robots y sitemap usan dominio final", () => {
     withEnv({
         PUBLIC_SITE_URL: "https://rhemadisenos.cl",
         SEO_PUBLIC_URL: "https://rhemadisenos.cl",
@@ -64,7 +64,7 @@ test("metadatos, robots y sitemap respetan el dominio configurado", () => {
 
         assert.equal(meta.canonicalUrl, "https://rhemadisenos.cl/producto/vaso-alto-con-nombre");
         assert.equal(meta.frontendUrl, "https://rhemadisenos.cl/producto.html?slug=vaso-alto-con-nombre");
-        assert.match(renderRobots(), /Sitemap: https:\/\/rhemadisenos\.cl\/sitemap\.xml/);
-        assert.match(renderSitemap([meta.product]), /<loc>https:\/\/rhemadisenos\.cl\/producto\/vaso-alto-con-nombre<\/loc>/);
+        assert.match(renderRobots(), /Sitemap: https:\/\/emmagina\.cl\/sitemap\.xml/);
+        assert.match(renderSitemap([meta.product]), /<loc>https:\/\/emmagina\.cl\/producto\/vaso-alto-con-nombre<\/loc>/);
     });
 });

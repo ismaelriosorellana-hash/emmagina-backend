@@ -93,7 +93,7 @@ test("mapea estados de Mercado Pago y valida el monto del pedido", () => {
     assert.equal(paymentMatchesOrder(order, { ...payment, transaction_amount: 20000 }), false);
 });
 
-test("acepta los dos métodos habilitados y rechaza otros", () => {
+test("acepta Mercado Pago como único método habilitado", () => {
     const previousToken = process.env.MP_ACCESS_TOKEN;
     const previousSecret = process.env.MP_WEBHOOK_SECRET;
     const previousBackendUrl = process.env.PUBLIC_BACKEND_URL;
@@ -102,8 +102,11 @@ test("acepta los dos métodos habilitados y rechaza otros", () => {
     process.env.PUBLIC_BACKEND_URL = "https://emmagina-backend.onrender.com";
 
     try {
-        assert.doesNotThrow(() => validatePaymentMethod("transferencia"));
         assert.doesNotThrow(() => validatePaymentMethod("mercadopago"));
+        assert.throws(
+            () => validatePaymentMethod("transferencia"),
+            /no está disponible/i
+        );
         assert.throws(
             () => validatePaymentMethod("efectivo"),
             /no está disponible/i
