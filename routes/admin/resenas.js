@@ -1,11 +1,9 @@
 "use strict";
 const express = require("express");
-const { listReviews, createReview, updateReview, deleteReview } = require("../../controllers/adminReviewController");
+const { listReviews, updateReview, deleteReview } = require("../../controllers/adminReviewController");
 const { validateObjectId } = require("../../middleware/validateObjectId");
 const router = express.Router();
 router.get("/", listReviews);
-router.post("/", createReview);
-router.put("/:id", validateObjectId("id"), updateReview);
 router.patch("/:id", validateObjectId("id"), updateReview);
 router.delete("/:id", validateObjectId("id"), deleteReview);
 module.exports = router;

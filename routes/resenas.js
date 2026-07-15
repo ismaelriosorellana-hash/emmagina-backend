@@ -1,6 +1,12 @@
 "use strict";
 const express = require("express");
-const { listProductReviews } = require("../controllers/reviewController");
+const { listProductReviews, listBestReviews, reviewEligibility, createCustomerReview } = require("../controllers/reviewController");
+const { requireAuth, requireRole } = require("../middleware/auth");
+const { validateObjectId } = require("../middleware/validateObjectId");
+const { accountWriteLimiter } = require("../middleware/rateLimits");
 const router = express.Router();
+router.get("/mejores", listBestReviews);
 router.get("/producto/:productoId", listProductReviews);
+router.get("/pedido/:pedidoId/disponibles", requireAuth, requireRole("cliente"), validateObjectId("pedidoId"), reviewEligibility);
+router.post("/pedido/:pedidoId/items/:lineaId", requireAuth, requireRole("cliente"), validateObjectId("pedidoId"), accountWriteLimiter, createCustomerReview);
 module.exports = router;

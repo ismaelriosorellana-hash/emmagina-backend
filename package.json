@@ -1,6 +1,6 @@
 {
   "name": "rhema-disenos-backend",
-  "version": "3.23.0",
+  "version": "3.24.0",
   "description": "API Rhema Diseños con gestión y publicación de reseñas de productos.",
   "main": "server.js",
   "scripts": {
