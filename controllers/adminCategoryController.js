@@ -15,7 +15,8 @@ const {
 async function listAdminCategories(req, res, next) {
     try {
         const categories = await Categoria.find({})
-            .sort({ orden: 1, nombre: 1 })
+            .populate("categoriaPadre", "nombre slug")
+            .sort({ categoriaPadre: 1, orden: 1, nombre: 1 })
             .lean();
 
         res.json({
@@ -34,6 +35,10 @@ async function createCategory(req, res, next) {
             return res.status(400).json({
                 error: "El nombre de la categoría es obligatorio."
             });
+        }
+
+        if (data.categoriaPadre && !(await Categoria.exists({ _id: data.categoriaPadre }))) {
+            return res.status(400).json({ error: "La categoría padre seleccionada no existe." });
         }
 
         data.slug = await resolveUniqueCategorySlug(data.slug);
@@ -56,6 +61,13 @@ async function updateCategory(req, res, next) {
             return res.status(400).json({
                 error: "El nombre de la categoría es obligatorio."
             });
+        }
+
+        if (String(data.categoriaPadre || "") === String(req.params.id)) {
+            return res.status(400).json({ error: "Una categoría no puede ser su propia categoría padre." });
+        }
+        if (data.categoriaPadre && !(await Categoria.exists({ _id: data.categoriaPadre }))) {
+            return res.status(400).json({ error: "La categoría padre seleccionada no existe." });
         }
 
         data.slug = await resolveUniqueCategorySlug(
@@ -83,6 +95,11 @@ async function updateCategory(req, res, next) {
 
 async function deleteCategory(req, res, next) {
     try {
+        const hasChildren = await Categoria.exists({ categoriaPadre: req.params.id });
+        if (hasChildren) {
+            return res.status(409).json({ error: "Primero elimina o reasigna las subcategorías asociadas." });
+        }
+
         const category = await Categoria.findByIdAndDelete(req.params.id);
 
         if (!category) {

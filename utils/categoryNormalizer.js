@@ -61,6 +61,7 @@ function normalizeCategoryInput(input = {}) {
         mostrarMenu: booleanValue(input.mostrarMenu ?? input.showInMenu, true),
         mostrarInicio: booleanValue(input.mostrarInicio ?? input.showOnHome, true),
         destacada: booleanValue(input.destacada ?? input.featured, false),
+        categoriaPadre: input.categoriaPadre || input.parentCategory || null,
         orden: Math.max(0, Math.min(9999, Math.floor(numberValue(input.orden ?? input.order, 0))))
     };
 }
@@ -83,6 +84,8 @@ function normalizeCategoryOutput(category = {}) {
         mostrarMenu: booleanValue(category.mostrarMenu ?? category.showInMenu, true),
         mostrarInicio: booleanValue(category.mostrarInicio ?? category.showOnHome, true),
         destacada: booleanValue(category.destacada ?? category.featured, false),
+        categoriaPadre: category.categoriaPadre ? String(category.categoriaPadre._id || category.categoriaPadre.id || category.categoriaPadre) : null,
+        categoriaPadreNombre: stringValue(category.categoriaPadre?.nombre || category.parentCategoryName),
         orden: Math.max(0, Math.floor(numberValue(category.orden ?? category.order, 0))),
         createdAt: category.createdAt || null,
         updatedAt: category.updatedAt || null

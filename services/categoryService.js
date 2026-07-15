@@ -48,7 +48,8 @@ async function countProductsByCategory(categories) {
 
 async function getActiveCategories(options = {}) {
     const savedCategories = await Categoria.find({})
-        .sort({ orden: 1, nombre: 1 })
+        .populate("categoriaPadre", "nombre slug")
+        .sort({ categoriaPadre: 1, orden: 1, nombre: 1 })
         .lean();
 
     const mergedCategories = mergeCategoryDocuments(

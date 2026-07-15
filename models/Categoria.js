@@ -60,6 +60,12 @@ const categorySchema = new mongoose.Schema(
             type: Boolean,
             default: false
         },
+        categoriaPadre: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Categoria",
+            default: null,
+            index: true
+        },
         orden: {
             type: Number,
             default: 0,
@@ -84,6 +90,7 @@ categorySchema.pre("validate", function setSlug(next) {
 
 categorySchema.index({ activa: 1, mostrarMenu: 1, orden: 1 });
 categorySchema.index({ activa: 1, mostrarInicio: 1, orden: 1 });
+categorySchema.index({ categoriaPadre: 1, orden: 1, nombre: 1 });
 categorySchema.index({ nombre: 1 });
 
 module.exports =
